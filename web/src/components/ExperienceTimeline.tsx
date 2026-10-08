@@ -1,108 +1,103 @@
-import type { EarlierRole, Engagement, Experience, FeaturedRole } from "@/lib/resume";
+import type {
+  EarlierRole,
+  Engagement,
+  Experience,
+  FeaturedRole,
+} from "@/lib/resume";
+import { Prompt } from "./Prompt";
 
-function EngagementCard({ engagement }: { engagement: Engagement }) {
+function Bullets({ bullets }: { bullets: string[] }) {
   return (
-    <div className="border-l-4 border-accent/60 bg-paper pl-4">
-      <p className="flex flex-wrap items-baseline gap-x-2 font-bold">
-        {engagement.client}
+    <ul className="mt-2 space-y-1.5">
+      {bullets.map((bullet) => (
+        <li key={bullet} className="flex gap-2 text-sm text-fg/90">
+          <span className="shrink-0 text-accent">{">"}</span>
+          <span>{bullet}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function EngagementBlock({ engagement }: { engagement: Engagement }) {
+  return (
+    <div className="border-l-2 border-accent-dim pl-4">
+      <p className="text-sm">
+        <span className="text-accent">{engagement.client}</span>
+        {engagement.role && <span className="text-dim"> — {engagement.role}</span>}
         {engagement.former && (
-          <span className="font-mono text-xs font-normal text-ink/50 uppercase">
-            former client
-          </span>
+          <span className="ml-2 text-xs text-dim">[former client]</span>
         )}
       </p>
-      {engagement.role && (
-        <p className="text-sm text-navy italic">{engagement.role}</p>
-      )}
-      <ul className="mt-2 space-y-1 text-sm text-ink/80">
-        {engagement.bullets.map((bullet) => (
-          <li key={bullet} className="flex gap-2">
-            <span className="shrink-0 text-accent">—</span>
-            <span>{bullet}</span>
-          </li>
-        ))}
-      </ul>
+      <Bullets bullets={engagement.bullets} />
     </div>
   );
 }
 
 function FeaturedRoleBlock({ role }: { role: FeaturedRole }) {
   return (
-    <li className="relative mb-16 last:mb-0">
-      <span
-        className="absolute top-1.5 -left-[2.3rem] h-4 w-4 rounded-full border-4 border-paper bg-accent"
-        aria-hidden
-      />
-      <p className="font-mono text-sm text-ink/60">{role.date_range}</p>
-      <h3 className="mt-1 text-2xl font-bold">{role.role}</h3>
-      <p className="text-lg font-medium text-navy">
-        {role.company}
-        {role.location ? ` · ${role.location}` : ""}
+    <div className="border-l border-border pl-5">
+      <p className="text-sm text-dim">
+        [{role.date_range}]{" "}
+        <span className="text-fg">
+          {role.role} @ {role.company}
+        </span>
+        {role.location && <span className="text-dim"> · {role.location}</span>}
       </p>
 
       {role.summary && (
-        <p className="mt-3 max-w-2xl text-ink/80">{role.summary}</p>
+        <p className="mt-2 text-sm text-dim">
+          <span className="select-none"># </span>
+          {role.summary}
+        </p>
       )}
 
-      {role.bullets.length > 0 && (
-        <ul className="mt-3 space-y-1 text-ink/80">
-          {role.bullets.map((bullet) => (
-            <li key={bullet} className="flex gap-2">
-              <span className="shrink-0 text-accent">—</span>
-              <span>{bullet}</span>
-            </li>
-          ))}
-        </ul>
-      )}
+      {role.bullets.length > 0 && <Bullets bullets={role.bullets} />}
 
       {role.engagements.length > 0 && (
-        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+        <div className="mt-3 space-y-5">
           {role.engagements.map((engagement) => (
-            <EngagementCard key={engagement.client} engagement={engagement} />
+            <EngagementBlock key={engagement.client} engagement={engagement} />
           ))}
         </div>
       )}
-    </li>
+    </div>
   );
 }
 
-function EarlierRoleCard({ role }: { role: EarlierRole }) {
+function EarlierRoleLine({ role }: { role: EarlierRole }) {
   return (
-    <div className="border-l-4 border-navy pl-4">
-      <p className="font-mono text-sm text-ink/60">{role.date_range}</p>
-      <h4 className="font-bold">{role.company}</h4>
-      <p className="text-sm text-navy">{role.role}</p>
-      <p className="mt-1 text-sm text-ink/80">{role.highlight}</p>
+    <div className="border-l border-border pl-5">
+      <p className="text-sm text-dim">
+        [{role.date_range}]{" "}
+        <span className="text-fg">
+          {role.role} @ {role.company}
+        </span>
+      </p>
+      <p className="mt-1 text-sm text-fg/80">{role.highlight}</p>
     </div>
   );
 }
 
 export function ExperienceTimeline({ experience }: { experience: Experience }) {
   return (
-    <section className="border-b-4 border-ink px-6 py-16 sm:px-10 sm:py-24">
-      <div className="mx-auto max-w-4xl">
-        <p className="font-mono text-xs tracking-[0.3em] text-accent uppercase">
-          Where the work happened
-        </p>
-        <h2 className="mt-2 text-4xl font-black tracking-tight sm:text-5xl">
-          Experience
-        </h2>
+    <section className="border-b border-border px-6 py-16 sm:px-10">
+      <div className="mx-auto max-w-3xl">
+        <Prompt command="cat experience.log" />
 
-        <ol className="mt-12 border-l-2 border-ink/15 pl-8">
+        <div className="mt-6 space-y-10">
           {experience.featured.map((role) => (
             <FeaturedRoleBlock key={role.company} role={role} />
           ))}
-        </ol>
+        </div>
 
-        <div className="mt-16">
-          <p className="font-mono text-xs tracking-[0.3em] text-ink/50 uppercase">
-            Earlier career
-          </p>
-          <div className="mt-6 grid gap-6 sm:grid-cols-2">
-            {experience.earlier.map((role) => (
-              <EarlierRoleCard key={role.company} role={role} />
-            ))}
-          </div>
+        <div className="mt-12">
+          <Prompt command="cat earlier_career.log" />
+        </div>
+        <div className="mt-6 space-y-6">
+          {experience.earlier.map((role) => (
+            <EarlierRoleLine key={role.company} role={role} />
+          ))}
         </div>
       </div>
     </section>

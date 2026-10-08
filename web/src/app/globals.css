@@ -1,24 +1,48 @@
 @import "tailwindcss";
 
 /*
- * McCandless-style palette: one neutral + two purposeful accents.
- * Navy carries hierarchy/structure, amber is reserved for emphasis
- * (current role, standout numbers) — never used decoratively.
- * See ~/.claude/skills/mccandless-infobeauty for the source principles.
+ * Terminal / CLI design: near-black phosphor screen, monospace everywhere,
+ * a single green accent reserved for prompts, highlights, and the cursor.
  */
 @theme {
-  --color-paper: #faf8f4;
-  --color-ink: #16140f;
-  --color-navy: #13223b;
-  --color-navy-soft: #273a5c;
-  --color-accent: #f2542d;
-  --color-accent-soft: #fde0d3;
-  --font-sans: var(--font-geist-sans);
+  --color-bg: #0a0d0a;
+  --color-panel: #0f140f;
+  --color-fg: #c9d6c9;
+  --color-dim: #5c6b5c;
+  --color-accent: #3ddc6a;
+  --color-accent-dim: #1f7a3d;
+  --color-border: #22301f;
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--color-paper);
-  color: var(--color-ink);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-mono), "SFMono-Regular", ui-monospace, monospace;
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  background: var(--color-accent);
+  vertical-align: text-bottom;
+  animation: blink 1s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
 }

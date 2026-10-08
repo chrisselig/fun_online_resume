@@ -1,17 +1,24 @@
 import type { Stat } from "@/lib/resume";
+import { Prompt } from "./Prompt";
 
 export function StatsBar({ stats }: { stats: Stat[] }) {
   return (
-    <section className="border-b-4 border-ink bg-navy px-6 py-12 sm:px-10">
-      <div className="mx-auto grid max-w-4xl grid-cols-2 gap-8 sm:grid-cols-4">
-        {stats.map((stat) => (
-          <div key={stat.label}>
-            <p className="font-mono text-4xl font-black text-accent sm:text-5xl">
-              {stat.value}
-            </p>
-            <p className="mt-1 text-sm text-paper/80">{stat.label}</p>
-          </div>
-        ))}
+    <section className="border-b border-border px-6 py-16 sm:px-10">
+      <div className="mx-auto max-w-3xl">
+        <Prompt command="neofetch --section career" />
+        <div className="mt-4 overflow-hidden rounded-md border border-border">
+          {stats.map((stat, i) => (
+            <div
+              key={stat.label}
+              className={`flex items-baseline justify-between px-5 py-4 ${
+                i !== stats.length - 1 ? "border-b border-border" : ""
+              }`}
+            >
+              <span className="text-sm text-dim">{stat.label}</span>
+              <span className="text-2xl font-bold text-accent">{stat.value}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

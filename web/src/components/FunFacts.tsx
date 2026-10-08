@@ -1,23 +1,18 @@
+import { Prompt } from "./Prompt";
+
 export function FunFacts({ facts }: { facts: string[] }) {
   return (
-    <section className="bg-navy px-6 py-16 sm:px-10 sm:py-24">
-      <div className="mx-auto max-w-4xl">
-        <p className="font-mono text-xs tracking-[0.3em] text-accent uppercase">
-          Technically irrelevant
-        </p>
-        <h2 className="mt-2 text-4xl font-black tracking-tight text-paper sm:text-5xl">
-          Skills that won&apos;t make the cut anywhere else
-        </h2>
-        <ul className="mt-10 grid gap-4 sm:grid-cols-2">
+    <section className="px-6 py-16 sm:px-10">
+      <div className="mx-auto max-w-3xl">
+        <Prompt command="grep -r 'TODO\|FIXME\|irrelevant' ./chris" />
+        <div className="mt-4 space-y-2 rounded-md border border-border bg-panel p-5">
           {facts.map((fact) => (
-            <li
-              key={fact}
-              className="border-2 border-navy-soft bg-navy-soft/40 p-5 text-paper"
-            >
+            <p key={fact} className="text-sm text-fg/80">
+              <span className="text-dim">{"// "}</span>
               {fact}
-            </li>
+            </p>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   );
