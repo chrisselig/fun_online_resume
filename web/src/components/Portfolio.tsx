@@ -1,32 +1,34 @@
 import type { PortfolioItem } from "@/lib/resume";
+import { Section } from "@/components/Section";
 
 export function Portfolio({ portfolio }: { portfolio: PortfolioItem[] }) {
   return (
-    <section className="border-b-4 border-ink px-6 py-16 sm:px-10 sm:py-24">
-      <div className="mx-auto max-w-4xl">
-        <p className="font-mono text-xs tracking-[0.3em] text-accent uppercase">
-          Proof, not just claims
-        </p>
-        <h2 className="mt-2 text-4xl font-black tracking-tight sm:text-5xl">
-          Portfolio
-        </h2>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          {portfolio.map((item) => (
+    <Section number="04" title="Portfolio">
+      <ol>
+        {portfolio.map((item, i) => (
+          <li
+            key={item.url}
+            className="grid grid-cols-[2rem_1fr] items-baseline gap-4 border-t border-rule py-4 first:border-t-0"
+          >
+            <span className="font-mono text-xs text-ink/40">
+              {String(i + 1).padStart(2, "0")}
+            </span>
             <a
-              key={item.url}
               href={item.url}
               target="_blank"
               rel="noreferrer"
-              className="group border-2 border-ink p-5 transition-colors hover:border-accent hover:bg-navy"
+              className="group flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1"
             >
-              <p className="font-bold group-hover:text-paper">{item.title}</p>
-              <p className="mt-1 font-mono text-sm text-accent group-hover:text-accent">
+              <span className="font-medium group-hover:text-red">
+                {item.title}
+              </span>
+              <span className="font-mono text-sm text-ink/40 group-hover:text-red">
                 {item.url.replace(/^https?:\/\//, "")} ↗
-              </p>
+              </span>
             </a>
-          ))}
-        </div>
-      </div>
-    </section>
+          </li>
+        ))}
+      </ol>
+    </Section>
   );
 }
