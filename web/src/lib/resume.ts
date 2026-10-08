@@ -1,0 +1,84 @@
+import resumeData from "@/data/resume.json";
+
+export interface Profile {
+  name: string;
+  headline: string;
+  location: string;
+  email: string;
+  linkedin_url: string;
+  summary: string;
+  focus_areas: string[];
+}
+
+export interface Stat {
+  label: string;
+  value: string;
+}
+
+export interface SkillEntry {
+  name: string;
+  endorsements: number;
+}
+
+export interface Engagement {
+  client: string;
+  role: string | null;
+  former: boolean;
+  bullets: string[];
+}
+
+export interface FeaturedRole {
+  company: string;
+  location: string;
+  date_range: string;
+  role: string;
+  summary: string | null;
+  bullets: string[];
+  engagements: Engagement[];
+}
+
+export interface EarlierRole {
+  company: string;
+  location: string;
+  date_range: string;
+  role: string;
+  highlight: string;
+}
+
+export interface Experience {
+  featured: FeaturedRole[];
+  earlier: EarlierRole[];
+}
+
+export interface EducationEntry {
+  school: string;
+  degree: string;
+  field_of_study: string;
+  start_year: string;
+  end_year: string;
+  description: string;
+}
+
+export interface CertificationEntry {
+  name: string;
+  authority: string;
+  issued_date: string;
+}
+
+export interface PortfolioItem {
+  title: string;
+  url: string;
+}
+
+export interface Resume {
+  profile: Profile;
+  stats: Stat[];
+  skills: SkillEntry[];
+  experience: Experience;
+  education: EducationEntry[];
+  certifications: CertificationEntry[];
+  portfolio: PortfolioItem[];
+  fun_facts: string[];
+}
+
+export const resume = resumeData as Resume;
