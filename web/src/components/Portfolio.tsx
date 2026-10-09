@@ -19,7 +19,7 @@ export function Portfolio({ portfolio }: { portfolio: PortfolioItem[] }) {
               rel="noreferrer"
               className="group border-2 border-ink p-5 transition-colors hover:border-accent hover:bg-navy"
             >
-              <p className="font-bold group-hover:text-paper">{item.title}</p>
+              <p className="font-bold group-hover:text-ink">{item.title}</p>
               <p className="mt-1 font-mono text-sm text-accent group-hover:text-accent">
                 {item.url.replace(/^https?:\/\//, "")} ↗
               </p>

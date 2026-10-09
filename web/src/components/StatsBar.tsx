@@ -9,7 +9,7 @@ export function StatsBar({ stats }: { stats: Stat[] }) {
             <p className="font-mono text-4xl font-black text-accent sm:text-5xl">
               {stat.value}
             </p>
-            <p className="mt-1 text-sm text-paper/80">{stat.label}</p>
+            <p className="mt-1 text-sm text-ink/80">{stat.label}</p>
           </div>
         ))}
       </div>

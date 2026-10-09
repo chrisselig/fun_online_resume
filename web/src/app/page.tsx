@@ -1,6 +1,7 @@
 import { Hero } from "@/components/Hero";
 import { StatsBar } from "@/components/StatsBar";
 import { SkillsBubbleChart } from "@/components/SkillsBubbleChart";
+import { ArcadeGame } from "@/components/ArcadeGame";
 import { ExperienceTimeline } from "@/components/ExperienceTimeline";
 import { EducationCertifications } from "@/components/EducationCertifications";
 import { Portfolio } from "@/components/Portfolio";
@@ -13,6 +14,11 @@ export default function Home() {
       <Hero profile={resume.profile} />
       <StatsBar stats={resume.stats} />
       <SkillsBubbleChart skills={resume.skills} />
+      <ArcadeGame
+        summary={resume.profile.summary}
+        featured={resume.experience.featured}
+        skills={resume.skills}
+      />
       <ExperienceTimeline experience={resume.experience} />
       <EducationCertifications
         education={resume.education}
@@ -21,7 +27,7 @@ export default function Home() {
       <Portfolio portfolio={resume.portfolio} />
       <FunFacts facts={resume.fun_facts} />
       <footer className="border-t-4 border-ink px-6 py-8 text-center font-mono text-xs text-ink/50">
-        {resume.profile.name} · built as a visual resume
+        {resume.profile.name} · built as a playable resume
       </footer>
     </main>
   );

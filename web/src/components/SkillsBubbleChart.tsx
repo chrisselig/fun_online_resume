@@ -46,7 +46,7 @@ export function SkillsBubbleChart({ skills }: { skills: SkillEntry[] }) {
                   y={c.y}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="fill-paper font-sans font-semibold"
+                  className="fill-ink font-sans font-semibold"
                   style={{ fontSize }}
                 >
                   {skill.name}

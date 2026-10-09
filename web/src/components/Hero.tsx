@@ -5,7 +5,7 @@ export function Hero({ profile }: { profile: Profile }) {
     <header className="border-b-4 border-ink px-6 py-16 sm:px-10 sm:py-24">
       <div className="mx-auto max-w-4xl">
         <p className="font-mono text-xs tracking-[0.3em] text-accent uppercase">
-          A visual resume
+          A playable resume — insert coin
         </p>
         <h1 className="mt-4 text-5xl font-black tracking-tight sm:text-7xl">
           {profile.name}

@@ -1,18 +1,19 @@
 @import "tailwindcss";
 
 /*
- * McCandless-style palette: one neutral + two purposeful accents.
- * Navy carries hierarchy/structure, amber is reserved for emphasis
- * (current role, standout numbers) — never used decoratively.
- * See ~/.claude/skills/mccandless-infobeauty for the source principles.
+ * Arcade/CRT palette — same token names as the base design (paper/ink/
+ * navy/navy-soft/accent) so every existing component re-skins for free,
+ * just inverted: paper is now the near-black canvas, ink the light
+ * phosphor text, navy a readable cyan used for borders/text/panels,
+ * accent a neon magenta pop color.
  */
 @theme {
-  --color-paper: #faf8f4;
-  --color-ink: #16140f;
-  --color-navy: #13223b;
-  --color-navy-soft: #273a5c;
-  --color-accent: #f2542d;
-  --color-accent-soft: #fde0d3;
+  --color-paper: #090b10;
+  --color-ink: #eaf6f0;
+  --color-navy: #1fb6c9;
+  --color-navy-soft: #0c2e33;
+  --color-accent: #ff2d78;
+  --color-accent-soft: #3d0f26;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -20,5 +21,22 @@
 body {
   background: var(--color-paper);
   color: var(--color-ink);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+/* Subtle CRT scanlines. Static, no motion — nothing to gate on reduced-motion. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.14) 0px,
+    rgba(0, 0, 0, 0.14) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 50;
+  mix-blend-mode: multiply;
 }
