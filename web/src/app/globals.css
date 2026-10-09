@@ -1,18 +1,21 @@
 @import "tailwindcss";
 
 /*
- * McCandless-style palette: one neutral + two purposeful accents.
- * Navy carries hierarchy/structure, amber is reserved for emphasis
- * (current role, standout numbers) — never used decoratively.
- * See ~/.claude/skills/mccandless-infobeauty for the source principles.
+ * McCandless Maximalist palette: four meaningful category hues instead of
+ * one restrained accent — each hue is reused consistently across both the
+ * tools sunburst and the career-eras rings, so "maximalist" still obeys
+ * the book's rule that every color carries real meaning, it just carries
+ * more of it. See ~/.claude/skills/mccandless-infobeauty.
  */
 @theme {
-  --color-paper: #faf8f4;
+  --color-paper: #faf6ec;
   --color-ink: #16140f;
   --color-navy: #13223b;
   --color-navy-soft: #273a5c;
-  --color-accent: #f2542d;
-  --color-accent-soft: #fde0d3;
+  --color-cat-lang: #d6453d;
+  --color-cat-bi: #1f8a70;
+  --color-cat-platform: #5b3a8e;
+  --color-cat-auto: #e0992e;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
