@@ -2,22 +2,22 @@ import type { EarlierRole, Engagement, Experience, FeaturedRole } from "@/lib/re
 
 function EngagementCard({ engagement }: { engagement: Engagement }) {
   return (
-    <div className="border-l-4 border-accent/60 bg-paper pl-4">
-      <p className="flex flex-wrap items-baseline gap-x-2 font-bold">
+    <div className="rounded-md border border-border bg-canvas p-4">
+      <p className="flex flex-wrap items-baseline gap-x-2 text-sm font-semibold text-ink">
         {engagement.client}
         {engagement.former && (
-          <span className="font-mono text-xs font-normal text-ink/50 uppercase">
+          <span className="rounded-full bg-border px-2 py-0.5 text-[10px] font-normal text-muted uppercase">
             former client
           </span>
         )}
       </p>
       {engagement.role && (
-        <p className="text-sm text-navy italic">{engagement.role}</p>
+        <p className="text-xs font-medium text-primary">{engagement.role}</p>
       )}
-      <ul className="mt-2 space-y-1 text-sm text-ink/80">
+      <ul className="mt-2 space-y-1 text-xs text-muted">
         {engagement.bullets.map((bullet) => (
           <li key={bullet} className="flex gap-2">
-            <span className="shrink-0 text-accent">—</span>
+            <span className="shrink-0 text-primary">·</span>
             <span>{bullet}</span>
           </li>
         ))}
@@ -26,29 +26,29 @@ function EngagementCard({ engagement }: { engagement: Engagement }) {
   );
 }
 
-function FeaturedRoleBlock({ role }: { role: FeaturedRole }) {
+function FeaturedRoleCard({ role }: { role: FeaturedRole }) {
   return (
-    <li className="relative mb-16 last:mb-0">
-      <span
-        className="absolute top-1.5 -left-[2.3rem] h-4 w-4 rounded-full border-4 border-paper bg-accent"
-        aria-hidden
-      />
-      <p className="font-mono text-sm text-ink/60">{role.date_range}</p>
-      <h3 className="mt-1 text-2xl font-bold">{role.role}</h3>
-      <p className="text-lg font-medium text-navy">
+    <div className="rounded-lg border border-border p-5">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h3 className="font-semibold text-ink">{role.role}</h3>
+        <span className="rounded-full bg-primary/10 px-2.5 py-1 font-mono text-xs font-medium text-primary">
+          {role.date_range}
+        </span>
+      </div>
+      <p className="text-sm text-muted">
         {role.company}
         {role.location ? ` · ${role.location}` : ""}
       </p>
 
       {role.summary && (
-        <p className="mt-3 max-w-2xl text-ink/80">{role.summary}</p>
+        <p className="mt-3 text-sm text-ink/80">{role.summary}</p>
       )}
 
       {role.bullets.length > 0 && (
-        <ul className="mt-3 space-y-1 text-ink/80">
+        <ul className="mt-3 space-y-1.5 text-sm text-ink/80">
           {role.bullets.map((bullet) => (
             <li key={bullet} className="flex gap-2">
-              <span className="shrink-0 text-accent">—</span>
+              <span className="shrink-0 text-primary">·</span>
               <span>{bullet}</span>
             </li>
           ))}
@@ -56,55 +56,50 @@ function FeaturedRoleBlock({ role }: { role: FeaturedRole }) {
       )}
 
       {role.engagements.length > 0 && (
-        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {role.engagements.map((engagement) => (
             <EngagementCard key={engagement.client} engagement={engagement} />
           ))}
         </div>
       )}
-    </li>
+    </div>
   );
 }
 
-function EarlierRoleCard({ role }: { role: EarlierRole }) {
+function EarlierRoleRow({ role }: { role: EarlierRole }) {
   return (
-    <div className="border-l-4 border-navy pl-4">
-      <p className="font-mono text-sm text-ink/60">{role.date_range}</p>
-      <h4 className="font-bold">{role.company}</h4>
-      <p className="text-sm text-navy">{role.role}</p>
-      <p className="mt-1 text-sm text-ink/80">{role.highlight}</p>
+    <div className="flex flex-col gap-1 border-t border-border py-3 first:border-t-0 sm:flex-row sm:items-baseline sm:gap-4">
+      <span className="w-28 shrink-0 font-mono text-xs text-muted">
+        {role.date_range}
+      </span>
+      <div className="flex-1">
+        <span className="font-semibold text-ink">{role.company}</span>
+        <span className="text-sm text-muted"> · {role.role}</span>
+        <p className="mt-0.5 text-sm text-ink/70">{role.highlight}</p>
+      </div>
     </div>
   );
 }
 
 export function ExperienceTimeline({ experience }: { experience: Experience }) {
   return (
-    <section className="border-b-4 border-ink px-6 py-16 sm:px-10 sm:py-24">
-      <div className="mx-auto max-w-4xl">
-        <p className="font-mono text-xs tracking-[0.3em] text-accent uppercase">
-          Where the work happened
+    <div>
+      <div className="space-y-5">
+        {experience.featured.map((role) => (
+          <FeaturedRoleCard key={role.company} role={role} />
+        ))}
+      </div>
+
+      <div className="mt-6">
+        <p className="text-xs font-semibold tracking-wide text-muted uppercase">
+          Earlier career
         </p>
-        <h2 className="mt-2 text-4xl font-black tracking-tight sm:text-5xl">
-          Experience
-        </h2>
-
-        <ol className="mt-12 border-l-2 border-ink/15 pl-8">
-          {experience.featured.map((role) => (
-            <FeaturedRoleBlock key={role.company} role={role} />
+        <div className="mt-2">
+          {experience.earlier.map((role) => (
+            <EarlierRoleRow key={role.company} role={role} />
           ))}
-        </ol>
-
-        <div className="mt-16">
-          <p className="font-mono text-xs tracking-[0.3em] text-ink/50 uppercase">
-            Earlier career
-          </p>
-          <div className="mt-6 grid gap-6 sm:grid-cols-2">
-            {experience.earlier.map((role) => (
-              <EarlierRoleCard key={role.company} role={role} />
-            ))}
-          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

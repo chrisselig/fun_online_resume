@@ -1,24 +1,27 @@
 @import "tailwindcss";
 
 /*
- * McCandless-style palette: one neutral + two purposeful accents.
- * Navy carries hierarchy/structure, amber is reserved for emphasis
- * (current role, standout numbers) — never used decoratively.
- * See ~/.claude/skills/mccandless-infobeauty for the source principles.
+ * "Analytics Dashboard" theme — self-referential: the resume rendered as
+ * if Chris built it in Power BI, his actual day-to-day tool. Colors match
+ * Power BI's default canvas/service palette (blue #118DFF, gold #F2C811,
+ * charcoal nav #201F1E, Fluent UI greys) rather than an invented brand.
  */
 @theme {
-  --color-paper: #faf8f4;
-  --color-ink: #16140f;
-  --color-navy: #13223b;
-  --color-navy-soft: #273a5c;
-  --color-accent: #f2542d;
-  --color-accent-soft: #fde0d3;
+  --color-canvas: #f3f2f1;
+  --color-panel: #ffffff;
+  --color-ink: #252423;
+  --color-muted: #605e5c;
+  --color-border: #e1dfdd;
+  --color-primary: #118dff;
+  --color-primary-dark: #0a5ca8;
+  --color-gold: #f2c811;
+  --color-nav: #201f1e;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--color-paper);
+  background: var(--color-canvas);
   color: var(--color-ink);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), "Segoe UI", Arial, Helvetica, sans-serif;
 }

@@ -8,54 +8,43 @@ export function EducationCertifications({
   certifications: CertificationEntry[];
 }) {
   return (
-    <section className="border-b-4 border-ink px-6 py-16 sm:px-10 sm:py-24">
-      <div className="mx-auto max-w-4xl">
-        <div>
-          <p className="font-mono text-xs tracking-[0.3em] text-accent uppercase">
-            Foundation
-          </p>
-          <h2 className="mt-2 text-3xl font-black tracking-tight">Education</h2>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2">
-            {education.map((ed) => (
-              <div key={ed.school} className="border-l-4 border-navy pl-4">
-                {ed.end_year && (
-                  <p className="font-mono text-sm text-ink/60">{ed.end_year}</p>
-                )}
-                <h3 className="text-lg font-bold">{ed.degree}</h3>
-                <p className="text-ink/80">
-                  {ed.field_of_study ? `${ed.field_of_study} · ` : ""}
-                  {ed.school}
-                </p>
-              </div>
-            ))}
+    <div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {education.map((ed) => (
+          <div key={ed.school} className="rounded-md border border-border p-4">
+            {ed.end_year && (
+              <p className="font-mono text-xs text-muted">{ed.end_year}</p>
+            )}
+            <h3 className="text-sm font-semibold text-ink">{ed.degree}</h3>
+            <p className="text-sm text-muted">
+              {ed.field_of_study ? `${ed.field_of_study} · ` : ""}
+              {ed.school}
+            </p>
           </div>
-        </div>
-
-        <div className="mt-16">
-          <p className="font-mono text-xs tracking-[0.3em] text-accent uppercase">
-            Never stopped learning
-          </p>
-          <h2 className="mt-2 text-3xl font-black tracking-tight">
-            Professional Development
-          </h2>
-          <ul className="mt-8 flex flex-wrap gap-2">
-            {certifications.map((cert) => (
-              <li
-                key={cert.name}
-                title={cert.authority || undefined}
-                className="rounded-full border-2 border-navy px-3 py-1.5 text-sm font-medium text-navy"
-              >
-                {cert.name}
-                {cert.issued_date && (
-                  <span className="ml-1.5 font-mono text-xs text-ink/50">
-                    {cert.issued_date}
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+        ))}
       </div>
-    </section>
+
+      <div className="mt-6 border-t border-border pt-6">
+        <p className="text-xs font-semibold tracking-wide text-muted uppercase">
+          Professional development
+        </p>
+        <ul className="mt-3 flex flex-wrap gap-2">
+          {certifications.map((cert) => (
+            <li
+              key={cert.name}
+              title={cert.authority || undefined}
+              className="rounded-full border border-border px-3 py-1 text-xs font-medium text-ink"
+            >
+              {cert.name}
+              {cert.issued_date && (
+                <span className="ml-1.5 font-mono text-[10px] text-muted">
+                  {cert.issued_date}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
