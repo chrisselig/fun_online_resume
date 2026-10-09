@@ -1,24 +1,22 @@
 export function FunFacts({ facts }: { facts: string[] }) {
+  const rotations = ["-rotate-1", "rotate-1", "-rotate-2", "rotate-2"];
+
   return (
-    <section className="bg-navy px-6 py-16 sm:px-10 sm:py-24">
-      <div className="mx-auto max-w-4xl">
-        <p className="font-mono text-xs tracking-[0.3em] text-accent uppercase">
-          Technically irrelevant
-        </p>
-        <h2 className="mt-2 text-4xl font-black tracking-tight text-paper sm:text-5xl">
-          Skills that won&apos;t make the cut anywhere else
-        </h2>
-        <ul className="mt-10 grid gap-4 sm:grid-cols-2">
-          {facts.map((fact) => (
-            <li
-              key={fact}
-              className="border-2 border-navy-soft bg-navy-soft/40 p-5 text-paper"
-            >
-              {fact}
-            </li>
-          ))}
-        </ul>
-      </div>
+    <section className="bg-accent px-6 py-16 sm:px-10 sm:py-24">
+      <p className="brutal-tag text-sm font-bold">007 / OFF_TOPIC.TXT</p>
+      <h2 className="mt-2 max-w-3xl text-5xl font-black tracking-tighter uppercase sm:text-7xl">
+        Skills that won&apos;t make the cut anywhere else
+      </h2>
+      <ul className="mt-12 grid gap-8 sm:grid-cols-2">
+        {facts.map((fact, i) => (
+          <li
+            key={fact}
+            className={`border-4 border-ink bg-paper p-5 font-serif text-lg ${rotations[i % rotations.length]}`}
+          >
+            {fact}
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

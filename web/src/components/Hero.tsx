@@ -2,45 +2,44 @@ import type { Profile } from "@/lib/resume";
 
 export function Hero({ profile }: { profile: Profile }) {
   return (
-    <header className="border-b-4 border-ink px-6 py-16 sm:px-10 sm:py-24">
-      <div className="mx-auto max-w-4xl">
-        <p className="font-mono text-xs tracking-[0.3em] text-accent uppercase">
-          A visual resume
-        </p>
-        <h1 className="mt-4 text-5xl font-black tracking-tight sm:text-7xl">
-          {profile.name}
+    <header className="relative border-b-8 border-ink px-6 pt-10 pb-20 sm:px-10 sm:pt-16 sm:pb-28">
+      <p className="brutal-tag text-sm font-bold">001 / RESUME.EXE</p>
+
+      <div className="relative mt-6 max-w-5xl">
+        <h1 className="text-[15vw] leading-[0.82] font-black tracking-tighter uppercase sm:text-8xl md:text-9xl">
+          {profile.name.replace(", MBA", "")}
         </h1>
-        <p className="mt-4 max-w-2xl text-xl font-medium text-navy sm:text-2xl">
-          {profile.headline}
-        </p>
-        <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink/80">
-          {profile.summary}
-        </p>
+        <span className="brutal-tag absolute top-2 right-0 border-4 border-ink bg-accent px-2 py-1 text-xs font-bold whitespace-nowrap sm:top-4 sm:-right-6 sm:rotate-6">
+          MBA
+        </span>
+      </div>
 
-        <ul className="mt-6 flex flex-wrap gap-2">
-          {profile.focus_areas.map((area) => (
-            <li
-              key={area}
-              className="rounded-full border-2 border-navy px-3 py-1 font-mono text-xs font-semibold text-navy uppercase"
-            >
-              {area}
-            </li>
-          ))}
-        </ul>
+      <p className="mt-6 inline-block border-4 border-ink bg-ink px-3 py-1 text-xl font-bold text-paper sm:text-2xl">
+        {profile.headline}
+      </p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-sm text-ink/70">
-          <span>{profile.location}</span>
-          {profile.linkedin_url && (
-            <a
-              href={profile.linkedin_url}
-              target="_blank"
-              rel="noreferrer"
-              className="text-accent underline decoration-2 underline-offset-4 hover:text-ink"
-            >
-              LinkedIn ↗
-            </a>
-          )}
-        </div>
+      <p className="mt-8 max-w-2xl border-l-8 border-ink pl-4 font-serif text-lg leading-snug">
+        {profile.summary}
+      </p>
+
+      <ul className="mt-8 flex flex-wrap gap-0">
+        {profile.focus_areas.map((area) => (
+          <li
+            key={area}
+            className="brutal-tag -ml-[4px] border-4 border-ink px-3 py-1 text-xs font-bold uppercase first:ml-0"
+          >
+            {area}
+          </li>
+        ))}
+      </ul>
+
+      <div className="brutal-tag mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-bold">
+        <span>{profile.location.toUpperCase()}</span>
+        {profile.linkedin_url && (
+          <a href={profile.linkedin_url} target="_blank" rel="noreferrer" className="brutal-link">
+            LINKEDIN.COM/IN/CHRIS-SELIG →
+          </a>
+        )}
       </div>
     </header>
   );

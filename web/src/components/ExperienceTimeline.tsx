@@ -2,22 +2,22 @@ import type { EarlierRole, Engagement, Experience, FeaturedRole } from "@/lib/re
 
 function EngagementCard({ engagement }: { engagement: Engagement }) {
   return (
-    <div className="border-l-4 border-accent/60 bg-paper pl-4">
-      <p className="flex flex-wrap items-baseline gap-x-2 font-bold">
+    <div className="border-4 border-ink p-4">
+      <p className="flex flex-wrap items-baseline gap-x-2 text-lg font-black uppercase">
         {engagement.client}
         {engagement.former && (
-          <span className="font-mono text-xs font-normal text-ink/50 uppercase">
-            former client
+          <span className="brutal-tag border-2 border-ink bg-accent px-1 text-[10px] font-bold">
+            FORMER
           </span>
         )}
       </p>
       {engagement.role && (
-        <p className="text-sm text-navy italic">{engagement.role}</p>
+        <p className="brutal-tag text-xs font-bold uppercase">{engagement.role}</p>
       )}
-      <ul className="mt-2 space-y-1 text-sm text-ink/80">
+      <ul className="mt-3 space-y-2 font-serif text-sm">
         {engagement.bullets.map((bullet) => (
           <li key={bullet} className="flex gap-2">
-            <span className="shrink-0 text-accent">—</span>
+            <span className="shrink-0 font-black">×</span>
             <span>{bullet}</span>
           </li>
         ))}
@@ -26,29 +26,33 @@ function EngagementCard({ engagement }: { engagement: Engagement }) {
   );
 }
 
-function FeaturedRoleBlock({ role }: { role: FeaturedRole }) {
+function FeaturedRoleBlock({ role, index }: { role: FeaturedRole; index: number }) {
   return (
-    <li className="relative mb-16 last:mb-0">
-      <span
-        className="absolute top-1.5 -left-[2.3rem] h-4 w-4 rounded-full border-4 border-paper bg-accent"
-        aria-hidden
-      />
-      <p className="font-mono text-sm text-ink/60">{role.date_range}</p>
-      <h3 className="mt-1 text-2xl font-bold">{role.role}</h3>
-      <p className="text-lg font-medium text-navy">
-        {role.company}
-        {role.location ? ` · ${role.location}` : ""}
+    <div className="border-b-8 border-ink px-6 py-12 sm:px-10 sm:py-16">
+      <div className="flex flex-wrap items-baseline justify-between gap-4">
+        <span className="brutal-tag border-4 border-ink bg-ink px-2 py-1 text-xs font-bold text-paper">
+          0{index}
+        </span>
+        <p className="brutal-tag text-sm font-bold">{role.date_range}</p>
+      </div>
+      <h3 className="mt-4 text-3xl font-black tracking-tighter uppercase sm:text-5xl">
+        {role.role}
+      </h3>
+      <p className="mt-1 inline-block border-b-4 border-ink text-lg font-bold">
+        {role.company} — {role.location}
       </p>
 
       {role.summary && (
-        <p className="mt-3 max-w-2xl text-ink/80">{role.summary}</p>
+        <p className="mt-4 max-w-2xl border-l-8 border-ink pl-4 font-serif text-base">
+          {role.summary}
+        </p>
       )}
 
       {role.bullets.length > 0 && (
-        <ul className="mt-3 space-y-1 text-ink/80">
+        <ul className="mt-4 max-w-2xl space-y-2 font-serif text-base">
           {role.bullets.map((bullet) => (
             <li key={bullet} className="flex gap-2">
-              <span className="shrink-0 text-accent">—</span>
+              <span className="shrink-0 font-black">×</span>
               <span>{bullet}</span>
             </li>
           ))}
@@ -56,53 +60,47 @@ function FeaturedRoleBlock({ role }: { role: FeaturedRole }) {
       )}
 
       {role.engagements.length > 0 && (
-        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
           {role.engagements.map((engagement) => (
             <EngagementCard key={engagement.client} engagement={engagement} />
           ))}
         </div>
       )}
-    </li>
+    </div>
   );
 }
 
 function EarlierRoleCard({ role }: { role: EarlierRole }) {
   return (
-    <div className="border-l-4 border-navy pl-4">
-      <p className="font-mono text-sm text-ink/60">{role.date_range}</p>
-      <h4 className="font-bold">{role.company}</h4>
-      <p className="text-sm text-navy">{role.role}</p>
-      <p className="mt-1 text-sm text-ink/80">{role.highlight}</p>
+    <div className="border-4 border-ink p-4">
+      <p className="brutal-tag text-xs font-bold">{role.date_range}</p>
+      <h4 className="text-xl font-black uppercase">{role.company}</h4>
+      <p className="brutal-tag text-xs font-bold uppercase">{role.role}</p>
+      <p className="mt-2 font-serif text-sm">{role.highlight}</p>
     </div>
   );
 }
 
 export function ExperienceTimeline({ experience }: { experience: Experience }) {
   return (
-    <section className="border-b-4 border-ink px-6 py-16 sm:px-10 sm:py-24">
-      <div className="mx-auto max-w-4xl">
-        <p className="font-mono text-xs tracking-[0.3em] text-accent uppercase">
+    <section className="border-b-8 border-ink">
+      <div className="border-b-8 border-ink px-6 py-8 sm:px-10">
+        <p className="brutal-tag text-sm font-bold">004 / EXPERIENCE.LOG</p>
+        <h2 className="mt-2 text-5xl font-black tracking-tighter uppercase sm:text-7xl">
           Where the work happened
-        </p>
-        <h2 className="mt-2 text-4xl font-black tracking-tight sm:text-5xl">
-          Experience
         </h2>
+      </div>
 
-        <ol className="mt-12 border-l-2 border-ink/15 pl-8">
-          {experience.featured.map((role) => (
-            <FeaturedRoleBlock key={role.company} role={role} />
+      {experience.featured.map((role, i) => (
+        <FeaturedRoleBlock key={role.company} role={role} index={i + 1} />
+      ))}
+
+      <div className="px-6 py-12 sm:px-10 sm:py-16">
+        <p className="brutal-tag text-sm font-bold uppercase">Earlier career</p>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          {experience.earlier.map((role) => (
+            <EarlierRoleCard key={role.company} role={role} />
           ))}
-        </ol>
-
-        <div className="mt-16">
-          <p className="font-mono text-xs tracking-[0.3em] text-ink/50 uppercase">
-            Earlier career
-          </p>
-          <div className="mt-6 grid gap-6 sm:grid-cols-2">
-            {experience.earlier.map((role) => (
-              <EarlierRoleCard key={role.company} role={role} />
-            ))}
-          </div>
         </div>
       </div>
     </section>
