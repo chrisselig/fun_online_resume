@@ -9,7 +9,7 @@ import {
   type KeyboardEvent,
 } from "react";
 import type { EarlierRole, FeaturedRole, SkillEntry } from "@/lib/resume";
-import { extractPainPoints, topWeapons } from "@/lib/arcadeContent";
+import { extractPainPoints, topWeapons, weaponKindFor, type WeaponKind } from "@/lib/arcadeContent";
 
 const CANVAS_W = 480;
 const CANVAS_H = 320;
@@ -26,9 +26,20 @@ const ENEMY_GAP_X = 10;
 const ENEMY_GAP_Y = 12;
 const BASE_ENEMY_SPEED = 0.4;
 const ENEMY_SPEED_PER_WAVE = 0.12;
-const ENEMY_DROP = 14;
+const ENEMY_DROP = 20;
+// Lose condition: the formation only has to get this close to the ship's
+// row, not literally overlap it — keeps a bonus minigame from dragging on.
+const DANGER_Y = PLAYER_Y - 26;
 const WAVE_COUNT = 4;
+const START_LIVES = 3;
 const SHOT_COOLDOWN_MS = 220;
+const RAPID_COOLDOWN_MS = 110;
+const LASER_COOLDOWN_MS = 300;
+const SPREAD_VX = 1.7;
+const WAVE_AMPLITUDE = 22;
+const WAVE_FREQ = 0.045;
+const HIT_FLASH_MS = 180;
+const LASER_FLASH_MS = 140;
 const MOVE_KEYS = new Set(["arrowleft", "arrowright", "a", "d", " "]);
 const WEAPON_KEYS = new Set(["q", "e", "[", "]"]);
 
@@ -46,7 +57,19 @@ interface Enemy {
   label: string;
 }
 
-type Status = "idle" | "playing" | "levelClear" | "complete";
+interface Bullet {
+  x: number;
+  y: number;
+  vx: number;
+  wave?: { spawnX: number; spawnY: number };
+}
+
+interface LaserFlash {
+  x: number;
+  bornAt: number;
+}
+
+type Status = "idle" | "playing" | "levelClear" | "gameOver" | "complete";
 
 function buildWave(labels: string[], waveIndex: number): Enemy[] {
   const totalW = ENEMY_COLS * ENEMY_W + (ENEMY_COLS - 1) * ENEMY_GAP_X;
@@ -99,6 +122,30 @@ function waveReveal(
   };
 }
 
+/** Spawn the bullet(s) for one shot of a given weapon kind, from the ship's muzzle position. */
+function spawnShot(kind: WeaponKind, muzzleX: number, muzzleY: number): Bullet[] {
+  switch (kind) {
+    case "twin":
+      return [
+        { x: muzzleX - 6, y: muzzleY, vx: 0 },
+        { x: muzzleX + 6, y: muzzleY, vx: 0 },
+      ];
+    case "spread":
+      return [
+        { x: muzzleX, y: muzzleY, vx: -SPREAD_VX },
+        { x: muzzleX, y: muzzleY, vx: 0 },
+        { x: muzzleX, y: muzzleY, vx: SPREAD_VX },
+      ];
+    case "wave":
+      return [{ x: muzzleX, y: muzzleY, vx: 0, wave: { spawnX: muzzleX, spawnY: muzzleY } }];
+    case "rapid":
+    case "single":
+    case "laser":
+    default:
+      return [{ x: muzzleX, y: muzzleY, vx: 0 }];
+  }
+}
+
 export function ArcadeGame({
   summary,
   featured,
@@ -113,18 +160,22 @@ export function ArcadeGame({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const keysRef = useRef<Set<string>>(new Set());
   const playerXRef = useRef((CANVAS_W - PLAYER_W) / 2);
-  const bulletsRef = useRef<{ x: number; y: number }[]>([]);
+  const bulletsRef = useRef<Bullet[]>([]);
+  const laserFlashesRef = useRef<LaserFlash[]>([]);
   const enemiesRef = useRef<Enemy[]>([]);
   const offsetXRef = useRef(0);
   const dirRef = useRef(1);
   const dropRef = useRef(0);
   const lastShotRef = useRef(0);
   const lastWeaponSwitchRef = useRef(0);
+  const hitFlashUntilRef = useRef(0);
+  const pendingLaserXRef = useRef<number | null>(null);
   const rafRef = useRef(0);
 
   const [status, setStatus] = useState<Status>("idle");
   const [waveIndex, setWaveIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(START_LIVES);
   const [weaponIndex, setWeaponIndex] = useState(0);
 
   const painPoints = useMemo(
@@ -133,11 +184,13 @@ export function ArcadeGame({
   );
   const weapons = useMemo(() => topWeapons(skills), [skills]);
   const activeWeapon = weapons[weaponIndex % weapons.length] ?? "Python";
+  const activeKind = weaponKindFor(activeWeapon);
 
   const setupWave = useCallback(
     (idx: number) => {
       enemiesRef.current = buildWave(painPoints, idx);
       bulletsRef.current = [];
+      laserFlashesRef.current = [];
       dirRef.current = 1;
       dropRef.current = 0;
       offsetXRef.current = 0;
@@ -145,6 +198,13 @@ export function ArcadeGame({
     },
     [painPoints],
   );
+
+  const resetFormationPosition = () => {
+    dirRef.current = 1;
+    dropRef.current = 0;
+    offsetXRef.current = 0;
+    bulletsRef.current = [];
+  };
 
   const draw = useCallback(
     (ctx: CanvasRenderingContext2D) => {
@@ -163,6 +223,16 @@ export function ArcadeGame({
         ctx.fillRect(b.x - 1.5, b.y, 3, 8);
       }
 
+      const now = performance.now();
+      for (const flash of laserFlashesRef.current) {
+        const age = now - flash.bornAt;
+        if (age > LASER_FLASH_MS) continue;
+        ctx.globalAlpha = 1 - age / LASER_FLASH_MS;
+        ctx.fillStyle = COLOR_ACCENT;
+        ctx.fillRect(flash.x - 2, 0, 4, PLAYER_Y);
+        ctx.globalAlpha = 1;
+      }
+
       ctx.font = FONT;
       for (const e of enemiesRef.current) {
         if (!e.alive) continue;
@@ -177,6 +247,13 @@ export function ArcadeGame({
         const lineH = 9;
         const startY = y + ENEMY_H / 2 - ((lines.length - 1) * lineH) / 2 + 3;
         lines.forEach((line, i) => ctx.fillText(line, x + ENEMY_W / 2, startY + i * lineH));
+      }
+
+      if (now < hitFlashUntilRef.current) {
+        ctx.fillStyle = COLOR_INK;
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+        ctx.globalAlpha = 1;
       }
     },
     [activeWeapon],
@@ -204,8 +281,24 @@ export function ArcadeGame({
         );
       }
 
+      if (pendingLaserXRef.current !== null) {
+        const laserX = pendingLaserXRef.current;
+        pendingLaserXRef.current = null;
+        let hits = 0;
+        for (const enemy of enemiesRef.current) {
+          if (!enemy.alive) continue;
+          const ex = enemy.baseX + offsetXRef.current;
+          if (laserX > ex && laserX < ex + ENEMY_W) {
+            enemy.alive = false;
+            hits++;
+          }
+        }
+        if (hits > 0) setScore((s) => s + 10 * hits);
+      }
+
       offsetXRef.current += dirRef.current * enemySpeed;
-      const aliveXs = enemiesRef.current.filter((e) => e.alive).map((e) => e.baseX);
+      const aliveEnemies = enemiesRef.current.filter((e) => e.alive);
+      const aliveXs = aliveEnemies.map((e) => e.baseX);
       if (aliveXs.length > 0) {
         const minX = Math.min(...aliveXs);
         const maxX = Math.max(...aliveXs) + ENEMY_W;
@@ -215,9 +308,38 @@ export function ArcadeGame({
         }
       }
 
+      // Lose condition: the formation reached the danger line.
+      const deepestY = Math.max(0, ...aliveEnemies.map((e) => e.baseY + dropRef.current + ENEMY_H));
+      if (aliveEnemies.length > 0 && deepestY >= DANGER_Y) {
+        hitFlashUntilRef.current = performance.now() + HIT_FLASH_MS;
+        draw(ctx);
+        setLives((l) => {
+          const remaining = l - 1;
+          if (remaining <= 0) {
+            setStatus("gameOver");
+          } else {
+            resetFormationPosition();
+          }
+          return remaining;
+        });
+        rafRef.current = requestAnimationFrame(loop);
+        return;
+      }
+
       bulletsRef.current = bulletsRef.current
-        .map((b) => ({ x: b.x, y: b.y - BULLET_SPEED }))
-        .filter((b) => b.y > -10);
+        .map((b) => {
+          const y = b.y - BULLET_SPEED;
+          if (b.wave) {
+            const traveled = b.wave.spawnY - y;
+            return {
+              ...b,
+              y,
+              x: b.wave.spawnX + WAVE_AMPLITUDE * Math.sin(traveled * WAVE_FREQ),
+            };
+          }
+          return { ...b, y, x: b.x + b.vx };
+        })
+        .filter((b) => b.y > -10 && b.x > -10 && b.x < CANVAS_W + 10);
 
       for (const enemy of enemiesRef.current) {
         if (!enemy.alive) continue;
@@ -238,6 +360,9 @@ export function ArcadeGame({
         }
       }
       bulletsRef.current = bulletsRef.current.filter((b) => b.y > -100);
+      laserFlashesRef.current = laserFlashesRef.current.filter(
+        (f) => performance.now() - f.bornAt < LASER_FLASH_MS,
+      );
 
       draw(ctx);
 
@@ -262,6 +387,7 @@ export function ArcadeGame({
   const beginGame = () => {
     setWaveIndex(0);
     setScore(0);
+    setLives(START_LIVES);
     setWeaponIndex(0);
     setupWave(0);
     setStatus("playing");
@@ -285,6 +411,26 @@ export function ArcadeGame({
     setWeaponIndex((i) => (i + dir + weapons.length) % weapons.length);
   };
 
+  const fire = () => {
+    const now = performance.now();
+    const cooldown =
+      activeKind === "rapid" ? RAPID_COOLDOWN_MS : activeKind === "laser" ? LASER_COOLDOWN_MS : SHOT_COOLDOWN_MS;
+    if (now - lastShotRef.current <= cooldown) return;
+    lastShotRef.current = now;
+
+    const muzzleX = playerXRef.current + PLAYER_W / 2;
+
+    if (activeKind === "laser") {
+      laserFlashesRef.current.push({ x: muzzleX, bornAt: now });
+      // Actual hit detection happens on the next animation-loop tick — it
+      // owns all enemiesRef mutation, this just queues the intent.
+      pendingLaserXRef.current = muzzleX;
+      return;
+    }
+
+    bulletsRef.current.push(...spawnShot(activeKind, muzzleX, PLAYER_Y));
+  };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLCanvasElement>) => {
     const key = e.key.toLowerCase();
     if (MOVE_KEYS.has(key) || WEAPON_KEYS.has(key)) e.preventDefault();
@@ -295,6 +441,10 @@ export function ArcadeGame({
     }
     if (status === "levelClear") {
       if (key === " ") advanceWave();
+      return;
+    }
+    if (status === "gameOver") {
+      if (key === " ") beginGame();
       return;
     }
     if (status === "complete") return;
@@ -309,13 +459,7 @@ export function ArcadeGame({
     }
 
     keysRef.current.add(key);
-    if (key === " " && !e.repeat) {
-      const now = performance.now();
-      if (now - lastShotRef.current > SHOT_COOLDOWN_MS) {
-        bulletsRef.current.push({ x: playerXRef.current + PLAYER_W / 2, y: PLAYER_Y });
-        lastShotRef.current = now;
-      }
-    }
+    if (key === " " && !e.repeat) fire();
   };
 
   const handleKeyUp = (e: KeyboardEvent<HTMLCanvasElement>) => {
@@ -332,8 +476,9 @@ export function ArcadeGame({
           Data Invaders
         </h2>
         <p className="mt-3 max-w-2xl font-serif text-lg text-paper/80">
-          Shoot down real problems from 18 years of real work. Arrow keys / A-D to move, Space
-          to fire, Q/E to switch weapons. Clear a wave to unlock what came next.
+          Shoot down real problems from 18 years of real work before they reach you. Arrow keys
+          / A-D to move, Space to fire, Q/E to switch weapons. Clear a wave to unlock what came
+          next — lose all 3 lives and it&apos;s back to wave one.
         </p>
 
         <div className="relative mx-auto mt-8 w-full max-w-2xl">
@@ -372,6 +517,17 @@ export function ArcadeGame({
             </div>
           )}
 
+          {status === "gameOver" && (
+            <div className="bg-ink/95 absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center font-mono">
+              <span className="text-accent text-xl font-black uppercase">Game Over</span>
+              <span className="text-paper text-sm">Buried in spreadsheets.</span>
+              <span className="text-paper/70 text-xs">Score: {score}</span>
+              <span className="text-paper/50 mt-2 animate-pulse text-xs">
+                press space to retry from wave one
+              </span>
+            </div>
+          )}
+
           {status === "complete" && (
             <div className="bg-ink/90 absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center font-mono">
               <span className="text-accent text-lg font-black uppercase">
@@ -394,15 +550,25 @@ export function ArcadeGame({
                   : "border-paper/30 text-paper/60"
               }`}
             >
-              {w}
+              {w} <span className="opacity-60">[{weaponKindFor(w)}]</span>
             </span>
           ))}
         </div>
 
-        <p className="text-paper/50 mt-3 font-mono text-xs">
-          Score {score} · Wave {Math.min(waveIndex + 1, WAVE_COUNT)}/{WAVE_COUNT} · Armed with{" "}
-          {activeWeapon}
-        </p>
+        <div className="mt-4 flex flex-wrap items-center gap-4">
+          <p className="text-paper/50 font-mono text-xs">
+            Score {score} · Wave {Math.min(waveIndex + 1, WAVE_COUNT)}/{WAVE_COUNT} · Armed
+            with {activeWeapon} ({activeKind})
+          </p>
+          <div className="flex items-center gap-1" aria-label={`${lives} lives remaining`}>
+            {Array.from({ length: START_LIVES }).map((_, i) => (
+              <span
+                key={i}
+                className={`h-3 w-3 border-2 border-paper/40 ${i < lives ? "bg-accent" : "bg-transparent"}`}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

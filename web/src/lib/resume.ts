@@ -13,6 +13,12 @@ export interface Profile {
 export interface Stat {
   label: string;
   value: string;
+  details?: string[];
+}
+
+export interface Industry {
+  name: string;
+  examples: string[];
 }
 
 export interface SkillEntry {
@@ -73,6 +79,7 @@ export interface PortfolioItem {
 export interface Resume {
   profile: Profile;
   stats: Stat[];
+  industries: Industry[];
   skills: SkillEntry[];
   experience: Experience;
   education: EducationEntry[];

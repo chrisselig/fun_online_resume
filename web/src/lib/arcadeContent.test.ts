@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { extractPainPoints, topWeapons } from "./arcadeContent";
+import { extractPainPoints, topWeapons, weaponKindFor } from "./arcadeContent";
 import type { EarlierRole, FeaturedRole, SkillEntry } from "./resume";
 
 const featured: FeaturedRole[] = [
@@ -108,5 +108,31 @@ describe("topWeapons", () => {
     const copy = [...skills];
     topWeapons(skills);
     expect(skills).toEqual(copy);
+  });
+
+  it("excludes curated-out tools even when they'd otherwise rank highly", () => {
+    const withExcluded: SkillEntry[] = [
+      { name: "Spotfire", endorsements: 50 },
+      { name: "RStudio", endorsements: 40 },
+      ...skills,
+    ];
+    const result = topWeapons(withExcluded, 10);
+    expect(result).not.toContain("Spotfire");
+    expect(result).not.toContain("RStudio");
+    expect(result).toEqual(["R", "Power BI", "Python", "Tableau"]);
+  });
+});
+
+describe("weaponKindFor", () => {
+  it("maps known tools to distinct, thematic firing patterns", () => {
+    expect(weaponKindFor("R")).toBe("wave");
+    expect(weaponKindFor("Excel / VBA")).toBe("twin");
+    expect(weaponKindFor("Power BI")).toBe("spread");
+    expect(weaponKindFor("Python")).toBe("rapid");
+    expect(weaponKindFor("SQL")).toBe("laser");
+  });
+
+  it("falls back to a single shot for unmapped tools", () => {
+    expect(weaponKindFor("Some Future Tool")).toBe("single");
   });
 });

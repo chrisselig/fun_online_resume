@@ -45,10 +45,38 @@ export function extractPainPoints(
   return CANDIDATE_PAIN_POINTS.filter((phrase) => haystack.includes(phrase.toLowerCase()));
 }
 
+/**
+ * Tools that exist in the real skills data but shouldn't appear as a
+ * playable weapon (curation call, not a reflection of real usage).
+ */
+const EXCLUDED_WEAPONS = new Set(["Spotfire", "RStudio"]);
+
 /** Weapon labels: the real top tools by how often they show up in the career history. */
 export function topWeapons(skills: SkillEntry[], count = 8): string[] {
   return [...skills]
+    .filter((s) => !EXCLUDED_WEAPONS.has(s.name))
     .sort((a, b) => b.endorsements - a.endorsements)
     .slice(0, count)
     .map((s) => s.name);
+}
+
+export type WeaponKind = "single" | "rapid" | "twin" | "spread" | "wave" | "laser";
+
+/**
+ * Each weapon fires differently — a direct, thematic mapping rather than a
+ * generic default, so switching tools actually changes how the ship fights.
+ */
+const WEAPON_KIND_BY_TOOL: Record<string, WeaponKind> = {
+  R: "wave",
+  "Excel / VBA": "twin",
+  "Power BI": "spread",
+  Python: "rapid",
+  SQL: "laser",
+  Spark: "spread",
+  AWS: "twin",
+  Databricks: "wave",
+};
+
+export function weaponKindFor(tool: string): WeaponKind {
+  return WEAPON_KIND_BY_TOOL[tool] ?? "single";
 }
