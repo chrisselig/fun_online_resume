@@ -174,6 +174,10 @@ FEATURED_EXPERIENCE: list[dict[str, object]] = [
             "Developed an AI-based model that reads different file formats and extracts the data into tables — saving end users 4 days of work each time new files were sent to the team.",
         ],
         "engagements": [],
+        "rewards": [
+            "4 fewer days of manual file-wrangling every cycle — automated, not just dashboarded",
+            "Closed a real data-access gap with automated permission monitoring",
+        ],
     },
     {
         "company": "Bidamia Inc.",
@@ -256,6 +260,10 @@ FEATURED_EXPERIENCE: list[dict[str, object]] = [
                 ],
             },
         ],
+        "rewards": [
+            "Led a Power BI rollout across an entire business, not just one team",
+            "Replaced scattered spreadsheets with one SQL Server source of truth",
+        ],
     },
     {
         "company": "SELICA Analytics Inc.",
@@ -288,7 +296,19 @@ FEATURED_EXPERIENCE: list[dict[str, object]] = [
                 ],
             },
         ],
+        "rewards": [
+            "Cut a financial close process from 3–5 days to 10 minutes",
+            "Reclaimed 10 hours a month from manual PDF work using AI",
+        ],
     },
+]
+
+# ---------------------------------------------------------------------------
+# Earlier-career rewards — the bonus wave's "what you get" pitch.
+# ---------------------------------------------------------------------------
+EARLIER_CAREER_REWARDS: list[str] = [
+    "Cut Essbase turnaround from 5 days to 2 hours",
+    "Caught data-submission errors nobody had quantified before",
 ]
 
 # ---------------------------------------------------------------------------
@@ -611,6 +631,7 @@ def load_resume(db_path: str | Path = _DB_PATH) -> dict[str, object]:
             "experience": {
                 "featured": FEATURED_EXPERIENCE,
                 "earlier": EARLIER_EXPERIENCE,
+                "earlier_rewards": EARLIER_CAREER_REWARDS,
             },
             "education": _records(load_section(conn, "education")),
             "certifications": _records(load_section(conn, "certifications")),
