@@ -1,132 +1,45 @@
-# LinkedIn Resume AI
+# fun_online_resume
 
-> An end-to-end data engineering project — scrape, transform, and present a LinkedIn profile as an infographic-style web application, fully automated with CI/CD.
+> My resume, rebuilt as a web app, because a PDF doesn't say much about how I actually think.
 
-**Live site:** bidamia.ca (Vercel — see [deployment notes](docs/deployment.md))
+Hi — I'm Chris Selig, a data & analytics professional based in Calgary. This repo is my resume, reimagined as a brutalist-styled infographic site with three playable arcade mini-games built entirely out of my own career data. If you're a hiring manager reading this, skip to [What This Demonstrates](#what-this-demonstrates) — that's written for you.
+
+**Status:** Actively building. Not deployed yet — the plan is Vercel at a custom domain, documented in [docs/deployment.md](docs/deployment.md), pending a DNS/Vercel setup step. Run it locally in the meantime (30 seconds, see below).
 
 ---
 
-## What This Project Demonstrates
+## What's actually in here
 
-This project was built to showcase a complete, production-quality workflow spanning data engineering and frontend development — from raw data collection through to a deployed, designed web application.
+- **An infographic resume**, not a document — real stats, real industries, real tools, laid out the way you'd lay out data you wanted someone to actually read.
+- **Three playable mini-games** built from the same real data, not placeholder text:
+  - *Data Invaders* — shoot down real pain points from my accomplishments, armed with my actual top tools, each weapon firing differently (wave, spread, laser...). Clear a wave and it tells you what you get if you hire me, in concrete numbers pulled from real projects.
+  - *Spreadsheet Breaker* — a brick-breaker where every brick is a tool I've used.
+  - *Data Pipeline* — classic snake, where every "food" item is a real skill the pipeline picks up.
+- **Every number is real.** 18+ years, 12 companies and consulting clients, 8 industries, each with real examples — no padded stats.
+- **A few honest asides** — a section on technically-irrelevant skills (NES Punch-Out!!, hand-tool woodworking), because a resume that's only ever serious is a resume nobody remembers.
 
-| Skill Area | Technologies Used |
+## What This Demonstrates
+
+If you're evaluating me as a candidate, here's what building this actually required:
+
+| Area | What you'd be hiring |
 |---|---|
-| **Data Collection** | Playwright (headless Chromium), DOM scraping, browser automation |
-| **Data Engineering** | pandas (vectorized operations), data cleaning, normalization, schema design |
-| **Data Storage** | DuckDB, parameterized SQL, upsert patterns |
-| **Frontend** | Next.js, TypeScript, Tailwind CSS, hand-rolled SVG data visualization (no charting library) |
-| **Design** | Infographic visual language — restrained color, typography-driven hierarchy, concept-first layout |
-| **Software Engineering** | PEP 8, type hints, docstrings, modular package design |
-| **Testing** | pytest (Python pipeline), Vitest (frontend), mocked browser/DB, 100+ unit tests |
-| **CI/CD** | GitHub Actions, automated lint + test on PRs |
-| **Deployment** | Vercel (static Next.js build), custom domain |
+| **Frontend engineering** | Next.js + TypeScript + Tailwind, hand-rolled Canvas game loops (collision detection, pure-function physics, deterministic state), no framework crutch for anything custom |
+| **Product judgment** | Chose depth over scope — three small, polished games beat one half-finished big one; cut a feature (a standalone chart section) in favor of a cleaner interaction when it didn't earn its space |
+| **Craft & attention to detail** | Consistent, considered visual language across every page section, not just a template; real data checked against source material rather than invented |
+| **Engineering hygiene** | Typed code throughout, unit tests on every non-trivial piece of logic (game physics, collision detection, data pipeline) rather than boilerplate coverage, CI running lint/typecheck/test/build on every change, feature branches, PR workflow, GitHub issues for tracked work |
+| **Self-direction** | This was built iteratively — explored several visual directions, kept what worked, cut what didn't, incorporated real-time feedback and corrected real data as I remembered details from 18 years of work |
 
----
+## Tech Stack
 
-## How It Works
+- **Frontend:** Next.js (App Router), TypeScript, Tailwind CSS — deployed as a static build, no server runtime
+- **Content pipeline:** a small Python package (`src/linkedin_project`) holds the resume content as typed, hand-curated Python data (not scraped, not database-backed) and exports it to a static JSON file the frontend reads at build time
+- **Testing:** Vitest (frontend logic), pytest (content pipeline)
+- **CI:** GitHub Actions — lint, typecheck, test, and build on every change
 
-The project is two halves: a Python data pipeline that only ever produces data, and a Next.js site that only ever reads it. There is no server-side Python in production.
-
-```mermaid
-flowchart TD
-    A[LinkedIn Profile\nhttps://linkedin.com/in/chris-selig] -->|Playwright headless browser\nlogs in + scrapes DOM| B
-
-    subgraph scrape ["① Scrape  src/linkedin_project/scrape/"]
-        B[scraper.py\nPlaywright + Chromium]
-        B --> C[ProfileData\nDataFrames per section]
-    end
-
-    C -->|Raw DataFrames\nexperience · education\nskills · certifications| D
-
-    subgraph transform ["② Transform  src/linkedin_project/transform/"]
-        D[cleaner.py\nnormalize text · parse dates]
-        D --> E[normalizer.py\ncanonical skills · deduplication]
-    end
-
-    E -->|Clean DataFrames| F
-
-    subgraph storage ["③ Storage  src/linkedin_project/storage/"]
-        F[database.py\nDuckDB upsert]
-        F --> G[(linkedin.db\nDuckDB)]
-    end
-
-    G -->|load_resume\nvia duckdb-python| H
-
-    subgraph export ["④ Export  pipelines/export_resume.py"]
-        H[export_resume_json.py\nDataFrame → JSON]
-        H --> I[web/src/data/resume.json]
-    end
-
-    I -->|Static import\nbuild time, no API route| J
-
-    subgraph frontend ["⑤ Frontend  web/"]
-        J[Next.js infographic site\nhand-rolled SVG charts]
-    end
-
-    J -->|git push main\nVercel GitHub integration| K[Vercel\nbidamia.ca]
-
-    subgraph cicd ["⑥ CI/CD  .github/workflows/ci.yml"]
-        L[Python job\nblack · flake8 · pytest]
-        M[Frontend job\neslint · vitest · next build]
-    end
-```
-
-### ① Scrape — `src/linkedin_project/scrape/`
-
-A headless Chromium browser (Playwright) logs in to LinkedIn and navigates to the target profile. The scraper scrolls to trigger lazy-loaded content, clicks "Show all" sections, and extracts structured data via CSS selectors. Each section (experience, education, skills, certifications) is returned as a pandas DataFrame with a typed schema defined in `schema.py`.
-
-**Why Playwright?** The unofficial LinkedIn API requires authentication and is frequently blocked. A real browser that mimics human navigation is significantly more reliable.
-
-### ② Transform — `src/linkedin_project/transform/`
-
-Raw DataFrames pass through two stages:
-- `cleaner.py` — strips whitespace, parses ISO 8601 dates, normalizes company names
-- `normalizer.py` — maps skills to a 60+ entry canonical list, deduplicates rows, standardizes date ranges
-
-All operations use vectorized pandas — no row-level loops.
-
-### ③ Storage — `src/linkedin_project/storage/`
-
-Cleaned DataFrames are upserted into a local DuckDB file (`data/duckdb/linkedin.db`). All SQL uses parameterized queries (no string interpolation). Table names are validated against an allowlist; column names in WHERE clauses are validated as alphanumeric-only to prevent injection.
-
-**Why DuckDB?** Zero-configuration, embedded, and optimized for analytical queries on DataFrames.
-
-### ④ Export — `src/linkedin_project/pipelines/export_resume.py`
-
-Reads from DuckDB if populated, falling back to sample data otherwise. `scripts/export_resume_json.py` writes the result to `web/src/data/resume.json` — a committed, build-time data file. This is the only hand-off between the Python pipeline and the frontend.
-
-### ⑤ Frontend — `web/`
-
-A Next.js (TypeScript + Tailwind) site renders the resume as infographic sections instead of a conventional document layout — a bold typography-led hero, a hand-rolled SVG circle-packing chart for skills (sized by endorsement count), a timeline for experience, and card layouts for education/certifications. The visual language (restrained 2-hue palette, typography as hierarchy, concept-first design) follows principles extracted from David McCandless's *Information is Beautiful*.
-
-### ⑥ CI/CD — `.github/workflows/ci.yml`
-
-Every pull request runs two jobs: the Python pipeline (`black --check`, `flake8`, `pytest --cov=src`) and the frontend (`eslint`, `vitest`, `next build`). Deploys to Vercel happen via Vercel's own GitHub integration on push to `main` — not a custom Actions workflow.
-
----
+See [docs/architecture.md](docs/architecture.md) for the full data flow.
 
 ## Running Locally
-
-**Python pipeline:**
-
-```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-pip install -e ".[dev]"
-playwright install chromium
-
-# Scrape your LinkedIn profile (optional — falls back to sample data)
-export LINKEDIN_USERNAME="your@email.com"
-export LINKEDIN_PASSWORD="yourpassword"
-export LINKEDIN_PROFILE="chris-selig"
-python scripts/scrape_linkedin.py
-
-# Export resume data for the frontend
-python scripts/export_resume_json.py
-```
-
-**Frontend:**
 
 ```bash
 cd web
@@ -134,50 +47,34 @@ npm install
 npm run dev   # http://localhost:3000
 ```
 
----
+That's it — the resume content is already baked into `web/src/data/resume.json`. To change the content itself, edit `src/linkedin_project/pipelines/export_resume.py` and regenerate:
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt && pip install -e ".[dev]"
+python scripts/export_resume_json.py
+```
 
 ## Project Structure
 
 ```
 .
-├── web/                         # Next.js infographic site (the deployed app)
-│   ├── src/app/                 # App Router page + layout
-│   ├── src/components/          # Hero, SkillsBubbleChart, ExperienceTimeline, …
-│   ├── src/lib/                 # Typed resume loader, circle-pack layout math
-│   └── src/data/resume.json     # Generated — do not edit by hand
+├── web/                          # Next.js site (the actual app)
+│   ├── src/app/                  # App Router page + layout
+│   ├── src/components/           # Infographic sections + the 3 arcade games
+│   ├── src/lib/                  # Typed resume loader, game physics/logic (unit tested)
+│   └── src/data/resume.json      # Generated — do not edit by hand
 ├── src/linkedin_project/
-│   ├── scrape/                  # Playwright scraper + schema definitions
-│   ├── transform/                # Data cleaning and normalization
-│   ├── storage/                  # DuckDB read/write
-│   └── pipelines/                # Orchestration, including export_resume.py
-├── scripts/
-│   ├── scrape_linkedin.py        # CLI entry point for scraping
-│   └── export_resume_json.py     # Writes web/src/data/resume.json
-├── tests/                        # Python pipeline tests (pytest)
-├── .github/workflows/
-│   └── ci.yml                    # PR: lint + test, both pipeline and frontend
+│   └── pipelines/export_resume.py  # All resume content, hand-curated, single source of truth
+├── scripts/export_resume_json.py   # Writes web/src/data/resume.json
+├── tests/                        # Python content-pipeline tests
+├── .github/workflows/ci.yml      # Lint + test on every PR, both halves of the stack
 └── docs/
-    ├── architecture.md           # Detailed architecture notes
-    └── deployment.md             # Vercel + bidamia.ca setup
+    ├── architecture.md           # Data flow and layer responsibilities
+    └── deployment.md             # Vercel + custom domain setup
 ```
-
----
-
-## Key Engineering Decisions
-
-| Decision | Rationale |
-|---|---|
-| Playwright over requests/API | LinkedIn blocks API clients; a real browser is far more reliable |
-| DuckDB over SQLite/Postgres | Zero-config, columnar, native pandas integration, analytical queries |
-| Static JSON hand-off, no API | Resume content changes rarely; a build-time import needs no server, no auth, no runtime failure mode |
-| Hand-rolled SVG over a chart library | A handful of custom infographic shapes don't justify a dependency — see `web/src/lib/circlePack.ts` |
-| Parameterized SQL everywhere | Prevents SQL injection; table/column names validated against allowlists |
-| Vectorized pandas only | No row-level loops — all transforms use apply/map/merge on full columns |
-
----
 
 ## Documentation
 
-- [Architecture](docs/architecture.md) — detailed data flow and layer responsibilities
-- [Deployment](docs/deployment.md) — Vercel setup and the bidamia.ca custom domain
-- [Data directory](data/README.md) — data file conventions
+- [Architecture](docs/architecture.md)
+- [Deployment](docs/deployment.md)
