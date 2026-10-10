@@ -85,7 +85,7 @@ export function ExperienceTimeline({ experience }: { experience: Experience }) {
   return (
     <section className="border-b-8 border-ink">
       <div className="border-b-8 border-ink px-6 py-8 sm:px-10">
-        <p className="brutal-tag text-sm font-bold">004 / EXPERIENCE.LOG</p>
+        <p className="brutal-tag text-sm font-bold">003 / EXPERIENCE.LOG</p>
         <h2 className="mt-2 text-5xl font-black tracking-tighter uppercase sm:text-7xl">
           Where the work happened
         </h2>

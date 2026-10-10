@@ -9,7 +9,7 @@ export function EducationCertifications({
 }) {
   return (
     <section className="border-b-8 border-ink px-6 py-16 sm:px-10 sm:py-24">
-      <p className="brutal-tag text-sm font-bold">005 / CREDENTIALS.TXT</p>
+      <p className="brutal-tag text-sm font-bold">004 / CREDENTIALS.TXT</p>
       <h2 className="mt-2 text-5xl font-black tracking-tighter uppercase sm:text-7xl">
         Education
       </h2>

@@ -8,6 +8,7 @@ export interface Profile {
   linkedin_url: string;
   summary: string;
   focus_areas: string[];
+  business_domains: string[];
 }
 
 export interface Stat {

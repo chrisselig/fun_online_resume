@@ -471,7 +471,7 @@ export function ArcadeGame({
   return (
     <section className="border-b-8 border-ink bg-ink px-6 py-16 text-paper sm:px-10 sm:py-24">
       <div className="mx-auto max-w-4xl">
-        <p className="brutal-tag text-accent text-sm font-bold">008 / ARCADE.EXE</p>
+        <p className="brutal-tag text-accent text-sm font-bold">007 / ARCADE.EXE</p>
         <h2 className="mt-2 text-5xl font-black tracking-tighter uppercase sm:text-7xl">
           Data Invaders
         </h2>

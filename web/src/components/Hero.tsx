@@ -33,6 +33,20 @@ export function Hero({ profile }: { profile: Profile }) {
         ))}
       </ul>
 
+      <p className="brutal-tag mt-8 text-xs font-bold uppercase">
+        Supported business functions
+      </p>
+      <ul className="mt-2 flex flex-wrap gap-0">
+        {profile.business_domains.map((domain) => (
+          <li
+            key={domain}
+            className="brutal-tag bg-ink text-paper -ml-[4px] border-4 border-ink px-3 py-1 text-xs font-bold uppercase first:ml-0"
+          >
+            {domain}
+          </li>
+        ))}
+      </ul>
+
       <div className="brutal-tag mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-bold">
         <span>{profile.location.toUpperCase()}</span>
         {profile.linkedin_url && (

@@ -5,7 +5,7 @@ const ROTATIONS = ["-rotate-1", "rotate-1", "rotate-2", "-rotate-2"];
 export function Portfolio({ portfolio }: { portfolio: PortfolioItem[] }) {
   return (
     <section className="border-b-8 border-ink bg-paper px-6 py-16 sm:px-10 sm:py-24">
-      <p className="brutal-tag text-sm font-bold">006 / PORTFOLIO.LINKS</p>
+      <p className="brutal-tag text-sm font-bold">005 / PORTFOLIO.LINKS</p>
       <h2 className="mt-2 text-5xl font-black tracking-tighter uppercase sm:text-7xl">
         Proof, not claims
       </h2>

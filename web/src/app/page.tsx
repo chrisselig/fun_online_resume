@@ -1,6 +1,5 @@
 import { Hero } from "@/components/Hero";
 import { StatsBar } from "@/components/StatsBar";
-import { SkillsBarChart } from "@/components/SkillsBarChart";
 import { ExperienceTimeline } from "@/components/ExperienceTimeline";
 import { EducationCertifications } from "@/components/EducationCertifications";
 import { Portfolio } from "@/components/Portfolio";
@@ -13,7 +12,6 @@ export default function Home() {
     <main>
       <Hero profile={resume.profile} />
       <StatsBar stats={resume.stats} />
-      <SkillsBarChart skills={resume.skills} />
       <ExperienceTimeline experience={resume.experience} />
       <EducationCertifications
         education={resume.education}
@@ -28,7 +26,7 @@ export default function Home() {
         skills={resume.skills}
       />
       <footer className="brutal-tag px-6 py-8 text-center text-xs font-bold">
-        009 / EOF — {resume.profile.name.toUpperCase()}
+        008 / EOF — {resume.profile.name.toUpperCase()}
       </footer>
     </main>
   );
