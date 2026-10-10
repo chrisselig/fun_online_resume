@@ -10,6 +10,7 @@ import {
 } from "react";
 import type { EarlierRole, FeaturedRole, SkillEntry } from "@/lib/resume";
 import { extractPainPoints, topWeapons, weaponKindFor, type WeaponKind } from "@/lib/arcadeContent";
+import { useFullscreen } from "@/lib/useFullscreen";
 
 const CANVAS_W = 480;
 const CANVAS_H = 320;
@@ -157,6 +158,8 @@ export function ArcadeInvaders({
   skills: SkillEntry[];
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const frameRef = useRef<HTMLDivElement | null>(null);
+  const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(frameRef);
   const keysRef = useRef<Set<string>>(new Set());
   const playerXRef = useRef((CANVAS_W - PLAYER_W) / 2);
   const bulletsRef = useRef<Bullet[]>([]);
@@ -383,6 +386,13 @@ export function ArcadeInvaders({
     if (ctx) draw(ctx);
   }, [draw]);
 
+  // Focus the canvas as soon as this game is picked — otherwise arrow
+  // keys scroll the page instead of controlling the ship until the
+  // player happens to click the canvas first.
+  useEffect(() => {
+    canvasRef.current?.focus();
+  }, []);
+
   const beginGame = () => {
     setWaveIndex(0);
     setScore(0);
@@ -478,17 +488,41 @@ export function ArcadeInvaders({
           next — lose all 3 lives and it&apos;s back to wave one.
         </p>
 
-        <div className="relative mx-auto mt-8 w-full max-w-2xl">
-          <canvas
-            ref={canvasRef}
-            width={CANVAS_W}
-            height={CANVAS_H}
-            tabIndex={0}
-            onKeyDown={handleKeyDown}
-            onKeyUp={handleKeyUp}
-            className="border-accent w-full border-8 outline-none [image-rendering:pixelated]"
-            aria-label="Data Invaders mini-game canvas"
-          />
+        <button
+          type="button"
+          onClick={toggleFullscreen}
+          className="border-paper text-paper hover:bg-paper hover:text-ink brutal-tag mt-4 inline-block border-2 px-3 py-1 text-xs font-bold uppercase"
+        >
+          ⛶ Fullscreen
+        </button>
+
+        <div
+          ref={frameRef}
+          className={isFullscreen ? "fixed inset-0 flex items-center justify-center bg-ink" : ""}
+        >
+          <div className={isFullscreen ? "relative" : "relative mx-auto mt-8 w-full max-w-2xl"}>
+            <canvas
+              ref={canvasRef}
+              width={CANVAS_W}
+              height={CANVAS_H}
+              tabIndex={0}
+              onKeyDown={handleKeyDown}
+              onKeyUp={handleKeyUp}
+              className={`border-accent border-8 outline-none [image-rendering:pixelated] ${
+                isFullscreen ? "h-[85vh] w-auto" : "w-full"
+              }`}
+              aria-label="Data Invaders mini-game canvas"
+            />
+
+            {isFullscreen && (
+              <button
+                type="button"
+                onClick={toggleFullscreen}
+                className="border-paper bg-ink/80 text-paper hover:bg-paper hover:text-ink brutal-tag absolute top-2 left-2 z-10 border-2 px-3 py-1 text-xs font-bold uppercase"
+              >
+                ← Back
+              </button>
+            )}
 
           {status === "idle" && (
             <button
@@ -545,6 +579,7 @@ export function ArcadeInvaders({
               </span>
             </div>
           )}
+          </div>
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-2">

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "re
 import type { FeaturedRole, SkillEntry } from "@/lib/resume";
 import { topWeapons } from "@/lib/arcadeContent";
 import { buildBricks, reflectOffPaddle, type Brick } from "@/lib/breakoutPhysics";
+import { useFullscreen } from "@/lib/useFullscreen";
 
 const CANVAS_W = 480;
 const CANVAS_H = 320;
@@ -54,6 +55,8 @@ export function ArcadeBreakout({
   featured: FeaturedRole[];
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const frameRef = useRef<HTMLDivElement | null>(null);
+  const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(frameRef);
   const keysRef = useRef<Set<string>>(new Set());
   const paddleXRef = useRef((CANVAS_W - PADDLE_W) / 2);
   const ballRef = useRef({ x: CANVAS_W / 2, y: PADDLE_Y - 20, vx: BALL_SPEED * 0.4, vy: -BALL_SPEED });
@@ -196,6 +199,12 @@ export function ArcadeBreakout({
     if (ctx) draw(ctx);
   }, [draw]);
 
+  // Focus the canvas as soon as this game is picked — otherwise arrow
+  // keys scroll the page instead of moving the paddle.
+  useEffect(() => {
+    canvasRef.current?.focus();
+  }, []);
+
   const beginGame = () => {
     setupBricks();
     resetBall();
@@ -228,7 +237,19 @@ export function ArcadeBreakout({
         the paddle — where you catch the ball steers the rebound angle.
       </p>
 
-      <div className="relative mx-auto mt-6 w-full max-w-2xl">
+      <button
+        type="button"
+        onClick={toggleFullscreen}
+        className="border-paper text-paper hover:bg-paper hover:text-ink brutal-tag mt-4 inline-block border-2 px-3 py-1 text-xs font-bold uppercase"
+      >
+        ⛶ Fullscreen
+      </button>
+
+      <div
+        ref={frameRef}
+        className={isFullscreen ? "fixed inset-0 flex items-center justify-center bg-ink" : ""}
+      >
+      <div className={isFullscreen ? "relative" : "relative mx-auto mt-6 w-full max-w-2xl"}>
         <canvas
           ref={canvasRef}
           width={CANVAS_W}
@@ -236,9 +257,21 @@ export function ArcadeBreakout({
           tabIndex={0}
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}
-          className="border-accent w-full border-8 outline-none [image-rendering:pixelated]"
+          className={`border-accent border-8 outline-none [image-rendering:pixelated] ${
+            isFullscreen ? "h-[85vh] w-auto" : "w-full"
+          }`}
           aria-label="Spreadsheet Breaker mini-game canvas"
         />
+
+        {isFullscreen && (
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            className="border-paper bg-ink/80 text-paper hover:bg-paper hover:text-ink brutal-tag absolute top-2 left-2 z-10 border-2 px-3 py-1 text-xs font-bold uppercase"
+          >
+            ← Back
+          </button>
+        )}
 
         {status === "idle" && (
           <button
@@ -272,6 +305,7 @@ export function ArcadeBreakout({
             <span className="text-paper/70 text-xs">Score: {score}</span>
           </div>
         )}
+      </div>
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-4">

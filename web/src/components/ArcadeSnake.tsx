@@ -11,6 +11,7 @@ import {
   type Cell,
   type Direction,
 } from "@/lib/snakeLogic";
+import { useFullscreen } from "@/lib/useFullscreen";
 
 const CANVAS_W = 480;
 const CANVAS_H = 320;
@@ -47,6 +48,8 @@ function startingSnake(): Cell[] {
 
 export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const frameRef = useRef<HTMLDivElement | null>(null);
+  const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(frameRef);
   const snakeRef = useRef<Cell[]>(startingSnake());
   const dirRef = useRef<Direction>("right");
   const pendingDirRef = useRef<Direction>("right");
@@ -128,6 +131,12 @@ export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
     if (ctx) draw(ctx);
   }, [draw]);
 
+  // Focus the canvas as soon as this game is picked — otherwise arrow
+  // keys scroll the page instead of steering the snake.
+  useEffect(() => {
+    canvasRef.current?.focus();
+  }, []);
+
   const handleKeyDown = (e: KeyboardEvent<HTMLCanvasElement>) => {
     const key = e.key.toLowerCase();
     const dir = DIR_KEYS[key];
@@ -150,16 +159,40 @@ export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
         wall or yourself and the pipeline breaks.
       </p>
 
-      <div className="relative mx-auto mt-6 w-full max-w-2xl">
+      <button
+        type="button"
+        onClick={toggleFullscreen}
+        className="border-paper text-paper hover:bg-paper hover:text-ink brutal-tag mt-4 inline-block border-2 px-3 py-1 text-xs font-bold uppercase"
+      >
+        ⛶ Fullscreen
+      </button>
+
+      <div
+        ref={frameRef}
+        className={isFullscreen ? "fixed inset-0 flex items-center justify-center bg-ink" : ""}
+      >
+      <div className={isFullscreen ? "relative" : "relative mx-auto mt-6 w-full max-w-2xl"}>
         <canvas
           ref={canvasRef}
           width={CANVAS_W}
           height={CANVAS_H}
           tabIndex={0}
           onKeyDown={handleKeyDown}
-          className="border-accent w-full border-8 outline-none [image-rendering:pixelated]"
+          className={`border-accent border-8 outline-none [image-rendering:pixelated] ${
+            isFullscreen ? "h-[85vh] w-auto" : "w-full"
+          }`}
           aria-label="Data Pipeline mini-game canvas"
         />
+
+        {isFullscreen && (
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            className="border-paper bg-ink/80 text-paper hover:bg-paper hover:text-ink brutal-tag absolute top-2 left-2 z-10 border-2 px-3 py-1 text-xs font-bold uppercase"
+          >
+            ← Back
+          </button>
+        )}
 
         {status === "idle" && (
           <button
@@ -185,6 +218,7 @@ export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
             </span>
           </button>
         )}
+      </div>
       </div>
 
       <div className="mt-4">
