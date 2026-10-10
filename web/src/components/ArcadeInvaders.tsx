@@ -160,6 +160,10 @@ export function ArcadeInvaders({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frameRef = useRef<HTMLDivElement | null>(null);
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(frameRef);
+  const handleToggleFullscreen = () => {
+    toggleFullscreen();
+    canvasRef.current?.focus();
+  };
   const keysRef = useRef<Set<string>>(new Set());
   const playerXRef = useRef((CANVAS_W - PLAYER_W) / 2);
   const bulletsRef = useRef<Bullet[]>([]);
@@ -400,6 +404,9 @@ export function ArcadeInvaders({
     setWeaponIndex(0);
     setupWave(0);
     setStatus("playing");
+    // Clicking "Press Start" moves focus to that button — pull it back to
+    // the canvas so arrow keys / space control the ship immediately.
+    canvasRef.current?.focus();
   };
 
   const advanceWave = () => {
@@ -490,7 +497,7 @@ export function ArcadeInvaders({
 
         <button
           type="button"
-          onClick={toggleFullscreen}
+          onClick={handleToggleFullscreen}
           className="border-paper text-paper hover:bg-paper hover:text-ink brutal-tag mt-4 inline-block border-2 px-3 py-1 text-xs font-bold uppercase"
         >
           ⛶ Fullscreen
@@ -517,7 +524,7 @@ export function ArcadeInvaders({
             {isFullscreen && (
               <button
                 type="button"
-                onClick={toggleFullscreen}
+                onClick={handleToggleFullscreen}
                 className="border-paper bg-ink/80 text-paper hover:bg-paper hover:text-ink brutal-tag absolute top-2 left-2 z-10 border-2 px-3 py-1 text-xs font-bold uppercase"
               >
                 ← Back

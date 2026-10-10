@@ -50,6 +50,10 @@ export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frameRef = useRef<HTMLDivElement | null>(null);
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(frameRef);
+  const handleToggleFullscreen = () => {
+    toggleFullscreen();
+    canvasRef.current?.focus();
+  };
   const snakeRef = useRef<Cell[]>(startingSnake());
   const dirRef = useRef<Direction>("right");
   const pendingDirRef = useRef<Direction>("right");
@@ -83,6 +87,9 @@ export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
     setCollected([]);
     lastMoveRef.current = 0;
     setStatus("playing");
+    // Clicking "Press Start"/"Retry" moves focus to that button — pull it
+    // back to the canvas so arrow keys steer immediately.
+    canvasRef.current?.focus();
   };
 
   useEffect(() => {
@@ -161,7 +168,7 @@ export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
 
       <button
         type="button"
-        onClick={toggleFullscreen}
+        onClick={handleToggleFullscreen}
         className="border-paper text-paper hover:bg-paper hover:text-ink brutal-tag mt-4 inline-block border-2 px-3 py-1 text-xs font-bold uppercase"
       >
         ⛶ Fullscreen
@@ -187,7 +194,7 @@ export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
         {isFullscreen && (
           <button
             type="button"
-            onClick={toggleFullscreen}
+            onClick={handleToggleFullscreen}
             className="border-paper bg-ink/80 text-paper hover:bg-paper hover:text-ink brutal-tag absolute top-2 left-2 z-10 border-2 px-3 py-1 text-xs font-bold uppercase"
           >
             ← Back

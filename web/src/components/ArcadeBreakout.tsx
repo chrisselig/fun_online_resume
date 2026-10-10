@@ -57,6 +57,10 @@ export function ArcadeBreakout({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frameRef = useRef<HTMLDivElement | null>(null);
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(frameRef);
+  const handleToggleFullscreen = () => {
+    toggleFullscreen();
+    canvasRef.current?.focus();
+  };
   const keysRef = useRef<Set<string>>(new Set());
   const paddleXRef = useRef((CANVAS_W - PADDLE_W) / 2);
   const ballRef = useRef({ x: CANVAS_W / 2, y: PADDLE_Y - 20, vx: BALL_SPEED * 0.4, vy: -BALL_SPEED });
@@ -211,6 +215,9 @@ export function ArcadeBreakout({
     setScore(0);
     setLives(START_LIVES);
     setStatus("playing");
+    // Clicking "Press Start"/"Retry" moves focus to that button — pull it
+    // back to the canvas so arrow keys control the paddle immediately.
+    canvasRef.current?.focus();
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLCanvasElement>) => {
@@ -239,7 +246,7 @@ export function ArcadeBreakout({
 
       <button
         type="button"
-        onClick={toggleFullscreen}
+        onClick={handleToggleFullscreen}
         className="border-paper text-paper hover:bg-paper hover:text-ink brutal-tag mt-4 inline-block border-2 px-3 py-1 text-xs font-bold uppercase"
       >
         ⛶ Fullscreen
@@ -266,7 +273,7 @@ export function ArcadeBreakout({
         {isFullscreen && (
           <button
             type="button"
-            onClick={toggleFullscreen}
+            onClick={handleToggleFullscreen}
             className="border-paper bg-ink/80 text-paper hover:bg-paper hover:text-ink brutal-tag absolute top-2 left-2 z-10 border-2 px-3 py-1 text-xs font-bold uppercase"
           >
             ← Back
