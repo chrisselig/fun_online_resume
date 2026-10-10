@@ -50,6 +50,74 @@ PROFILE: dict[str, object] = {
 }
 
 # ---------------------------------------------------------------------------
+# Focus-area examples — real (client, accomplishment) proof pulled from
+# FEATURED_EXPERIENCE/EARLIER_EXPERIENCE bullets below, keyed by the focus
+# area it backs. Backs the Hero focus-area tags' hover detail.
+# ---------------------------------------------------------------------------
+FOCUS_AREA_EXAMPLES: dict[str, list[dict[str, str]]] = {
+    "Data Science": [
+        {
+            "client": "Western Financial Group",
+            "accomplishment": "Built a k-means customer-segmentation model in R to group branch customers for targeted strategy.",
+        },
+        {
+            "client": "CNOOC International",
+            "accomplishment": "Developed a time series algorithm in R to forecast IT financial costs more efficiently than the traditional process.",
+        },
+    ],
+    "Business Intelligence": [
+        {
+            "client": "CNOOC International",
+            "accomplishment": "Led the Power BI implementation program rolled out across the entire business, including training users on best practices.",
+        },
+        {
+            "client": "ATCO Energy",
+            "accomplishment": "Created a Power BI dashboard for HR to visualize executives' goals and track progress.",
+        },
+    ],
+    "Visual Analytics": [
+        {
+            "client": "Husky Energy",
+            "accomplishment": "Built Spotfire reports (with HTML/CSS) tracking project-portfolio costs and status for upper management and the CIO — the first time all costs were visualized together.",
+        },
+        {
+            "client": "Camber Capital Private Wealth",
+            "accomplishment": "Built a 165-query Power BI report that automated data ingestion into a dashboard for my clients' clients.",
+        },
+    ],
+    "Data Engineering": [
+        {
+            "client": "Husky Energy",
+            "accomplishment": "Developed a SQL Server database as the single source of truth for the Planning and Controls team, cutting reporting time dramatically.",
+        },
+        {
+            "client": "Cenovus Energy",
+            "accomplishment": "Built and maintained the entire HR data model using Python, PySpark, and Databricks.",
+        },
+    ],
+    "Data Analysis": [
+        {
+            "client": "GardaWorld",
+            "accomplishment": "Built an R-based analysis that quantified data-submission errors for the first time, focusing training initiatives.",
+        },
+        {
+            "client": "ATCO Energy",
+            "accomplishment": "Ran advanced statistical text mining (topic modeling, word sentiment, bigrams) on an IT Engagement survey, providing an action plan for IT leadership.",
+        },
+    ],
+    "Automation": [
+        {
+            "client": "Cenovus Energy",
+            "accomplishment": "Developed an AI-based model that reads different file formats and extracts the data into tables — saving end users 4 days of work each time new files were sent.",
+        },
+        {
+            "client": "ATCO Energy",
+            "accomplishment": "Built a Power Automate flow using AI to extract information from PDF files, saving 10 hours a month.",
+        },
+    ],
+}
+
+# ---------------------------------------------------------------------------
 # Industries served — real, specific engagements, not a generic bucket.
 # Backs the "Industries served" stat tile's hover detail.
 # ---------------------------------------------------------------------------
@@ -523,6 +591,7 @@ def load_resume() -> dict[str, object]:
     return {
         "profile": dict(PROFILE),
         "stats": STATS,
+        "focus_area_examples": FOCUS_AREA_EXAMPLES,
         "industries": INDUSTRIES,
         "skills": _records(SKILLS),
         "experience": {

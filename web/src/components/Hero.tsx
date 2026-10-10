@@ -1,6 +1,12 @@
-import type { Profile } from "@/lib/resume";
+import type { FocusAreaExample, Profile } from "@/lib/resume";
 
-export function Hero({ profile }: { profile: Profile }) {
+export function Hero({
+  profile,
+  focusAreaExamples,
+}: {
+  profile: Profile;
+  focusAreaExamples: Record<string, FocusAreaExample[]>;
+}) {
   return (
     <header className="relative border-b-8 border-ink px-6 pt-10 pb-20 sm:px-10 sm:pt-16 sm:pb-28">
       <p className="brutal-tag text-sm font-bold">001 / RESUME.EXE</p>
@@ -23,14 +29,39 @@ export function Hero({ profile }: { profile: Profile }) {
       </p>
 
       <ul className="mt-8 flex flex-wrap gap-0">
-        {profile.focus_areas.map((area) => (
-          <li
-            key={area}
-            className="brutal-tag -ml-[4px] border-4 border-ink px-3 py-1 text-xs font-bold uppercase first:ml-0"
-          >
-            {area}
-          </li>
-        ))}
+        {profile.focus_areas.map((area) => {
+          const examples = focusAreaExamples[area];
+          return (
+            <li
+              key={area}
+              className={`group relative -ml-[4px] border-4 border-ink px-3 py-1 first:ml-0 ${
+                examples ? "cursor-help" : ""
+              }`}
+            >
+              <span className="brutal-tag text-xs font-bold uppercase">
+                {area}
+                {examples ? " *" : ""}
+              </span>
+
+              {examples && (
+                <div className="invisible absolute top-full left-0 z-10 mt-1 w-72 border-4 border-ink bg-paper p-4 opacity-0 shadow-[8px_8px_0_0_var(--color-ink)] transition-opacity duration-100 group-hover:visible group-hover:opacity-100">
+                  <ul className="space-y-3">
+                    {examples.map((example) => (
+                      <li key={example.client}>
+                        <p className="brutal-tag text-xs font-bold uppercase">
+                          {example.client}
+                        </p>
+                        <p className="mt-1 font-serif text-sm text-ink">
+                          {example.accomplishment}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </li>
+          );
+        })}
       </ul>
 
       <p className="brutal-tag mt-8 text-xs font-bold uppercase">

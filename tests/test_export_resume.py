@@ -37,6 +37,19 @@ def test_featured_experience_bullets_or_engagements_present():
         assert has_bullets or has_engagement_bullets, role["company"]
 
 
+def test_every_focus_area_has_a_real_example():
+    resume = load_resume()
+
+    focus_areas = resume["profile"]["focus_areas"]
+    examples = resume["focus_area_examples"]
+    for area in focus_areas:
+        assert area in examples, area
+        assert len(examples[area]) >= 1, area
+        for example in examples[area]:
+            assert example["client"]
+            assert example["accomplishment"]
+
+
 def test_load_resume_is_json_serializable_with_no_nan():
     resume = load_resume()
 

@@ -17,6 +17,11 @@ export interface Stat {
   details?: string[];
 }
 
+export interface FocusAreaExample {
+  client: string;
+  accomplishment: string;
+}
+
 export interface Industry {
   name: string;
   examples: string[];
@@ -87,6 +92,7 @@ export interface PortfolioItem {
 export interface Resume {
   profile: Profile;
   stats: Stat[];
+  focus_area_examples: Record<string, FocusAreaExample[]>;
   industries: Industry[];
   skills: SkillEntry[];
   experience: Experience;

@@ -10,7 +10,10 @@ import { resume } from "@/lib/resume";
 export default function Home() {
   return (
     <main>
-      <Hero profile={resume.profile} />
+      <Hero
+        profile={resume.profile}
+        focusAreaExamples={resume.focus_area_examples}
+      />
       <StatsBar stats={resume.stats} />
       <ExperienceTimeline experience={resume.experience} />
       <EducationCertifications
