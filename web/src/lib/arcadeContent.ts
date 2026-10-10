@@ -49,7 +49,7 @@ export function extractPainPoints(
  * Tools that exist in the real skills data but shouldn't appear as a
  * playable weapon (curation call, not a reflection of real usage).
  */
-const EXCLUDED_WEAPONS = new Set(["Spotfire", "RStudio"]);
+const EXCLUDED_WEAPONS = new Set(["Spotfire", "RStudio", "Spark", "AWS"]);
 
 /** Weapon labels: the real top tools by how often they show up in the career history. */
 export function topWeapons(skills: SkillEntry[], count = 8): string[] {
@@ -72,9 +72,9 @@ const WEAPON_KIND_BY_TOOL: Record<string, WeaponKind> = {
   "Power BI": "spread",
   Python: "rapid",
   SQL: "laser",
-  Spark: "spread",
-  AWS: "twin",
   Databricks: "wave",
+  "Power Automate": "rapid",
+  Azure: "spread",
 };
 
 export function weaponKindFor(tool: string): WeaponKind {

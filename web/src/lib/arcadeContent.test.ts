@@ -114,11 +114,15 @@ describe("topWeapons", () => {
     const withExcluded: SkillEntry[] = [
       { name: "Spotfire", endorsements: 50 },
       { name: "RStudio", endorsements: 40 },
+      { name: "Spark", endorsements: 30 },
+      { name: "AWS", endorsements: 20 },
       ...skills,
     ];
     const result = topWeapons(withExcluded, 10);
     expect(result).not.toContain("Spotfire");
     expect(result).not.toContain("RStudio");
+    expect(result).not.toContain("Spark");
+    expect(result).not.toContain("AWS");
     expect(result).toEqual(["R", "Power BI", "Python", "Tableau"]);
   });
 });
