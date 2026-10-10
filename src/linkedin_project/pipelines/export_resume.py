@@ -189,11 +189,34 @@ SKILLS = pd.DataFrame(
 )
 
 # ---------------------------------------------------------------------------
+# Companies & consulting clients — every real employer and named client
+# across featured and earlier-career roles. Backs that stat's hover detail.
+# ---------------------------------------------------------------------------
+COMPANIES_AND_CLIENTS: list[str] = [
+    "Cenovus Energy",
+    "Bidamia Inc.",
+    "CNOOC International",
+    "ATCO Energy",
+    "Husky Energy",
+    "Devon Energy",
+    "SELICA Analytics Inc.",
+    "Camber Capital Private Wealth",
+    "Western Financial Group",
+    "GardaWorld",
+    "ConocoPhillips Canada",
+    "Liquidation World",
+]
+
+# ---------------------------------------------------------------------------
 # Career stats — a few honest numbers, not vanity metrics.
 # ---------------------------------------------------------------------------
 STATS: list[dict[str, object]] = [
     {"label": "Years in data & analytics", "value": "18+"},
-    {"label": "Companies & consulting clients", "value": "12"},
+    {
+        "label": "Companies & consulting clients",
+        "value": str(len(COMPANIES_AND_CLIENTS)),
+        "details": COMPANIES_AND_CLIENTS,
+    },
     {
         "label": "Industries served",
         "value": str(len(INDUSTRIES)),

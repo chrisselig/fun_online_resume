@@ -30,7 +30,21 @@
     },
     {
       "label": "Companies & consulting clients",
-      "value": "12"
+      "value": "12",
+      "details": [
+        "Cenovus Energy",
+        "Bidamia Inc.",
+        "CNOOC International",
+        "ATCO Energy",
+        "Husky Energy",
+        "Devon Energy",
+        "SELICA Analytics Inc.",
+        "Camber Capital Private Wealth",
+        "Western Financial Group",
+        "GardaWorld",
+        "ConocoPhillips Canada",
+        "Liquidation World"
+      ]
     },
     {
       "label": "Industries served",
