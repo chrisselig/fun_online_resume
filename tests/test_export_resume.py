@@ -17,6 +17,17 @@ def test_load_resume_falls_back_to_static_data_without_db():
     assert len(resume["stats"]) >= 1
 
 
+def test_industries_stat_matches_the_real_industries_list():
+    resume = load_resume(db_path="/nonexistent/path/linkedin.db")
+
+    industries_stat = next(
+        s for s in resume["stats"] if s["label"] == "Industries served"
+    )
+    assert industries_stat["value"] == str(len(resume["industries"]))
+    assert industries_stat["details"] == [i["name"] for i in resume["industries"]]
+    assert len(resume["industries"]) > 4  # more than the original undercount
+
+
 def test_featured_experience_bullets_or_engagements_present():
     resume = load_resume(db_path="/nonexistent/path/linkedin.db")
 

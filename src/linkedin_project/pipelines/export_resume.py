@@ -53,12 +53,62 @@ PROFILE: dict[str, object] = {
 }
 
 # ---------------------------------------------------------------------------
+# Industries served — real, specific engagements, not a generic bucket.
+# Backs the "Industries served" stat tile's hover detail.
+# ---------------------------------------------------------------------------
+INDUSTRIES: list[dict[str, object]] = [
+    {
+        "name": "Energy & Utilities",
+        "examples": [
+            "Cenovus Energy",
+            "CNOOC International",
+            "ATCO Energy",
+            "Husky Energy",
+            "Devon Energy",
+            "ConocoPhillips Canada",
+        ],
+    },
+    {
+        "name": "Finance & Wealth Management",
+        "examples": ["Camber Capital Private Wealth", "Western Financial Group"],
+    },
+    {
+        "name": "Aviation Security",
+        "examples": ["GardaWorld — airport security screening-officer training"],
+    },
+    {"name": "Retail", "examples": ["Liquidation World"]},
+    {
+        "name": "Academic & Research",
+        "examples": [
+            "University medical study (300+ R Markdown reports)",
+            "Harvard graduate student — R geospatial analysis & linear regression",
+        ],
+    },
+    {
+        "name": "Technology / Startups",
+        "examples": ["Stealth startup — investor-presentation R Shiny dashboard"],
+    },
+    {
+        "name": "Health & Wellness",
+        "examples": ["Therapy practice — analytics & traffic reporting"],
+    },
+    {
+        "name": "Automotive / Auto Recycling",
+        "examples": ["Minnesota u-pick auto-parts business — eBay sales profitability"],
+    },
+]
+
+# ---------------------------------------------------------------------------
 # Career stats — a few honest numbers, not vanity metrics.
 # ---------------------------------------------------------------------------
-STATS: list[dict[str, str]] = [
+STATS: list[dict[str, object]] = [
     {"label": "Years in data & analytics", "value": "18+"},
     {"label": "Companies & consulting clients", "value": "12"},
-    {"label": "Industries served", "value": "4"},
+    {
+        "label": "Industries served",
+        "value": str(len(INDUSTRIES)),
+        "details": [industry["name"] for industry in INDUSTRIES],
+    },
     {"label": "Tools mastered", "value": "20+"},
 ]
 
@@ -126,7 +176,7 @@ FEATURED_EXPERIENCE: list[dict[str, object]] = [
             {
                 "client": "CNOOC International",
                 "role": "Data Scientist",
-                "former": False,
+                "former": True,
                 "bullets": [
                     "Managed the analytics environment (RStudio/Python/GitLab) and advised on data initiatives, including rolling out BI tools and optimizing processes.",
                     "Reverse-engineered a large manual process that took days each month and sped it up using system resources and Power BI.",
@@ -137,18 +187,18 @@ FEATURED_EXPERIENCE: list[dict[str, object]] = [
             {
                 "client": "Various (Online freelancer)",
                 "role": None,
-                "former": False,
+                "former": True,
                 "bullets": [
                     "Produced over 300 R Markdown reports for participants in a university medical study, automatically generated via R/RStudio with ggplot2 visuals and PDF output.",
                     "Wrote OData queries to extract Microsoft Dynamics sales data and visualize it in Power BI for executives.",
-                    "Developed an R Shiny dashboard to visualize economic, financial, geospatial, and proprietary data for investor presentations — hosted on Docker + an Azure VM.",
+                    "Developed an R Shiny dashboard to visualize economic, financial, geospatial, and proprietary data for investor presentations at a stealth startup — hosted on Docker + an Azure VM.",
                     "Built an R-based interactive text-mining analysis on free-form survey text (word correlation, frequency counts, sentiment) to surface customer-satisfaction insights for management.",
                     "Created a Power BI dashboard visualizing SurveyMonkey customer-satisfaction data to help management focus improvement efforts.",
                     "Using Python, built a data pipeline between internal systems and AWS (S3 and Redshift) enabling new analytics initiatives.",
-                    "Taught a client to use R for geospatial analysis and linear regression.",
-                    "Combined data from multiple systems for the first time to determine whether a company's eBay sales were profitable, delivering Excel and Power BI reports plus profitability recommendations.",
-                    "Set up Google Analytics and Calendly with a Google Data Studio dashboard for near-real-time visitor and booking-funnel tracking.",
-                    "Set up Google Analytics and a Google Data Studio report to track which blog posts and social channels drove the most traffic.",
+                    "Taught a Harvard graduate student to use R for geospatial analysis and linear regression.",
+                    "Combined data from multiple systems for the first time to determine whether a Minnesota u-pick auto-parts business's eBay sales were profitable, delivering Excel and Power BI reports plus profitability recommendations.",
+                    "Set up Google Analytics and Calendly with a Google Data Studio dashboard for a therapy practice, enabling near-real-time visitor and booking-funnel tracking.",
+                    "Set up Google Analytics and a Google Data Studio report for the same therapy practice to track which blog posts and social channels drove the most traffic.",
                     "Created R/ggplot2 data visualizations for an academic study on the mental-health effects of COVID-19.",
                 ],
             },
@@ -247,9 +297,10 @@ EARLIER_EXPERIENCE: list[dict[str, str]] = [
         "date_range": "2016 – 2017",
         "role": "Data Analyst",
         "highlight": (
-            "Built a Power BI training-analytics dashboard and an R-based "
-            "analysis that quantified data-submission errors for the first "
-            "time, focusing training initiatives."
+            "Built a Power BI dashboard tracking airport security screening-"
+            "officer training, and an R-based analysis that quantified "
+            "data-submission errors for the first time, focusing training "
+            "initiatives."
         ),
     },
     {
@@ -517,6 +568,7 @@ def load_resume(db_path: str | Path = _DB_PATH) -> dict[str, object]:
         return {
             "profile": load_profile(conn),
             "stats": STATS,
+            "industries": INDUSTRIES,
             "skills": _records(load_section(conn, "skills")),
             "experience": {
                 "featured": FEATURED_EXPERIENCE,
