@@ -451,20 +451,20 @@ SAMPLE_CERTIFICATIONS = pd.DataFrame(
 # ---------------------------------------------------------------------------
 PORTFOLIO: list[dict[str, str]] = [
     {
-        "title": "Azure Data Engineering — Bike Sharing DW",
-        "url": "https://github.com/chrisselig/bikesharingDW",
-    },
-    {
-        "title": "Azure Data Engineering — NYC Data Project",
-        "url": "https://github.com/chrisselig/de_udacity_nycdata_project",
+        "title": "Movie Awards Video Analysis",
+        "url": "https://github.com/chrisselig/movie_awards_video_analysis",
     },
     {
         "title": "Fantasy Baseball Dashboard (Python + Claude Code)",
         "url": "https://chris-selig.shinyapps.io/fantasy_baseball_dashboard/",
     },
     {
-        "title": "Movie Awards Video Analysis",
-        "url": "https://github.com/chrisselig/movie_awards_video_analysis",
+        "title": "Azure Data Engineering — Bike Sharing DW",
+        "url": "https://github.com/chrisselig/bikesharingDW",
+    },
+    {
+        "title": "Azure Data Engineering — NYC Data Project",
+        "url": "https://github.com/chrisselig/de_udacity_nycdata_project",
     },
 ]
 
