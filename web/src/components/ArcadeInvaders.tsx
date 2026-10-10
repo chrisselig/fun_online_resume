@@ -143,7 +143,7 @@ function spawnShot(kind: WeaponKind, muzzleX: number, muzzleY: number): Bullet[]
   }
 }
 
-export function ArcadeGame({
+export function ArcadeInvaders({
   summary,
   featured,
   earlier,
@@ -468,13 +468,11 @@ export function ArcadeGame({
   const reveal = waveReveal(waveIndex, featured, earlierRewards);
 
   return (
-    <section className="border-b-8 border-ink bg-ink px-6 py-16 text-paper sm:px-10 sm:py-24">
-      <div className="mx-auto max-w-4xl">
-        <p className="brutal-tag text-accent text-sm font-bold">007 / ARCADE.EXE</p>
-        <h2 className="mt-2 text-5xl font-black tracking-tighter uppercase sm:text-7xl">
+    <div>
+        <h3 className="text-2xl font-black tracking-tight uppercase sm:text-3xl">
           Data Invaders
-        </h2>
-        <p className="mt-3 max-w-2xl font-serif text-lg text-paper/80">
+        </h3>
+        <p className="mt-2 max-w-2xl font-serif text-base text-paper/80">
           Shoot down real problems from 18 years of real work before they reach you. Arrow keys
           / A-D to move, Space to fire, Q/E to switch weapons. Clear a wave to unlock what came
           next — lose all 3 lives and it&apos;s back to wave one.
@@ -578,7 +576,6 @@ export function ArcadeGame({
             ))}
           </div>
         </div>
-      </div>
-    </section>
+    </div>
   );
 }

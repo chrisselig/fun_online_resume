@@ -4,7 +4,7 @@ import { ExperienceTimeline } from "@/components/ExperienceTimeline";
 import { EducationCertifications } from "@/components/EducationCertifications";
 import { Portfolio } from "@/components/Portfolio";
 import { FunFacts } from "@/components/FunFacts";
-import { ArcadeGame } from "@/components/ArcadeGame";
+import { ArcadeSection } from "@/components/ArcadeSection";
 import { resume } from "@/lib/resume";
 
 export default function Home() {
@@ -19,7 +19,7 @@ export default function Home() {
       />
       <Portfolio portfolio={resume.portfolio} />
       <FunFacts facts={resume.fun_facts} />
-      <ArcadeGame
+      <ArcadeSection
         summary={resume.profile.summary}
         featured={resume.experience.featured}
         earlier={resume.experience.earlier}
