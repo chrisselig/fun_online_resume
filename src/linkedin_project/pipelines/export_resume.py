@@ -1,27 +1,14 @@
-"""Load resume data (DuckDB if populated, else static real content) as plain Python.
+"""Hand-curated resume content, exported as plain Python/JSON.
 
-This is the single data source for anything that renders the resume —
-currently the Next.js frontend in /web, which consumes the JSON this module
-produces via scripts/export_resume_json.py.
-
-The curated experience narrative (featured roles with client engagements,
-career stats, portfolio, fun facts) is static editorial content transcribed
-from Chris Selig's resume — it doesn't fit the flat LinkedIn-scrape schema
-in scrape/schema.py and isn't something scraping could produce anyway, so
-it has no DB-backed path. Skills, education, and certifications remain
-DB-backed with a static fallback, matching the existing scrape schema.
+This is the single data source for the Next.js frontend in /web, which
+consumes the JSON this module produces via scripts/export_resume_json.py.
+Everything here is static editorial content transcribed from Chris Selig's
+real resume — there is no scraper or database behind it.
 """
 
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Optional
-
-import duckdb
 import pandas as pd
-
-_PROJECT_ROOT = Path(__file__).resolve().parents[3]
-_DB_PATH = _PROJECT_ROOT / "data" / "duckdb" / "linkedin.db"
 
 # ---------------------------------------------------------------------------
 # Profile
@@ -50,23 +37,69 @@ PROFILE: dict[str, object] = {
         "Data Analysis",
         "Automation",
     ],
+    # Corporate functions and business units supported with analytics,
+    # across roles — not what he does, but who he's done it for.
+    "business_domains": [
+        "Accounting / Finance",
+        "IT",
+        "Human Resources",
+        "BI Teams",
+        "Supply Chain",
+        "Corporate Planning",
+    ],
 }
 
 # ---------------------------------------------------------------------------
-# Career stats — a few honest numbers, not vanity metrics.
+# Industries served — real, specific engagements, not a generic bucket.
+# Backs the "Industries served" stat tile's hover detail.
 # ---------------------------------------------------------------------------
-STATS: list[dict[str, str]] = [
-    {"label": "Years in data & analytics", "value": "18+"},
-    {"label": "Companies & consulting clients", "value": "12"},
-    {"label": "Industries served", "value": "4"},
-    {"label": "Tools mastered", "value": "20+"},
+INDUSTRIES: list[dict[str, object]] = [
+    {
+        "name": "Energy & Utilities",
+        "examples": [
+            "Cenovus Energy",
+            "CNOOC International",
+            "ATCO Energy",
+            "Husky Energy",
+            "Devon Energy",
+            "ConocoPhillips Canada",
+        ],
+    },
+    {
+        "name": "Finance & Wealth Management",
+        "examples": ["Camber Capital Private Wealth", "Western Financial Group"],
+    },
+    {
+        "name": "Aviation Security",
+        "examples": ["GardaWorld — airport security screening-officer training"],
+    },
+    {"name": "Retail", "examples": ["Liquidation World"]},
+    {
+        "name": "Academic & Research",
+        "examples": [
+            "University medical study (300+ R Markdown reports)",
+            "Harvard graduate student — R geospatial analysis & linear regression",
+        ],
+    },
+    {
+        "name": "Technology / Startups",
+        "examples": ["Stealth startup — investor-presentation R Shiny dashboard"],
+    },
+    {
+        "name": "Health & Wellness",
+        "examples": ["Therapy practice — analytics & traffic reporting"],
+    },
+    {
+        "name": "Automotive / Auto Recycling",
+        "examples": ["Minnesota u-pick auto-parts business — eBay sales profitability"],
+    },
 ]
 
 # ---------------------------------------------------------------------------
 # Skills — sized by how often each tool shows up across 18 years of real
 # work (counted from the resume text), not LinkedIn endorsements.
 # ---------------------------------------------------------------------------
-SAMPLE_SKILLS = pd.DataFrame(
+SKILLS = pd.DataFrame(
     [
         {"name": "R", "endorsements": 26},
         {"name": "Power BI", "endorsements": 18},
@@ -86,6 +119,24 @@ SAMPLE_SKILLS = pd.DataFrame(
         {"name": "Tableau", "endorsements": 1},
     ]
 )
+
+# ---------------------------------------------------------------------------
+# Career stats — a few honest numbers, not vanity metrics.
+# ---------------------------------------------------------------------------
+STATS: list[dict[str, object]] = [
+    {"label": "Years in data & analytics", "value": "18+"},
+    {"label": "Companies & consulting clients", "value": "12"},
+    {
+        "label": "Industries served",
+        "value": str(len(INDUSTRIES)),
+        "details": [industry["name"] for industry in INDUSTRIES],
+    },
+    {
+        "label": "Tools mastered",
+        "value": "20+",
+        "details": list(SKILLS.sort_values("endorsements", ascending=False)["name"]),
+    },
+]
 
 # ---------------------------------------------------------------------------
 # Featured experience — full detail, including consulting client
@@ -108,6 +159,10 @@ FEATURED_EXPERIENCE: list[dict[str, object]] = [
             "Developed an AI-based model that reads different file formats and extracts the data into tables — saving end users 4 days of work each time new files were sent to the team.",
         ],
         "engagements": [],
+        "rewards": [
+            "4 fewer days of manual file-wrangling every cycle — automated, not just dashboarded",
+            "Closed a real data-access gap with automated permission monitoring",
+        ],
     },
     {
         "company": "Bidamia Inc.",
@@ -126,7 +181,7 @@ FEATURED_EXPERIENCE: list[dict[str, object]] = [
             {
                 "client": "CNOOC International",
                 "role": "Data Scientist",
-                "former": False,
+                "former": True,
                 "bullets": [
                     "Managed the analytics environment (RStudio/Python/GitLab) and advised on data initiatives, including rolling out BI tools and optimizing processes.",
                     "Reverse-engineered a large manual process that took days each month and sped it up using system resources and Power BI.",
@@ -137,18 +192,18 @@ FEATURED_EXPERIENCE: list[dict[str, object]] = [
             {
                 "client": "Various (Online freelancer)",
                 "role": None,
-                "former": False,
+                "former": True,
                 "bullets": [
                     "Produced over 300 R Markdown reports for participants in a university medical study, automatically generated via R/RStudio with ggplot2 visuals and PDF output.",
                     "Wrote OData queries to extract Microsoft Dynamics sales data and visualize it in Power BI for executives.",
-                    "Developed an R Shiny dashboard to visualize economic, financial, geospatial, and proprietary data for investor presentations — hosted on Docker + an Azure VM.",
+                    "Developed an R Shiny dashboard to visualize economic, financial, geospatial, and proprietary data for investor presentations at a stealth startup — hosted on Docker + an Azure VM.",
                     "Built an R-based interactive text-mining analysis on free-form survey text (word correlation, frequency counts, sentiment) to surface customer-satisfaction insights for management.",
                     "Created a Power BI dashboard visualizing SurveyMonkey customer-satisfaction data to help management focus improvement efforts.",
                     "Using Python, built a data pipeline between internal systems and AWS (S3 and Redshift) enabling new analytics initiatives.",
-                    "Taught a client to use R for geospatial analysis and linear regression.",
-                    "Combined data from multiple systems for the first time to determine whether a company's eBay sales were profitable, delivering Excel and Power BI reports plus profitability recommendations.",
-                    "Set up Google Analytics and Calendly with a Google Data Studio dashboard for near-real-time visitor and booking-funnel tracking.",
-                    "Set up Google Analytics and a Google Data Studio report to track which blog posts and social channels drove the most traffic.",
+                    "Taught a Harvard graduate student to use R for geospatial analysis and linear regression.",
+                    "Combined data from multiple systems for the first time to determine whether a Minnesota u-pick auto-parts business's eBay sales were profitable, delivering Excel and Power BI reports plus profitability recommendations.",
+                    "Set up Google Analytics and Calendly with a Google Data Studio dashboard for a therapy practice, enabling near-real-time visitor and booking-funnel tracking.",
+                    "Set up Google Analytics and a Google Data Studio report for the same therapy practice to track which blog posts and social channels drove the most traffic.",
                     "Created R/ggplot2 data visualizations for an academic study on the mental-health effects of COVID-19.",
                 ],
             },
@@ -190,6 +245,10 @@ FEATURED_EXPERIENCE: list[dict[str, object]] = [
                 ],
             },
         ],
+        "rewards": [
+            "Led a Power BI rollout across an entire business, not just one team",
+            "Replaced scattered spreadsheets with one SQL Server source of truth",
+        ],
     },
     {
         "company": "SELICA Analytics Inc.",
@@ -222,7 +281,19 @@ FEATURED_EXPERIENCE: list[dict[str, object]] = [
                 ],
             },
         ],
+        "rewards": [
+            "Cut a financial close process from 3–5 days to 10 minutes",
+            "Reclaimed 10 hours a month from manual PDF work using AI",
+        ],
     },
+]
+
+# ---------------------------------------------------------------------------
+# Earlier-career rewards — the bonus wave's "what you get" pitch.
+# ---------------------------------------------------------------------------
+EARLIER_CAREER_REWARDS: list[str] = [
+    "Cut Essbase turnaround from 5 days to 2 hours",
+    "Caught data-submission errors nobody had quantified before",
 ]
 
 # ---------------------------------------------------------------------------
@@ -247,9 +318,10 @@ EARLIER_EXPERIENCE: list[dict[str, str]] = [
         "date_range": "2016 – 2017",
         "role": "Data Analyst",
         "highlight": (
-            "Built a Power BI training-analytics dashboard and an R-based "
-            "analysis that quantified data-submission errors for the first "
-            "time, focusing training initiatives."
+            "Built a Power BI dashboard tracking airport security screening-"
+            "officer training, and an R-based analysis that quantified "
+            "data-submission errors for the first time, focusing training "
+            "initiatives."
         ),
     },
     {
@@ -278,7 +350,7 @@ EARLIER_EXPERIENCE: list[dict[str, str]] = [
 # ---------------------------------------------------------------------------
 # Education
 # ---------------------------------------------------------------------------
-SAMPLE_EDUCATION = pd.DataFrame(
+EDUCATION = pd.DataFrame(
     [
         {
             "school": "Institute for Statistics Education",
@@ -318,7 +390,7 @@ SAMPLE_EDUCATION = pd.DataFrame(
 # ---------------------------------------------------------------------------
 # Professional development — frequent, recent, self-directed upskilling.
 # ---------------------------------------------------------------------------
-SAMPLE_CERTIFICATIONS = pd.DataFrame(
+CERTIFICATIONS = pd.DataFrame(
     [
         {
             "name": "Data Engineering with Azure",
@@ -382,22 +454,44 @@ SAMPLE_CERTIFICATIONS = pd.DataFrame(
 # ---------------------------------------------------------------------------
 # Portfolio
 # ---------------------------------------------------------------------------
-PORTFOLIO: list[dict[str, str]] = [
+PORTFOLIO: list[dict[str, object]] = [
     {
-        "title": "Azure Data Engineering — Bike Sharing DW",
-        "url": "https://github.com/chrisselig/bikesharingDW",
-    },
-    {
-        "title": "Azure Data Engineering — NYC Data Project",
-        "url": "https://github.com/chrisselig/de_udacity_nycdata_project",
+        "title": "Movie Awards Video Analysis",
+        "links": [
+            {"label": "Live app", "url": "https://the-movie-awards.ca/"},
+            {
+                "label": "GitHub",
+                "url": "https://github.com/chrisselig/movie_awards_video_analysis",
+            },
+        ],
     },
     {
         "title": "Fantasy Baseball Dashboard (Python + Claude Code)",
-        "url": "https://chris-selig.shinyapps.io/fantasy_baseball_dashboard/",
+        "links": [
+            {
+                "label": "Live app",
+                "url": "https://chris-selig.shinyapps.io/fantasy_baseball_dashboard/",
+            },
+            {
+                "label": "GitHub",
+                "url": "https://github.com/chrisselig/fantasy_baseball_forecasting",
+            },
+        ],
     },
     {
-        "title": "R Shiny Resume (earlier version of this site)",
-        "url": "https://chris-selig.shinyapps.io/ShinyResume/",
+        "title": "Azure Data Engineering — Bike Sharing DW",
+        "links": [
+            {"label": "GitHub", "url": "https://github.com/chrisselig/bikesharingDW"}
+        ],
+    },
+    {
+        "title": "Azure Data Engineering — NYC Data Project",
+        "links": [
+            {
+                "label": "GitHub",
+                "url": "https://github.com/chrisselig/de_udacity_nycdata_project",
+            }
+        ],
     },
 ]
 
@@ -411,95 +505,9 @@ FUN_FACTS: list[str] = [
     "Addicted to hand-tool woodworking and buying saws — 15 and counting. Send help.",
 ]
 
-_SAMPLE_SECTIONS: dict[str, pd.DataFrame] = {
-    "education": SAMPLE_EDUCATION,
-    "skills": SAMPLE_SKILLS,
-    "certifications": SAMPLE_CERTIFICATIONS,
-}
-
-_DB_QUERIES: dict[str, str] = {
-    "education": "SELECT * FROM education ORDER BY end_date DESC",
-    "skills": "SELECT * FROM skills ORDER BY endorsement_count DESC",
-    "certifications": "SELECT * FROM certifications ORDER BY issued_date DESC",
-}
-
-# ---------------------------------------------------------------------------
-# Database helpers
-# ---------------------------------------------------------------------------
-
-
-def get_db_connection(
-    db_path: str | Path = _DB_PATH,
-) -> Optional[duckdb.DuckDBPyConnection]:
-    """Open a read-only DuckDB connection, or return None if unavailable."""
-    try:
-        path = Path(db_path)
-        if not path.exists():
-            return None
-        return duckdb.connect(str(path), read_only=True)
-    except Exception:
-        return None
-
-
-def _safe_query(conn: duckdb.DuckDBPyConnection, sql: str) -> Optional[pd.DataFrame]:
-    """Execute SQL and return a DataFrame, or None on error."""
-    try:
-        return conn.execute(sql).df()
-    except Exception:
-        return None
-
-
-def _extract_year(series: pd.Series) -> pd.Series:
-    """Extract year strings from ISO 8601 date strings."""
-    parsed = pd.to_datetime(series, errors="coerce")
-    return parsed.dt.year.astype("Int64").astype(str).where(parsed.notna(), other="")
-
-
-def load_section(
-    conn: Optional[duckdb.DuckDBPyConnection], section: str
-) -> pd.DataFrame:
-    """Load a DB-backed resume section from DuckDB, falling back to static data."""
-    if section not in _SAMPLE_SECTIONS:
-        raise ValueError(f"Unknown section: {section!r}")
-
-    if conn is None:
-        return _SAMPLE_SECTIONS[section].copy()
-
-    result = _safe_query(conn, _DB_QUERIES[section])
-    if result is None or result.empty:
-        return _SAMPLE_SECTIONS[section].copy()
-
-    if section == "education":
-        if "start_date" in result.columns and "start_year" not in result.columns:
-            result = result.copy()
-            result["start_year"] = _extract_year(result["start_date"])
-        if "end_date" in result.columns and "end_year" not in result.columns:
-            result = result.copy()
-            result["end_year"] = _extract_year(result["end_date"])
-
-    return result
-
-
-def load_profile(conn: Optional[duckdb.DuckDBPyConnection]) -> dict[str, object]:
-    """Load the profile record from DuckDB, falling back to static data."""
-    if conn is None:
-        return dict(PROFILE)
-    result = _safe_query(conn, "SELECT * FROM profile LIMIT 1")
-    if result is None or result.empty:
-        return dict(PROFILE)
-    row = result.iloc[0].to_dict()
-    row.setdefault("summary", PROFILE["summary"])
-    return row
-
 
 def _records(df: pd.DataFrame) -> list[dict[str, object]]:
-    """Convert a DataFrame to JSON-safe records (NaN/NaT -> None).
-
-    ``DataFrame.where`` re-coerces ``None`` back to the column's own NA
-    sentinel (``float('nan')`` even for pandas' string dtype), so NaN is
-    scrubbed per-value after ``to_dict`` instead, once values are plain
-    Python objects no longer bound to a column dtype.
-    """
+    """Convert a DataFrame to JSON-safe records (NaN/NaT -> None)."""
     records = df.to_dict(orient="records")
     return [
         {
@@ -510,23 +518,20 @@ def _records(df: pd.DataFrame) -> list[dict[str, object]]:
     ]
 
 
-def load_resume(db_path: str | Path = _DB_PATH) -> dict[str, object]:
-    """Load the full resume (profile + all sections) as plain Python data."""
-    conn = get_db_connection(db_path)
-    try:
-        return {
-            "profile": load_profile(conn),
-            "stats": STATS,
-            "skills": _records(load_section(conn, "skills")),
-            "experience": {
-                "featured": FEATURED_EXPERIENCE,
-                "earlier": EARLIER_EXPERIENCE,
-            },
-            "education": _records(load_section(conn, "education")),
-            "certifications": _records(load_section(conn, "certifications")),
-            "portfolio": PORTFOLIO,
-            "fun_facts": FUN_FACTS,
-        }
-    finally:
-        if conn is not None:
-            conn.close()
+def load_resume() -> dict[str, object]:
+    """Return the full resume (profile + all sections) as plain Python data."""
+    return {
+        "profile": dict(PROFILE),
+        "stats": STATS,
+        "industries": INDUSTRIES,
+        "skills": _records(SKILLS),
+        "experience": {
+            "featured": FEATURED_EXPERIENCE,
+            "earlier": EARLIER_EXPERIENCE,
+            "earlier_rewards": EARLIER_CAREER_REWARDS,
+        },
+        "education": _records(EDUCATION),
+        "certifications": _records(CERTIFICATIONS),
+        "portfolio": PORTFOLIO,
+        "fun_facts": FUN_FACTS,
+    }
