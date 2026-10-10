@@ -12,12 +12,9 @@ export function Portfolio({ portfolio }: { portfolio: PortfolioItem[] }) {
 
       <div className="mt-12 grid gap-8 sm:grid-cols-2">
         {portfolio.map((item, i) => (
-          <a
-            key={item.url}
-            href={item.url}
-            target="_blank"
-            rel="noreferrer"
-            className={`group relative block overflow-hidden border-4 border-ink bg-paper p-6 text-ink transition-all duration-150 hover:-translate-y-1 hover:rotate-0 hover:bg-ink hover:text-paper ${ROTATIONS[i % ROTATIONS.length]}`}
+          <div
+            key={item.title}
+            className={`group relative overflow-hidden border-4 border-ink bg-paper p-6 text-ink transition-all duration-150 hover:-translate-y-1 hover:rotate-0 hover:bg-ink hover:text-paper ${ROTATIONS[i % ROTATIONS.length]}`}
           >
             <span
               aria-hidden
@@ -28,14 +25,25 @@ export function Portfolio({ portfolio }: { portfolio: PortfolioItem[] }) {
 
             <div className="relative">
               <span className="bg-accent text-ink inline-block px-2 py-1 font-mono text-xs font-bold uppercase">
-                View Project
+                {item.links.length > 1 ? "Live + Source" : "View Project"}
               </span>
               <h3 className="mt-4 text-2xl font-black uppercase sm:text-3xl">{item.title}</h3>
-              <p className="mt-3 inline-block font-mono text-sm font-bold underline decoration-2 underline-offset-4 group-hover:text-accent">
-                {item.url.replace(/^https?:\/\//, "")} ↗
-              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {item.links.map((link) => (
+                  <a
+                    key={link.url}
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="border-ink group-hover:border-paper inline-block border-2 px-2 py-1 font-mono text-xs font-bold uppercase underline decoration-2 underline-offset-4 hover:text-accent"
+                  >
+                    {link.label} ↗
+                  </a>
+                ))}
+              </div>
             </div>
-          </a>
+          </div>
         ))}
       </div>
     </section>

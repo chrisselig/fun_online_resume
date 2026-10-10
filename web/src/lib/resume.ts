@@ -72,9 +72,14 @@ export interface CertificationEntry {
   issued_date: string;
 }
 
+export interface PortfolioLink {
+  label: string;
+  url: string;
+}
+
 export interface PortfolioItem {
   title: string;
-  url: string;
+  links: PortfolioLink[];
 }
 
 export interface Resume {
