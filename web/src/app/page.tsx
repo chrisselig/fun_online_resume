@@ -5,6 +5,7 @@ import { ExperienceTimeline } from "@/components/ExperienceTimeline";
 import { EducationCertifications } from "@/components/EducationCertifications";
 import { Portfolio } from "@/components/Portfolio";
 import { FunFacts } from "@/components/FunFacts";
+import { ArcadeGame } from "@/components/ArcadeGame";
 import { resume } from "@/lib/resume";
 
 export default function Home() {
@@ -20,8 +21,14 @@ export default function Home() {
       />
       <Portfolio portfolio={resume.portfolio} />
       <FunFacts facts={resume.fun_facts} />
+      <ArcadeGame
+        summary={resume.profile.summary}
+        featured={resume.experience.featured}
+        earlier={resume.experience.earlier}
+        skills={resume.skills}
+      />
       <footer className="brutal-tag px-6 py-8 text-center text-xs font-bold">
-        008 / EOF — {resume.profile.name.toUpperCase()}
+        009 / EOF — {resume.profile.name.toUpperCase()}
       </footer>
     </main>
   );

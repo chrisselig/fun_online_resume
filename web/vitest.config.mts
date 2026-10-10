@@ -9,8 +9,6 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    // This design variant has no algorithmic logic (unlike circlePack.ts
-    // in other branches) — just JSX. Nothing to unit test.
     passWithNoTests: true,
   },
 });
