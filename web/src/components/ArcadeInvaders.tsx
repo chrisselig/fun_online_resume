@@ -10,6 +10,7 @@ import {
 } from "react";
 import type { EarlierRole, FeaturedRole, SkillEntry } from "@/lib/resume";
 import { extractPainPoints, topWeapons, weaponKindFor, type WeaponKind } from "@/lib/arcadeContent";
+import { pickRandomReasons } from "@/lib/pickRandomReasons";
 import { useFullscreen } from "@/lib/useFullscreen";
 
 const CANVAS_W = 480;
@@ -150,12 +151,14 @@ export function ArcadeInvaders({
   earlier,
   earlierRewards,
   skills,
+  hireMePool,
 }: {
   summary: string;
   featured: FeaturedRole[];
   earlier: EarlierRole[];
   earlierRewards: string[];
   skills: SkillEntry[];
+  hireMePool: string[];
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frameRef = useRef<HTMLDivElement | null>(null);
@@ -183,6 +186,7 @@ export function ArcadeInvaders({
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(START_LIVES);
   const [weaponIndex, setWeaponIndex] = useState(0);
+  const [bonusReasons, setBonusReasons] = useState<string[]>([]);
 
   const painPoints = useMemo(
     () => extractPainPoints(summary, featured, earlier),
@@ -412,6 +416,9 @@ export function ArcadeInvaders({
   const advanceWave = () => {
     const next = waveIndex + 1;
     if (next >= WAVE_COUNT) {
+      // Direct response to the player pressing space on the levelClear
+      // screen — never during initial render, so it's safe to randomize.
+      setBonusReasons(pickRandomReasons(hireMePool, 3));
       setStatus("complete");
       return;
     }
@@ -581,6 +588,13 @@ export function ArcadeInvaders({
               <span className="text-accent text-lg font-black uppercase">
                 All Systems Clear
               </span>
+              <ul className="space-y-1">
+                {bonusReasons.map((reason) => (
+                  <li key={reason} className="text-paper max-w-sm text-xs font-bold">
+                    — {reason}
+                  </li>
+                ))}
+              </ul>
               <span className="text-paper text-sm">
                 Score: {score} — full experience below ↓
               </span>

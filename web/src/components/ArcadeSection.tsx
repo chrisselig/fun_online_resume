@@ -32,12 +32,14 @@ export function ArcadeSection({
   earlier,
   earlierRewards,
   skills,
+  hireMePool,
 }: {
   summary: string;
   featured: FeaturedRole[];
   earlier: EarlierRole[];
   earlierRewards: string[];
   skills: SkillEntry[];
+  hireMePool: string[];
 }) {
   const [selected, setSelected] = useState<GameId | null>(null);
 
@@ -95,10 +97,13 @@ export function ArcadeSection({
                 earlier={earlier}
                 earlierRewards={earlierRewards}
                 skills={skills}
+                hireMePool={hireMePool}
               />
             )}
-            {selected === "breakout" && <ArcadeBreakout skills={skills} featured={featured} />}
-            {selected === "snake" && <ArcadeSnake skills={skills} />}
+            {selected === "breakout" && (
+              <ArcadeBreakout skills={skills} hireMePool={hireMePool} />
+            )}
+            {selected === "snake" && <ArcadeSnake skills={skills} hireMePool={hireMePool} />}
           </div>
         )}
       </div>

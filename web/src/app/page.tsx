@@ -25,6 +25,7 @@ export default function Home() {
         earlier={resume.experience.earlier}
         earlierRewards={resume.experience.earlier_rewards}
         skills={resume.skills}
+        hireMePool={resume.hire_me_pool}
       />
       <footer className="brutal-tag px-6 py-8 text-center text-xs font-bold">
         008 / EOF — {resume.profile.name.toUpperCase()}

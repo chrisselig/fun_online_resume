@@ -11,6 +11,7 @@ import {
   type Cell,
   type Direction,
 } from "@/lib/snakeLogic";
+import { pickRandomReasons } from "@/lib/pickRandomReasons";
 import { useFullscreen } from "@/lib/useFullscreen";
 
 const CANVAS_W = 480;
@@ -46,7 +47,13 @@ function startingSnake(): Cell[] {
   ];
 }
 
-export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
+export function ArcadeSnake({
+  skills,
+  hireMePool,
+}: {
+  skills: SkillEntry[];
+  hireMePool: string[];
+}) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frameRef = useRef<HTMLDivElement | null>(null);
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(frameRef);
@@ -63,6 +70,7 @@ export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
 
   const [status, setStatus] = useState<Status>("idle");
   const [collected, setCollected] = useState<string[]>([]);
+  const [gameOverReason, setGameOverReason] = useState("");
 
   const tools = topWeapons(skills, 16);
 
@@ -85,6 +93,7 @@ export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
     pendingDirRef.current = "right";
     foodRef.current = pickFoodCell(COLS, ROWS, snakeRef.current);
     setCollected([]);
+    setGameOverReason("");
     lastMoveRef.current = 0;
     setStatus("playing");
     // Clicking "Press Start"/"Retry" moves focus to that button — pull it
@@ -107,6 +116,10 @@ export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
         const body = snakeRef.current.slice(0, -1); // tail cell is vacated this tick
 
         if (isCollision(head, body, COLS, ROWS)) {
+          // Random, client-only: this only ever runs mid-gameplay (after the
+          // player has already interacted), never during initial render, so
+          // it can't cause an SSR/hydration mismatch.
+          setGameOverReason(pickRandomReasons(hireMePool, 1)[0] ?? "");
           setStatus("gameOver");
           return;
         }
@@ -220,6 +233,14 @@ export function ArcadeSnake({ skills }: { skills: SkillEntry[] }) {
           >
             <span className="text-accent text-xl font-black uppercase">Pipeline Broke</span>
             <span className="text-paper/70 text-xs">{collected.length} tools collected</span>
+            {gameOverReason && (
+              <>
+                <span className="text-paper/70 text-xs">
+                  Pipeline broke, but here&apos;s what a working one gets you:
+                </span>
+                <span className="text-paper max-w-sm text-xs font-bold">— {gameOverReason}</span>
+              </>
+            )}
             <span className="text-paper/50 mt-2 animate-pulse text-xs">
               press space to retry
             </span>

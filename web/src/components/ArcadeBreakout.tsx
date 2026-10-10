@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
-import type { FeaturedRole, SkillEntry } from "@/lib/resume";
+import type { SkillEntry } from "@/lib/resume";
 import { topWeapons } from "@/lib/arcadeContent";
 import { buildBricks, reflectOffPaddle, type Brick } from "@/lib/breakoutPhysics";
+import { pickRandomReasons } from "@/lib/pickRandomReasons";
 import { useFullscreen } from "@/lib/useFullscreen";
 
 const CANVAS_W = 480;
@@ -49,10 +50,10 @@ function wrapLabel(ctx: CanvasRenderingContext2D, text: string, maxWidth: number
 
 export function ArcadeBreakout({
   skills,
-  featured,
+  hireMePool,
 }: {
   skills: SkillEntry[];
-  featured: FeaturedRole[];
+  hireMePool: string[];
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frameRef = useRef<HTMLDivElement | null>(null);
@@ -70,11 +71,9 @@ export function ArcadeBreakout({
   const [status, setStatus] = useState<Status>("idle");
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(START_LIVES);
+  const [bonusReasons, setBonusReasons] = useState<string[]>([]);
 
   const labels = topWeapons(skills);
-  const bonusReward =
-    featured.flatMap((r) => r.rewards)[Math.floor(labels.length) % Math.max(1, featured.length)] ??
-    "Breaks through the hardest problems too.";
 
   const setupBricks = () => {
     bricksRef.current = buildBricks(
@@ -187,6 +186,10 @@ export function ArcadeBreakout({
       draw(ctx);
 
       if (bricksRef.current.every((b) => !b.alive)) {
+        // Random, client-only: this only ever runs mid-gameplay (after the
+        // player has already interacted), never during initial render, so
+        // it can't cause an SSR/hydration mismatch.
+        setBonusReasons(pickRandomReasons(hireMePool, 2));
         setStatus("complete");
         return;
       }
@@ -196,7 +199,7 @@ export function ArcadeBreakout({
 
     rafRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [status, draw]);
+  }, [status, draw, hireMePool]);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d");
@@ -308,7 +311,13 @@ export function ArcadeBreakout({
         {status === "complete" && (
           <div className="bg-ink/90 absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center font-mono">
             <span className="text-accent text-lg font-black uppercase">All Bricks Cleared</span>
-            <span className="text-paper max-w-sm text-xs font-bold">— {bonusReward}</span>
+            <ul className="space-y-1">
+              {bonusReasons.map((reason) => (
+                <li key={reason} className="text-paper max-w-sm text-xs font-bold">
+                  — {reason}
+                </li>
+              ))}
+            </ul>
             <span className="text-paper/70 text-xs">Score: {score}</span>
           </div>
         )}

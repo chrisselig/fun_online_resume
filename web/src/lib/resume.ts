@@ -94,6 +94,7 @@ export interface Resume {
   certifications: CertificationEntry[];
   portfolio: PortfolioItem[];
   fun_facts: string[];
+  hire_me_pool: string[];
 }
 
 export const resume = resumeData as Resume;
