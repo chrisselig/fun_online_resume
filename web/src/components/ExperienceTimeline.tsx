@@ -1,4 +1,21 @@
+import { highlightMetrics } from "@/lib/highlightMetrics";
 import type { EarlierRole, Engagement, Experience, FeaturedRole } from "@/lib/resume";
+
+function HighlightedBullet({ text }: { text: string }) {
+  return (
+    <>
+      {highlightMetrics(text).map((segment, i) =>
+        segment.highlight ? (
+          <span key={i} className="text-accent font-bold">
+            {segment.text}
+          </span>
+        ) : (
+          <span key={i}>{segment.text}</span>
+        ),
+      )}
+    </>
+  );
+}
 
 function EngagementCard({ engagement }: { engagement: Engagement }) {
   return (
@@ -17,8 +34,10 @@ function EngagementCard({ engagement }: { engagement: Engagement }) {
       <ul className="mt-3 space-y-2 font-serif text-sm">
         {engagement.bullets.map((bullet) => (
           <li key={bullet} className="flex gap-2">
-            <span className="shrink-0 font-black">×</span>
-            <span>{bullet}</span>
+            <span aria-hidden className="mt-1.5 h-2 w-2 shrink-0 bg-accent" />
+            <span>
+              <HighlightedBullet text={bullet} />
+            </span>
           </li>
         ))}
       </ul>
@@ -50,10 +69,14 @@ function FeaturedRoleBlock({ role, index }: { role: FeaturedRole; index: number 
 
       {role.bullets.length > 0 && (
         <ul className="mt-4 max-w-2xl space-y-2 font-serif text-base">
-          {role.bullets.map((bullet) => (
-            <li key={bullet} className="flex gap-2">
-              <span className="shrink-0 font-black">×</span>
-              <span>{bullet}</span>
+          {role.bullets.map((bullet, i) => (
+            <li key={bullet} className="flex gap-3">
+              <span className="brutal-tag mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border-2 border-ink bg-ink text-[10px] font-bold text-paper">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span>
+                <HighlightedBullet text={bullet} />
+              </span>
             </li>
           ))}
         </ul>
