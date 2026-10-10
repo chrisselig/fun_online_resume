@@ -6,7 +6,7 @@ function HighlightedBullet({ text }: { text: string }) {
     <>
       {highlightMetrics(text).map((segment, i) =>
         segment.highlight ? (
-          <span key={i} className="text-accent font-bold">
+          <span key={i} className="bg-accent text-ink px-0.5 font-bold">
             {segment.text}
           </span>
         ) : (
