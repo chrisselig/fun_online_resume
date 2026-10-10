@@ -447,8 +447,8 @@ PORTFOLIO: list[dict[str, str]] = [
         "url": "https://chris-selig.shinyapps.io/fantasy_baseball_dashboard/",
     },
     {
-        "title": "R Shiny Resume (earlier version of this site)",
-        "url": "https://chris-selig.shinyapps.io/ShinyResume/",
+        "title": "Movie Awards Video Analysis",
+        "url": "https://github.com/chrisselig/movie_awards_video_analysis",
     },
 ]
 
