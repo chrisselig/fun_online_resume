@@ -416,6 +416,54 @@ EARLIER_EXPERIENCE: list[dict[str, str]] = [
 ]
 
 # ---------------------------------------------------------------------------
+# Shared "reasons to hire me" pool — drawn randomly by all 3 arcade games at
+# their reward/completion moments (Data Invaders' per-wave rewards above are
+# separate and stay tied to specific companies). Mix of real, resume-grounded
+# lines (untapped detail from FEATURED_EXPERIENCE/EARLIER_EXPERIENCE beyond
+# what's already in .rewards / EARLIER_CAREER_REWARDS) and generic-but-
+# plausible DE/analytics value props written in the same voice.
+# ---------------------------------------------------------------------------
+REASONS_TO_HIRE_ME: list[str] = [
+    # Real — Husky Energy
+    "Built a SQL Server single source of truth for Planning and Controls, cutting reporting time dramatically",
+    "Ran a vendor text-mining analysis that turned an ITFM tool selection into an informed decision, not a coin flip",
+    # Real — Camber Capital
+    "Built a 165-query Power BI report that fully automated data ingestion for client reporting",
+    # Real — ConocoPhillips
+    "Cut operating-expenditure forecasting from 6 hours to 30 minutes",
+    # Real — CNOOC International
+    "Reverse-engineered a manual process that took days each month and sped it up with Power BI",
+    # Real — ATCO Energy
+    "Ran text-mining analysis on an IT engagement survey and handed leadership an action plan, not a word cloud",
+    "Built a Power Automate flow that auto-updates SharePoint, freeing up human time nobody noticed was being wasted",
+    # Real — Devon Energy
+    "Delivered Power BI training sessions across Canada and the US, not just a slide deck",
+    # Real — Cenovus Energy
+    "Built an entire HR data model from scratch in Python, PySpark, and Databricks",
+    "Built an AI model that reads multiple file formats and extracts the data into clean tables",
+    "Shipped an automated People Metrics dashboard so the enterprise can self-serve its own HR numbers",
+    # Real — GardaWorld
+    "Quantified data-submission errors for the first time, focusing training where it actually helped",
+    # Real — Western Financial Group
+    "Built a k-means customer-segmentation model that gave branch offices real segments instead of guesses",
+    # Real — Bidamia freelance engagements
+    "Produced 300+ automated R Markdown reports for a university medical study — zero manual copy-paste",
+    "Built a Python pipeline moving data into AWS S3 and Redshift, unlocking analytics that didn't exist before",
+    "Built an R Shiny investor dashboard, hosted on Docker and Azure, for a stealth startup's fundraising",
+    # Generic-but-plausible DE/analytics value props, same voice
+    "Pipelines built for 99.9%+ uptime, not 99.9%+ uptime on the slide",
+    "Cuts reporting turnaround from days to minutes",
+    "Automates the manual process nobody wants to own",
+    "Turns a wall of spreadsheets into one source of truth",
+    "Writes SQL a human can still read a year later",
+    "Ships dashboards people actually open, not just ones that get built",
+    "Catches the data-quality bug before it reaches the CFO's deck",
+    "Documents the pipeline well enough that it survives when you leave",
+    "Builds for the on-call page that never fires",
+    "Picks the boring, reliable tool over the exciting, fragile one",
+]
+
+# ---------------------------------------------------------------------------
 # Education
 # ---------------------------------------------------------------------------
 EDUCATION = pd.DataFrame(
@@ -603,4 +651,5 @@ def load_resume() -> dict[str, object]:
         "certifications": _records(CERTIFICATIONS),
         "portfolio": PORTFOLIO,
         "fun_facts": FUN_FACTS,
+        "hire_me_pool": REASONS_TO_HIRE_ME,
     }

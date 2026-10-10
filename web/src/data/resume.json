@@ -572,5 +572,33 @@
     "Committed to playing first-person shooters, no matter how bad I am at them.",
     "Keep buying every technical book I can on a whim because I want to learn everything.",
     "Addicted to hand-tool woodworking and buying saws \u2014 15 and counting. Send help."
+  ],
+  "hire_me_pool": [
+    "Built a SQL Server single source of truth for Planning and Controls, cutting reporting time dramatically",
+    "Ran a vendor text-mining analysis that turned an ITFM tool selection into an informed decision, not a coin flip",
+    "Built a 165-query Power BI report that fully automated data ingestion for client reporting",
+    "Cut operating-expenditure forecasting from 6 hours to 30 minutes",
+    "Reverse-engineered a manual process that took days each month and sped it up with Power BI",
+    "Ran text-mining analysis on an IT engagement survey and handed leadership an action plan, not a word cloud",
+    "Built a Power Automate flow that auto-updates SharePoint, freeing up human time nobody noticed was being wasted",
+    "Delivered Power BI training sessions across Canada and the US, not just a slide deck",
+    "Built an entire HR data model from scratch in Python, PySpark, and Databricks",
+    "Built an AI model that reads multiple file formats and extracts the data into clean tables",
+    "Shipped an automated People Metrics dashboard so the enterprise can self-serve its own HR numbers",
+    "Quantified data-submission errors for the first time, focusing training where it actually helped",
+    "Built a k-means customer-segmentation model that gave branch offices real segments instead of guesses",
+    "Produced 300+ automated R Markdown reports for a university medical study \u2014 zero manual copy-paste",
+    "Built a Python pipeline moving data into AWS S3 and Redshift, unlocking analytics that didn't exist before",
+    "Built an R Shiny investor dashboard, hosted on Docker and Azure, for a stealth startup's fundraising",
+    "Pipelines built for 99.9%+ uptime, not 99.9%+ uptime on the slide",
+    "Cuts reporting turnaround from days to minutes",
+    "Automates the manual process nobody wants to own",
+    "Turns a wall of spreadsheets into one source of truth",
+    "Writes SQL a human can still read a year later",
+    "Ships dashboards people actually open, not just ones that get built",
+    "Catches the data-quality bug before it reaches the CFO's deck",
+    "Documents the pipeline well enough that it survives when you leave",
+    "Builds for the on-call page that never fires",
+    "Picks the boring, reliable tool over the exciting, fragile one"
   ]
 }

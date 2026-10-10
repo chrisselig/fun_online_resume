@@ -56,3 +56,12 @@ def test_load_resume_is_json_serializable_with_no_nan():
     serialized = json.dumps(resume)
     assert "NaN" not in serialized
     json.loads(serialized)  # round-trips without error
+
+
+def test_hire_me_pool_has_a_reasonable_minimum_size():
+    resume = load_resume()
+
+    pool = resume["hire_me_pool"]
+    assert len(pool) >= 15
+    assert len(set(pool)) == len(pool)  # no duplicate lines
+    assert all(isinstance(line, str) and line for line in pool)
