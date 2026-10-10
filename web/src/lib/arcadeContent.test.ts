@@ -15,6 +15,7 @@ const featured: FeaturedRole[] = [
       "Saved end users 4 days of work each cycle.",
     ],
     engagements: [],
+    rewards: ["Closed a real data-access gap", "Saved 4 days of manual work per cycle"],
   },
   {
     company: "Bidamia Inc.",
@@ -31,6 +32,7 @@ const featured: FeaturedRole[] = [
         bullets: ["Streamlined the process from 3–5 days down to 10 minutes."],
       },
     ],
+    rewards: ["Cut a process from days to minutes"],
   },
 ];
 

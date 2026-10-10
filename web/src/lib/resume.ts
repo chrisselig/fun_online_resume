@@ -42,6 +42,7 @@ export interface FeaturedRole {
   summary: string | null;
   bullets: string[];
   engagements: Engagement[];
+  rewards: string[];
 }
 
 export interface EarlierRole {
@@ -55,6 +56,7 @@ export interface EarlierRole {
 export interface Experience {
   featured: FeaturedRole[];
   earlier: EarlierRole[];
+  earlier_rewards: string[];
 }
 
 export interface EducationEntry {

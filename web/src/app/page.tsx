@@ -23,6 +23,7 @@ export default function Home() {
         summary={resume.profile.summary}
         featured={resume.experience.featured}
         earlier={resume.experience.earlier}
+        earlierRewards={resume.experience.earlier_rewards}
         skills={resume.skills}
       />
       <footer className="brutal-tag px-6 py-8 text-center text-xs font-bold">

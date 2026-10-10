@@ -112,14 +112,11 @@ function wrapLabel(ctx: CanvasRenderingContext2D, text: string, maxWidth: number
 function waveReveal(
   waveIndex: number,
   featured: FeaturedRole[],
-  earlier: EarlierRole[],
-): { title: string; subtitle: string } {
+  earlierRewards: string[],
+): { company: string; rewards: string[] } {
   const role = featured[waveIndex];
-  if (role) return { title: role.company, subtitle: role.role };
-  return {
-    title: "Earlier Career",
-    subtitle: earlier.map((r) => r.company).join(" · "),
-  };
+  if (role) return { company: role.company, rewards: role.rewards };
+  return { company: "18 years of earlier career", rewards: earlierRewards };
 }
 
 /** Spawn the bullet(s) for one shot of a given weapon kind, from the ship's muzzle position. */
@@ -150,11 +147,13 @@ export function ArcadeGame({
   summary,
   featured,
   earlier,
+  earlierRewards,
   skills,
 }: {
   summary: string;
   featured: FeaturedRole[];
   earlier: EarlierRole[];
+  earlierRewards: string[];
   skills: SkillEntry[];
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -466,7 +465,7 @@ export function ArcadeGame({
     keysRef.current.delete(e.key.toLowerCase());
   };
 
-  const reveal = waveReveal(waveIndex, featured, earlier);
+  const reveal = waveReveal(waveIndex, featured, earlierRewards);
 
   return (
     <section className="border-b-8 border-ink bg-ink px-6 py-16 text-paper sm:px-10 sm:py-24">
@@ -508,9 +507,19 @@ export function ArcadeGame({
 
           {status === "levelClear" && (
             <div className="bg-ink/90 absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center font-mono">
-              <span className="text-accent text-lg font-black uppercase">Wave Clear</span>
-              <span className="text-paper text-sm font-bold">{reveal.title}</span>
-              <span className="text-paper/70 text-xs">{reveal.subtitle}</span>
+              <span className="text-accent text-lg font-black uppercase">
+                Hire me, you get:
+              </span>
+              <ul className="space-y-1">
+                {reveal.rewards.map((reward) => (
+                  <li key={reward} className="text-paper max-w-sm text-xs font-bold">
+                    — {reward}
+                  </li>
+                ))}
+              </ul>
+              <span className="text-paper/50 text-[10px] uppercase">
+                proven at {reveal.company}
+              </span>
               <span className="text-paper/50 mt-2 animate-pulse text-xs">
                 press space to continue
               </span>

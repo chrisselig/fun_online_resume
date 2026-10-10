@@ -209,7 +209,11 @@
           "Identified and remediated a data access issue, strengthened permissions, and implemented automated monitoring for permission changes.",
           "Developed an AI-based model that reads different file formats and extracts the data into tables \u2014 saving end users 4 days of work each time new files were sent to the team."
         ],
-        "engagements": []
+        "engagements": [],
+        "rewards": [
+          "4 fewer days of manual file-wrangling every cycle \u2014 automated, not just dashboarded",
+          "Closed a real data-access gap with automated permission monitoring"
+        ]
       },
       {
         "company": "Bidamia Inc.",
@@ -285,6 +289,10 @@
               "Facilitated requirements-gathering sessions with stakeholders to drive Power BI report development."
             ]
           }
+        ],
+        "rewards": [
+          "Led a Power BI rollout across an entire business, not just one team",
+          "Replaced scattered spreadsheets with one SQL Server source of truth"
         ]
       },
       {
@@ -313,6 +321,10 @@
               "Built a 165-query Power BI report that automated data ingestion into a dashboard for my clients' clients."
             ]
           }
+        ],
+        "rewards": [
+          "Cut a financial close process from 3\u20135 days to 10 minutes",
+          "Reclaimed 10 hours a month from manual PDF work using AI"
         ]
       }
     ],
@@ -345,6 +357,10 @@
         "role": "Assistant Manager / Store Manager",
         "highlight": "Ran day-to-day operations of a top-5 sales store; promoted to Store Manager within 6 months of hire."
       }
+    ],
+    "earlier_rewards": [
+      "Cut Essbase turnaround from 5 days to 2 hours",
+      "Caught data-submission errors nobody had quantified before"
     ]
   },
   "education": [
