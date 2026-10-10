@@ -50,6 +50,16 @@ PROFILE: dict[str, object] = {
         "Data Analysis",
         "Automation",
     ],
+    # Corporate functions and business units supported with analytics,
+    # across roles — not what he does, but who he's done it for.
+    "business_domains": [
+        "Accounting / Finance",
+        "IT",
+        "Human Resources",
+        "BI Teams",
+        "Supply Chain",
+        "Corporate Planning",
+    ],
 }
 
 # ---------------------------------------------------------------------------
@@ -99,20 +109,6 @@ INDUSTRIES: list[dict[str, object]] = [
 ]
 
 # ---------------------------------------------------------------------------
-# Career stats — a few honest numbers, not vanity metrics.
-# ---------------------------------------------------------------------------
-STATS: list[dict[str, object]] = [
-    {"label": "Years in data & analytics", "value": "18+"},
-    {"label": "Companies & consulting clients", "value": "12"},
-    {
-        "label": "Industries served",
-        "value": str(len(INDUSTRIES)),
-        "details": [industry["name"] for industry in INDUSTRIES],
-    },
-    {"label": "Tools mastered", "value": "20+"},
-]
-
-# ---------------------------------------------------------------------------
 # Skills — sized by how often each tool shows up across 18 years of real
 # work (counted from the resume text), not LinkedIn endorsements.
 # ---------------------------------------------------------------------------
@@ -136,6 +132,26 @@ SAMPLE_SKILLS = pd.DataFrame(
         {"name": "Tableau", "endorsements": 1},
     ]
 )
+
+# ---------------------------------------------------------------------------
+# Career stats — a few honest numbers, not vanity metrics.
+# ---------------------------------------------------------------------------
+STATS: list[dict[str, object]] = [
+    {"label": "Years in data & analytics", "value": "18+"},
+    {"label": "Companies & consulting clients", "value": "12"},
+    {
+        "label": "Industries served",
+        "value": str(len(INDUSTRIES)),
+        "details": [industry["name"] for industry in INDUSTRIES],
+    },
+    {
+        "label": "Tools mastered",
+        "value": "20+",
+        "details": list(
+            SAMPLE_SKILLS.sort_values("endorsements", ascending=False)["name"]
+        ),
+    },
+]
 
 # ---------------------------------------------------------------------------
 # Featured experience — full detail, including consulting client

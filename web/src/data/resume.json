@@ -13,6 +13,14 @@
       "Data Engineering",
       "Data Analysis",
       "Automation"
+    ],
+    "business_domains": [
+      "Accounting / Finance",
+      "IT",
+      "Human Resources",
+      "BI Teams",
+      "Supply Chain",
+      "Corporate Planning"
     ]
   },
   "stats": [
@@ -40,7 +48,25 @@
     },
     {
       "label": "Tools mastered",
-      "value": "20+"
+      "value": "20+",
+      "details": [
+        "R",
+        "Excel / VBA",
+        "Power BI",
+        "Python",
+        "Spotfire",
+        "SQL",
+        "RStudio",
+        "Spark",
+        "AWS",
+        "Databricks",
+        "Power Automate",
+        "Azure",
+        "Essbase",
+        "KNIME",
+        "Cognos",
+        "Tableau"
+      ]
     }
   ],
   "industries": [
