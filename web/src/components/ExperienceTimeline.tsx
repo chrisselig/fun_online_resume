@@ -19,11 +19,11 @@ function HighlightedBullet({ text }: { text: string }) {
 
 function EngagementCard({ engagement }: { engagement: Engagement }) {
   return (
-    <div className="border-4 border-ink p-4">
+    <div className="border-4 border-line p-4">
       <p className="flex flex-wrap items-baseline gap-x-2 text-lg font-black uppercase">
         {engagement.client}
         {engagement.former && (
-          <span className="brutal-tag border-2 border-ink bg-accent px-1 text-[10px] font-bold">
+          <span className="brutal-tag border-2 border-line bg-accent px-1 text-[10px] font-bold">
             FORMER
           </span>
         )}
@@ -32,9 +32,11 @@ function EngagementCard({ engagement }: { engagement: Engagement }) {
         <p className="brutal-tag text-xs font-bold uppercase">{engagement.role}</p>
       )}
       <ul className="mt-3 space-y-2 font-serif text-sm">
-        {engagement.bullets.map((bullet) => (
+        {engagement.bullets.map((bullet, i) => (
           <li key={bullet} className="flex gap-2">
-            <span aria-hidden className="mt-1.5 h-2 w-2 shrink-0 bg-accent" />
+            <span className="brutal-tag mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center border-2 border-line bg-ink text-[9px] font-bold text-paper">
+              {String(i + 1).padStart(2, "0")}
+            </span>
             <span>
               <HighlightedBullet text={bullet} />
             </span>
@@ -47,9 +49,9 @@ function EngagementCard({ engagement }: { engagement: Engagement }) {
 
 function FeaturedRoleBlock({ role, index }: { role: FeaturedRole; index: number }) {
   return (
-    <div className="border-b-8 border-ink px-6 py-12 sm:px-10 sm:py-16">
+    <div className="border-b-8 border-line px-6 py-12 sm:px-10 sm:py-16">
       <div className="flex flex-wrap items-baseline justify-between gap-4">
-        <span className="brutal-tag border-4 border-ink bg-ink px-2 py-1 text-xs font-bold text-paper">
+        <span className="brutal-tag border-4 border-line bg-ink px-2 py-1 text-xs font-bold text-paper">
           0{index}
         </span>
         <p className="brutal-tag text-sm font-bold">{role.date_range}</p>
@@ -57,12 +59,12 @@ function FeaturedRoleBlock({ role, index }: { role: FeaturedRole; index: number 
       <h3 className="mt-4 text-3xl font-black tracking-tighter uppercase sm:text-5xl">
         {role.role}
       </h3>
-      <p className="mt-1 inline-block border-b-4 border-ink text-lg font-bold">
+      <p className="mt-1 inline-block border-b-4 border-line text-lg font-bold">
         {role.company} — {role.location}
       </p>
 
       {role.summary && (
-        <p className="mt-4 max-w-2xl border-l-8 border-ink pl-4 font-serif text-base">
+        <p className="mt-4 max-w-2xl border-l-8 border-line pl-4 font-serif text-base">
           {role.summary}
         </p>
       )}
@@ -71,7 +73,7 @@ function FeaturedRoleBlock({ role, index }: { role: FeaturedRole; index: number 
         <ul className="mt-4 max-w-2xl space-y-2 font-serif text-base">
           {role.bullets.map((bullet, i) => (
             <li key={bullet} className="flex gap-3">
-              <span className="brutal-tag mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border-2 border-ink bg-ink text-[10px] font-bold text-paper">
+              <span className="brutal-tag mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border-2 border-line bg-ink text-[10px] font-bold text-paper">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span>
@@ -95,7 +97,7 @@ function FeaturedRoleBlock({ role, index }: { role: FeaturedRole; index: number 
 
 function EarlierRoleCard({ role }: { role: EarlierRole }) {
   return (
-    <div className="border-4 border-ink p-4">
+    <div className="border-4 border-line p-4">
       <p className="brutal-tag text-xs font-bold">{role.date_range}</p>
       <h4 className="text-xl font-black uppercase">{role.company}</h4>
       <p className="brutal-tag text-xs font-bold uppercase">{role.role}</p>
@@ -103,7 +105,7 @@ function EarlierRoleCard({ role }: { role: EarlierRole }) {
       <ul className="mt-3 space-y-2 font-serif text-sm">
         {role.bullets.map((bullet, i) => (
           <li key={bullet} className="flex gap-2">
-            <span className="brutal-tag mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center border-2 border-ink bg-ink text-[9px] font-bold text-paper">
+            <span className="brutal-tag mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center border-2 border-line bg-ink text-[9px] font-bold text-paper">
               {String(i + 1).padStart(2, "0")}
             </span>
             <span>
@@ -118,8 +120,8 @@ function EarlierRoleCard({ role }: { role: EarlierRole }) {
 
 export function ExperienceTimeline({ experience }: { experience: Experience }) {
   return (
-    <section className="border-b-8 border-ink">
-      <div className="border-b-8 border-ink px-6 py-8 sm:px-10">
+    <section className="border-b-8 border-line">
+      <div className="border-b-8 border-line px-6 py-8 sm:px-10">
         <p className="brutal-tag text-sm font-bold">003 / EXPERIENCE.LOG</p>
         <h2 className="mt-2 text-5xl font-black tracking-tighter uppercase sm:text-7xl">
           Where the work happened
