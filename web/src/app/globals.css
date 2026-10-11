@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+/*
+ * Web Brutalist: raw, ugly-on-purpose, confident. Pure white/black,
+ * one jarring neon accent used sparingly, huge square borders,
+ * no shadows, no rounded corners, system serif body text.
+ */
+@theme {
+  --color-paper: #ffffff;
+  --color-ink: #000000;
+  --color-navy: #000000;
+  --color-navy-soft: #1a1a1a;
+  --color-accent: #d6ff1f;
+  --color-accent-soft: #eaffb0;
+  --color-link: #0000ee;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: Georgia, "Times New Roman", Times, serif;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+.brutal-link {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.brutal-link:hover {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.brutal-tag {
+  font-family: var(--font-mono);
+}

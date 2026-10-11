@@ -1,169 +1,80 @@
-# LinkedIn Resume AI
+# fun_online_resume
 
-> An end-to-end data engineering project — scrape, transform, store, and present a LinkedIn profile as an interactive web application, fully automated with CI/CD.
+> My resume, rebuilt as a web app, because a PDF doesn't say much about how I actually think.
 
-**Live app:** https://chris-selig.shinyapps.io/linkedin-resume/
+Hi — I'm Chris Selig, a data & analytics professional based in Calgary. This repo is my resume, reimagined as a brutalist-styled infographic site with three playable arcade mini-games built entirely out of my own career data. If you're a hiring manager reading this, skip to [What This Demonstrates](#what-this-demonstrates) — that's written for you.
+
+**Status:** Actively building. Not deployed yet — the plan is Vercel at a custom domain, documented in [docs/deployment.md](docs/deployment.md), pending a DNS/Vercel setup step. Run it locally in the meantime (30 seconds, see below).
 
 ---
 
-## What This Project Demonstrates
+## What's actually in here
 
-This project was built to showcase a complete, production-quality data engineering workflow using modern Python tooling — from raw data collection through to a deployed web application.
+- **An infographic resume**, not a document — real stats, real industries, real tools, laid out the way you'd lay out data you wanted someone to actually read.
+- **Three playable mini-games** built from the same real data, not placeholder text:
+  - *Data Invaders* — shoot down real pain points from my accomplishments, armed with my actual top tools, each weapon firing differently (wave, spread, laser...). Clear a wave and it tells you what you get if you hire me, in concrete numbers pulled from real projects.
+  - *Spreadsheet Breaker* — a brick-breaker where every brick is a tool I've used.
+  - *Data Pipeline* — classic snake, where every "food" item is a real skill the pipeline picks up.
+- **Every number is real.** 18+ years, 12 companies and consulting clients, 8 industries, each with real examples — no padded stats.
+- **A few honest asides** — a section on technically-irrelevant skills (NES Punch-Out!!, hand-tool woodworking), because a resume that's only ever serious is a resume nobody remembers.
 
-| Skill Area | Technologies Used |
+## What This Demonstrates
+
+If you're evaluating me as a candidate, here's what building this actually required:
+
+| Area | What you'd be hiring |
 |---|---|
-| **Data Collection** | Playwright (headless Chromium), DOM scraping, browser automation |
-| **Data Engineering** | pandas (vectorized operations), data cleaning, normalization, schema design |
-| **Data Storage** | DuckDB, parameterized SQL, upsert patterns |
-| **Web Application** | Python Shiny, reactive UI, CSS animations, JavaScript |
-| **Software Engineering** | PEP 8, type hints, docstrings, modular package design |
-| **Testing** | pytest, unittest.mock, 134+ unit tests, mocked browser/DB |
-| **CI/CD** | GitHub Actions, automated lint + test on PRs, auto-deploy on merge |
-| **Deployment** | shinyapps.io, rsconnect-python |
+| **Frontend engineering** | Next.js + TypeScript + Tailwind, hand-rolled Canvas game loops (collision detection, pure-function physics, deterministic state), no framework crutch for anything custom |
+| **Product judgment** | Chose depth over scope — three small, polished games beat one half-finished big one; cut a feature (a standalone chart section) in favor of a cleaner interaction when it didn't earn its space |
+| **Craft & attention to detail** | Consistent, considered visual language across every page section, not just a template; real data checked against source material rather than invented |
+| **Engineering hygiene** | Typed code throughout, unit tests on every non-trivial piece of logic (game physics, collision detection, data pipeline) rather than boilerplate coverage, CI running lint/typecheck/test/build on every change, feature branches, PR workflow, GitHub issues for tracked work |
+| **Self-direction** | This was built iteratively — explored several visual directions, kept what worked, cut what didn't, incorporated real-time feedback and corrected real data as I remembered details from 18 years of work |
 
----
+## Tech Stack
 
-## How It Works
+- **Frontend:** Next.js (App Router), TypeScript, Tailwind CSS — deployed as a static build, no server runtime
+- **Content pipeline:** a small Python package (`src/linkedin_project`) holds the resume content as typed, hand-curated Python data (not scraped, not database-backed) and exports it to a static JSON file the frontend reads at build time
+- **Testing:** Vitest (frontend logic), pytest (content pipeline)
+- **CI:** GitHub Actions — lint, typecheck, test, and build on every change
 
-The project is built as a pipeline with four distinct layers:
-
-```mermaid
-flowchart TD
-    A[LinkedIn Profile\nhttps://linkedin.com/in/chris-selig] -->|Playwright headless browser\nlogs in + scrapes DOM| B
-
-    subgraph scrape ["① Scrape  src/linkedin_project/scrape/"]
-        B[scraper.py\nPlaywright + Chromium]
-        B --> C[ProfileData\nDataFrames per section]
-    end
-
-    C -->|Raw DataFrames\nexperience · education\nskills · certifications| D
-
-    subgraph transform ["② Transform  src/linkedin_project/transform/"]
-        D[cleaner.py\nnormalize text · parse dates]
-        D --> E[normalizer.py\ncanonical skills · deduplication]
-    end
-
-    E -->|Clean DataFrames| F
-
-    subgraph storage ["③ Storage  src/linkedin_project/storage/"]
-        F[database.py\nDuckDB upsert]
-        F --> G[(linkedin.db\nDuckDB)]
-    end
-
-    G -->|SQL queries\nvia duckdb-python| H
-
-    subgraph app ["④ App  app/app.py"]
-        H[Python Shiny Server\nload_section · load_profile]
-        H --> I[Nebula Dark UI\nglassmorphism · animations\ntypewriter · skill bars]
-    end
-
-    I -->|rsconnect-python\nGitHub Actions deploy.yml| J[shinyapps.io\nhttps://chris-selig.shinyapps.io/linkedin-resume/]
-
-    subgraph cicd ["⑤ CI/CD  .github/workflows/"]
-        K[ci.yml\nblack · flake8 · pytest\non every pull request]
-        L[deploy.yml\nrsconnect deploy\non push to main]
-    end
-```
-
-### ① Scrape — `src/linkedin_project/scrape/`
-
-A headless Chromium browser (Playwright) logs in to LinkedIn and navigates to the target profile. The scraper scrolls to trigger lazy-loaded content, clicks "Show all" sections, and extracts structured data via CSS selectors. Each section (experience, education, skills, certifications) is returned as a pandas DataFrame with a typed schema defined in `schema.py`.
-
-**Why Playwright?** The unofficial LinkedIn API requires authentication and is frequently blocked. A real browser that mimics human navigation is significantly more reliable.
-
-### ② Transform — `src/linkedin_project/transform/`
-
-Raw DataFrames pass through two stages:
-- `cleaner.py` — strips whitespace, parses ISO 8601 dates, normalizes company names
-- `normalizer.py` — maps skills to a 60+ entry canonical list, deduplicates rows, standardizes date ranges
-
-All operations use vectorized pandas — no row-level loops.
-
-### ③ Storage — `src/linkedin_project/storage/`
-
-Cleaned DataFrames are upserted into a local DuckDB file (`data/duckdb/linkedin.db`). All SQL uses parameterized queries (no string interpolation). Table names are validated against an allowlist; column names in WHERE clauses are validated as alphanumeric-only to prevent injection.
-
-**Why DuckDB?** Zero-configuration, embedded, and optimized for analytical queries on DataFrames — ideal for a local data layer that feeds a Shiny app.
-
-### ④ App — `app/app.py`
-
-A Python Shiny application reads from DuckDB at session start, falling back to built-in sample data if the database is absent. The UI is rendered server-side as HTML with:
-
-- Animated gradient orb background (pure CSS)
-- Glassmorphism cards with neon glow on hover
-- Typewriter headline cycling through skills
-- Skill bars that animate on scroll (IntersectionObserver API)
-- Floating navigation dots with active section tracking
-
-The app is self-contained in a single file to avoid import-path issues when deployed to shinyapps.io. CSS is embedded inline at startup.
-
-### ⑤ CI/CD — `.github/workflows/`
-
-Every pull request triggers the CI pipeline: `black --check`, `flake8`, and `pytest --cov=src`. Merging to `main` automatically deploys the app to shinyapps.io via `rsconnect-python`.
-
----
+See [docs/architecture.md](docs/architecture.md) for the full data flow.
 
 ## Running Locally
 
 ```bash
-# Setup
-python3.10 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-playwright install chromium
-
-# Scrape your LinkedIn profile
-export LINKEDIN_USERNAME="your@email.com"
-export LINKEDIN_PASSWORD="yourpassword"
-export LINKEDIN_PROFILE="chris-selig"
-python scripts/scrape_linkedin.py
-
-# Run the app locally
-shiny run app/app.py --port 8000
+cd web
+npm install
+npm run dev   # http://localhost:3000
 ```
 
----
+That's it — the resume content is already baked into `web/src/data/resume.json`. To change the content itself, edit `src/linkedin_project/pipelines/export_resume.py` and regenerate:
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt && pip install -e ".[dev]"
+python scripts/export_resume_json.py
+```
 
 ## Project Structure
 
 ```
 .
-├── app/
-│   ├── app.py                  # Shiny UI + server (self-contained)
-│   └── assets/style.css        # Nebula Dark CSS
+├── web/                          # Next.js site (the actual app)
+│   ├── src/app/                  # App Router page + layout
+│   ├── src/components/           # Infographic sections + the 3 arcade games
+│   ├── src/lib/                  # Typed resume loader, game physics/logic (unit tested)
+│   └── src/data/resume.json      # Generated — do not edit by hand
 ├── src/linkedin_project/
-│   ├── scrape/                 # Playwright scraper + schema definitions
-│   ├── transform/              # Data cleaning and normalization
-│   ├── storage/                # DuckDB read/write
-│   ├── pipelines/              # Pipeline orchestration
-│   └── utils/                  # Shared helpers
-├── scripts/
-│   └── scrape_linkedin.py      # CLI entry point for scraping
-├── tests/                      # 134+ unit tests (pytest)
-├── deployment/
-│   └── deploy.sh               # Manual deploy script (overwrites existing app)
-├── .github/workflows/
-│   ├── ci.yml                  # PR: lint + test
-│   └── deploy.yml              # Push to main: deploy to shinyapps.io
+│   └── pipelines/export_resume.py  # All resume content, hand-curated, single source of truth
+├── scripts/export_resume_json.py   # Writes web/src/data/resume.json
+├── tests/                        # Python content-pipeline tests
+├── .github/workflows/ci.yml      # Lint + test on every PR, both halves of the stack
 └── docs/
-    └── architecture.md         # Detailed architecture notes
+    ├── architecture.md           # Data flow and layer responsibilities
+    └── deployment.md             # Vercel + custom domain setup
 ```
-
----
-
-## Key Engineering Decisions
-
-| Decision | Rationale |
-|---|---|
-| Playwright over requests/API | LinkedIn blocks API clients; a real browser is far more reliable |
-| DuckDB over SQLite/Postgres | Zero-config, columnar, native pandas integration, analytical queries |
-| Inline CSS in Shiny | Static file paths differ between local and shinyapps.io — embedding guarantees consistent rendering |
-| Single-file app.py | Avoids cross-directory import issues in shinyapps.io's deployment working directory |
-| Parameterized SQL everywhere | Prevents SQL injection; table/column names validated against allowlists |
-| Vectorized pandas only | No row-level loops — all transforms use apply/map/merge on full columns |
-
----
 
 ## Documentation
 
-- [Architecture](docs/architecture.md) — detailed data flow and layer responsibilities
-- [Data directory](data/README.md) — data file conventions
+- [Architecture](docs/architecture.md)
+- [Deployment](docs/deployment.md)
