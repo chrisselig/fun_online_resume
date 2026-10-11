@@ -90,6 +90,11 @@ export interface PortfolioItem {
   links: PortfolioLink[];
 }
 
+export interface PersonalityTrait {
+  trait: string;
+  value: number;
+}
+
 export interface Resume {
   profile: Profile;
   stats: Stat[];
@@ -100,6 +105,7 @@ export interface Resume {
   education: EducationEntry[];
   certifications: CertificationEntry[];
   portfolio: PortfolioItem[];
+  personality_traits: PersonalityTrait[];
   fun_facts: string[];
   hire_me_pool: string[];
 }

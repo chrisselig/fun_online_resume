@@ -65,15 +65,15 @@
       "value": "20+",
       "details": [
         "R",
+        "Python",
         "Excel / VBA",
         "Power BI",
-        "Python",
+        "Databricks",
         "Spotfire",
         "SQL",
         "RStudio",
         "Spark",
         "AWS",
-        "Databricks",
         "Power Automate",
         "Azure",
         "Essbase",
@@ -208,16 +208,20 @@
       "endorsements": 26
     },
     {
-      "name": "Power BI",
-      "endorsements": 18
+      "name": "Python",
+      "endorsements": 21
     },
     {
       "name": "Excel / VBA",
       "endorsements": 19
     },
     {
-      "name": "Python",
-      "endorsements": 9
+      "name": "Power BI",
+      "endorsements": 18
+    },
+    {
+      "name": "Databricks",
+      "endorsements": 15
     },
     {
       "name": "Spotfire",
@@ -238,10 +242,6 @@
     {
       "name": "AWS",
       "endorsements": 4
-    },
-    {
-      "name": "Databricks",
-      "endorsements": 3
     },
     {
       "name": "Power Automate",
@@ -501,6 +501,11 @@
   ],
   "certifications": [
     {
+      "name": "Claude Code: Software Engineering with Generative AI Agents",
+      "authority": "Vanderbilt University (Coursera)",
+      "issued_date": "2026"
+    },
+    {
       "name": "Data Engineering with Azure",
       "authority": "Udacity",
       "issued_date": "2023"
@@ -605,6 +610,48 @@
           "url": "https://github.com/chrisselig/de_udacity_nycdata_project"
         }
       ]
+    }
+  ],
+  "personality_traits": [
+    {
+      "trait": "Analytical",
+      "value": 80
+    },
+    {
+      "trait": "Curious",
+      "value": 90
+    },
+    {
+      "trait": "Honest",
+      "value": 90
+    },
+    {
+      "trait": "Humour",
+      "value": 100
+    },
+    {
+      "trait": "Motivated",
+      "value": 80
+    },
+    {
+      "trait": "Introvert",
+      "value": 60
+    },
+    {
+      "trait": "Creative",
+      "value": 40
+    },
+    {
+      "trait": "Serious",
+      "value": 30
+    },
+    {
+      "trait": "Extrovert",
+      "value": 20
+    },
+    {
+      "trait": "Unmotivated",
+      "value": 10
     }
   ],
   "fun_facts": [

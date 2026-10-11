@@ -45,6 +45,16 @@ def test_earlier_experience_has_full_bullet_lists():
         assert all(isinstance(b, str) and b for b in role["bullets"]), role["company"]
 
 
+def test_personality_traits_are_percentages():
+    resume = load_resume()
+
+    traits = resume["personality_traits"]
+    assert len(traits) >= 5
+    for t in traits:
+        assert t["trait"]
+        assert 0 <= t["value"] <= 100
+
+
 def test_every_focus_area_has_a_real_example():
     resume = load_resume()
 

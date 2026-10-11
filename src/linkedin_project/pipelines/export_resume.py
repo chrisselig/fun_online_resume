@@ -165,20 +165,21 @@ INDUSTRIES: list[dict[str, object]] = [
 
 # ---------------------------------------------------------------------------
 # Skills — sized by how often each tool shows up across 18 years of real
-# work (counted from the resume text), not LinkedIn endorsements.
+# work (counted from the resume text) and weighted up for tools used daily
+# in the current role, not LinkedIn endorsements.
 # ---------------------------------------------------------------------------
 SKILLS = pd.DataFrame(
     [
         {"name": "R", "endorsements": 26},
-        {"name": "Power BI", "endorsements": 18},
+        {"name": "Python", "endorsements": 21},
         {"name": "Excel / VBA", "endorsements": 19},
-        {"name": "Python", "endorsements": 9},
+        {"name": "Power BI", "endorsements": 18},
+        {"name": "Databricks", "endorsements": 15},
         {"name": "Spotfire", "endorsements": 8},
         {"name": "SQL", "endorsements": 8},
         {"name": "RStudio", "endorsements": 4},
         {"name": "Spark", "endorsements": 4},
         {"name": "AWS", "endorsements": 4},
-        {"name": "Databricks", "endorsements": 3},
         {"name": "Power Automate", "endorsements": 3},
         {"name": "Azure", "endorsements": 3},
         {"name": "Essbase", "endorsements": 3},
@@ -556,6 +557,11 @@ EDUCATION = pd.DataFrame(
 CERTIFICATIONS = pd.DataFrame(
     [
         {
+            "name": "Claude Code: Software Engineering with Generative AI Agents",
+            "authority": "Vanderbilt University (Coursera)",
+            "issued_date": "2026",
+        },
+        {
             "name": "Data Engineering with Azure",
             "authority": "Udacity",
             "issued_date": "2023",
@@ -659,6 +665,23 @@ PORTFOLIO: list[dict[str, object]] = [
 ]
 
 # ---------------------------------------------------------------------------
+# Personality traits — carried over from the original ShinyResume project's
+# personality_tbl.rds (self-assessed, scale of 0-20), rescaled to 0-100.
+# ---------------------------------------------------------------------------
+PERSONALITY_TRAITS: list[dict[str, object]] = [
+    {"trait": "Analytical", "value": 80},
+    {"trait": "Curious", "value": 90},
+    {"trait": "Honest", "value": 90},
+    {"trait": "Humour", "value": 100},
+    {"trait": "Motivated", "value": 80},
+    {"trait": "Introvert", "value": 60},
+    {"trait": "Creative", "value": 40},
+    {"trait": "Serious", "value": 30},
+    {"trait": "Extrovert", "value": 20},
+    {"trait": "Unmotivated", "value": 10},
+]
+
+# ---------------------------------------------------------------------------
 # Fun facts — wit as a design tool, not a distraction.
 # ---------------------------------------------------------------------------
 FUN_FACTS: list[str] = [
@@ -697,6 +720,7 @@ def load_resume() -> dict[str, object]:
         "education": _records(EDUCATION),
         "certifications": _records(CERTIFICATIONS),
         "portfolio": PORTFOLIO,
+        "personality_traits": PERSONALITY_TRAITS,
         "fun_facts": FUN_FACTS,
         "hire_me_pool": REASONS_TO_HIRE_ME,
     }
