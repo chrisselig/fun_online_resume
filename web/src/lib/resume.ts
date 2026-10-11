@@ -109,6 +109,7 @@ export interface Resume {
   personality_traits: PersonalityTrait[];
   fun_facts: string[];
   hire_me_pool: string[];
+  star_wars_crawl: string[];
 }
 
 export const resume = resumeData as Resume;

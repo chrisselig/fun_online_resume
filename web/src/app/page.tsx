@@ -73,7 +73,7 @@ const THEMES: ThemeOption[] = [
     title: "A long time ago...",
     tagline: "The resume, told as an opening crawl — scrolling into the stars.",
     accent: "#facc15",
-    href: null,
+    href: "/star-wars",
   },
   {
     slug: "c64-baseball",
@@ -109,7 +109,7 @@ export default function ThemePicker() {
           Chris Selig · {resume.stats[0]?.value} {resume.stats[0]?.label.toLowerCase()}
         </p>
         <h1 className="mt-2 bg-gradient-to-r from-white to-slate-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-6xl">
-          Pick how you want to read it
+          Pick which theme you want to use to view my resume
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-slate-400">
           Same resume, same real work, {THEMES.length} different ways to explore it.
