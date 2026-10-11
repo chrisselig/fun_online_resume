@@ -20,14 +20,23 @@ PROFILE: dict[str, object] = {
     "email": "",
     "linkedin_url": "https://www.linkedin.com/in/chris-selig/",
     "summary": (
-        "Senior data and analytics professional who builds pipelines, "
-        "dashboards, and automation that turn chaos into clarity. Brings "
-        "strong hands-on expertise in Python, SQL, Databricks, Spark, "
-        "Power BI, and R, along with a practical, business-focused "
-        "approach to solving real problems. Experienced in translating "
-        "complex data into reliable, high-value solutions that save time, "
-        "improve decisions, and quietly retire a few terrible spreadsheets "
-        "along the way."
+        "I build data pipelines, dashboards, models, and automation for "
+        "organizations that would prefer fewer manual processes and fewer "
+        "mystery spreadsheets. My background spans data engineering, "
+        "analytics, business intelligence, reporting, and statistical "
+        "analysis, so I'm just as comfortable cleaning up upstream data as "
+        "I am turning it into something useful downstream. I work mainly "
+        "in Python, SQL, Databricks, Spark, Power BI, and R, and I'm also "
+        "comfortable with Excel, KNIME, Spotfire, Power Automate, Azure "
+        "Data Factory, and Synapse. These days, I also use AI tools like "
+        "Claude Code, GitHub Copilot, Microsoft 365 Copilot, and ChatGPT "
+        "as part of how I work — whether that's accelerating development, "
+        "pressure-testing ideas, or helping turn rough concepts into "
+        "usable solutions faster. Most of my work has been about turning "
+        "scattered, awkward, or stubborn data into something reliable, "
+        "practical, and decision-friendly. I like solving messy problems, "
+        "building things that people actually use, and quietly retiring "
+        "bad manual processes whenever possible."
     ),
     "focus_areas": [
         "Data Science",
