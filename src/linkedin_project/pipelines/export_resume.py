@@ -391,50 +391,74 @@ EARLIER_CAREER_REWARDS: list[str] = [
 # Earlier career — condensed to one standout line each, full detail lives
 # in the source resume rather than the page (concept over completeness).
 # ---------------------------------------------------------------------------
-EARLIER_EXPERIENCE: list[dict[str, str]] = [
+EARLIER_EXPERIENCE: list[dict[str, object]] = [
     {
         "company": "Western Financial Group",
         "location": "Calgary, AB",
         "date_range": "2017",
         "role": "Business Intelligence Analyst",
-        "highlight": (
-            "Built a k-means customer-segmentation model in R and an "
-            "automated Excel/VBA/SQL revenue & expense forecasting model "
-            "for branch offices."
+        "summary": (
+            "Developed self-service business intelligence and analytics "
+            "solutions for branches and executive leadership. Software used: "
+            "Cognos Report Studio/Query Studio, Excel, R, and Spotfire."
         ),
+        "bullets": [
+            "Developed an analysis report in Spotfire that allowed management to understand the change in active policies versus the change in revenue for the brokerage.",
+            "Developed an automated Excel/VBA/SQL-based model to forecast both revenues and expenses for the branch offices, using a weighted-average method that significantly reduced forecasting time.",
+            "Developed a Tibco Spotfire based analysis dashboard for executives to show how changes in policy counts related to changes in revenue.",
+            "Developed, using R, a customer-segmentation model (k-means clustering) to group similar customers for marketing efforts.",
+            "Developed a Cognos Report Studio report to help transition and track 14,000 customers as they moved to a new product, ensuring key customers were contacted about product changes.",
+        ],
     },
     {
         "company": "GardaWorld",
         "location": "Calgary, AB",
         "date_range": "2016 – 2017",
         "role": "Data Analyst",
-        "highlight": (
-            "Built a Power BI dashboard tracking airport security screening-"
-            "officer training, and an R-based analysis that quantified "
-            "data-submission errors for the first time, focusing training "
-            "initiatives."
+        "summary": (
+            "Tasked to develop more efficient processes, and a database so "
+            "data analysis and visualization can be performed to gather "
+            "insights into the business. Software used: Excel, Power BI, R."
         ),
+        "bullets": [
+            "Developed a Power BI dashboard tracking airport security screening-officer training, visualizing metrics including — for the first time — statistics per training specialist: time spent training, what training was provided, and when.",
+            "Through R/RStudio, developed an analysis to quantify and visualize data-submission errors from the divisions for the first time, helping focus training initiatives.",
+        ],
     },
     {
         "company": "ConocoPhillips Canada",
         "location": "Calgary, AB",
         "date_range": "2008 – 2016",
         "role": "Long Range Planning Analyst / Business Analyst / Business Analyst – Systems",
-        "highlight": (
-            "Automated Excel/VBA/SQL models that cut Essbase turnaround from "
-            "5 days to 2 hours and operating-expenditure forecasting from "
-            "6 hours to 30 minutes."
+        "summary": (
+            "Developed automated tools and dashboards for coworkers and "
+            "management to provide insight into operating expenditures. "
+            "Created forecasts, budgets, and long-range plans. As part of both "
+            "the Finance and IT departments, monitored, maintained, and "
+            "validated the Essbase financial accounting system database."
         ),
+        "bullets": [
+            "Reduced Essbase database turnaround time from 5 days to 2 hours through automation of the Excel data models.",
+            "Reduced data submission times from 1 day to 15 minutes by developing an automated Excel model that used VBA to extract data from databases.",
+            "Significantly reduced database load errors by end users through streamlined Excel data load templates.",
+            "Trained finance members on correct Essbase processes, significantly reducing data load errors.",
+            "Reduced errors and turnaround time of a manually maintained Excel dashboard by replacing it with an automated Spotfire dashboard, giving management on-demand access to financials.",
+            "Developed a financial analysis dashboard in Spotfire that flagged accounting coding errors through vendor agreement comparisons against invoiced general ledger accounts.",
+            "Reduced operating expenditure forecast time from 6 hours to 30 minutes by developing an Excel-based data model that retrieved data from one database, layered on user-selected inputs, and exported the forecast.",
+            "Developed an Excel-based planning data model using VBA and SQL to extract data from Oracle for various scenarios, compiling it into presentation-ready visualizations.",
+            "Reduced data compilation time from 3+ hours to 5 minutes through an Excel-based data model that used VBA and SQL to extract data from an Oracle database.",
+        ],
     },
     {
         "company": "Liquidation World",
         "location": "Calgary, AB",
         "date_range": "2006 – 2008",
         "role": "Assistant Manager / Store Manager",
-        "highlight": (
-            "Ran day-to-day operations of a top-5 sales store; promoted to "
-            "Store Manager within 6 months of hire."
-        ),
+        "summary": None,
+        "bullets": [
+            "Managed day-to-day store operations of a top-5 sales store, including human resources functions, merchandising, and customer service.",
+            "Promoted to Store Manager within 6 months of hire.",
+        ],
     },
 ]
 

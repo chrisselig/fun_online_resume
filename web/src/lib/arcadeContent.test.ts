@@ -42,7 +42,8 @@ const earlier: EarlierRole[] = [
     location: "Calgary, AB",
     date_range: "2008 – 2016",
     role: "Business Analyst",
-    highlight: "Cut Essbase turnaround time dramatically through automation.",
+    summary: null,
+    bullets: ["Cut Essbase turnaround time dramatically through automation."],
   },
 ];
 

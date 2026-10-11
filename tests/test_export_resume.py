@@ -37,6 +37,14 @@ def test_featured_experience_bullets_or_engagements_present():
         assert has_bullets or has_engagement_bullets, role["company"]
 
 
+def test_earlier_experience_has_full_bullet_lists():
+    resume = load_resume()
+
+    for role in resume["experience"]["earlier"]:
+        assert len(role["bullets"]) > 0, role["company"]
+        assert all(isinstance(b, str) and b for b in role["bullets"]), role["company"]
+
+
 def test_every_focus_area_has_a_real_example():
     resume = load_resume()
 

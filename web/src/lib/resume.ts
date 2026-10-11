@@ -55,7 +55,8 @@ export interface EarlierRole {
   location: string;
   date_range: string;
   role: string;
-  highlight: string;
+  summary: string | null;
+  bullets: string[];
 }
 
 export interface Experience {

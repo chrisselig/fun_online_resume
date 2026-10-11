@@ -99,7 +99,19 @@ function EarlierRoleCard({ role }: { role: EarlierRole }) {
       <p className="brutal-tag text-xs font-bold">{role.date_range}</p>
       <h4 className="text-xl font-black uppercase">{role.company}</h4>
       <p className="brutal-tag text-xs font-bold uppercase">{role.role}</p>
-      <p className="mt-2 font-serif text-sm">{role.highlight}</p>
+      {role.summary && <p className="mt-2 font-serif text-sm">{role.summary}</p>}
+      <ul className="mt-3 space-y-2 font-serif text-sm">
+        {role.bullets.map((bullet, i) => (
+          <li key={bullet} className="flex gap-2">
+            <span className="brutal-tag mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center border-2 border-ink bg-ink text-[9px] font-bold text-paper">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span>
+              <HighlightedBullet text={bullet} />
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -120,7 +132,7 @@ export function ExperienceTimeline({ experience }: { experience: Experience }) {
 
       <div className="px-6 py-12 sm:px-10 sm:py-16">
         <p className="brutal-tag text-sm font-bold uppercase">Earlier career</p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div className="mt-6 grid items-start gap-4 sm:grid-cols-2">
           {experience.earlier.map((role) => (
             <EarlierRoleCard key={role.company} role={role} />
           ))}

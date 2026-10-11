@@ -37,7 +37,7 @@ export function extractPainPoints(
       ...role.bullets,
       ...role.engagements.flatMap((e) => e.bullets),
     ]),
-    ...earlier.map((role) => role.highlight),
+    ...earlier.flatMap((role) => [role.summary ?? "", ...role.bullets]),
   ]
     .join(" \n ")
     .toLowerCase();
