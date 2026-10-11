@@ -615,43 +615,103 @@
   "personality_traits": [
     {
       "trait": "Analytical",
-      "value": 80
+      "value": 80,
+      "link": null
     },
     {
       "trait": "Curious",
-      "value": 90
+      "value": 90,
+      "link": null
     },
     {
       "trait": "Honest",
-      "value": 90
+      "value": 90,
+      "link": null
     },
     {
       "trait": "Humour",
-      "value": 100
+      "value": 100,
+      "link": null
     },
     {
       "trait": "Motivated",
-      "value": 80
+      "value": 80,
+      "link": null
     },
     {
       "trait": "Introvert",
-      "value": 75
+      "value": 75,
+      "link": null
     },
     {
       "trait": "Creative",
-      "value": 60
+      "value": 60,
+      "link": "Built the Movie Awards Video Analysis app \u2014 proof the data skills don't clock out at 5pm."
     },
     {
       "trait": "Serious",
-      "value": 30
+      "value": 30,
+      "link": null
     },
     {
       "trait": "Extrovert",
-      "value": 20
+      "value": 20,
+      "link": null
     },
     {
       "trait": "Unmotivated",
-      "value": 10
+      "value": 10,
+      "link": "Can still knock out Glass Joe in about a minute in Punch-Out!! \u2014 just don't always feel like proving it."
+    },
+    {
+      "trait": "Leadership",
+      "value": 40,
+      "link": "Founder & Co-CEO of SELICA Analytics, leading a team of developers serving enterprise clients."
+    },
+    {
+      "trait": "Perfectionist",
+      "value": 0,
+      "link": null
+    },
+    {
+      "trait": "Skeptical",
+      "value": 50,
+      "link": null
+    },
+    {
+      "trait": "Stubborn",
+      "value": 10,
+      "link": null
+    },
+    {
+      "trait": "Direct / Blunt",
+      "value": 80,
+      "link": null
+    },
+    {
+      "trait": "Collaborative",
+      "value": 90,
+      "link": "Facilitated requirements-gathering sessions with stakeholders to drive Power BI report development."
+    },
+    {
+      "trait": "Patience",
+      "value": 70,
+      "link": null
+    },
+    {
+      "trait": "Resourceful",
+      "value": 80,
+      "link": "Reverse-engineered a large manual process that took days each month and sped it up using system resources and Power BI."
+    },
+    {
+      "trait": "Mentoring",
+      "value": 100,
+      "link": "Delivered Power BI training sessions to groups across Canada and the US."
+    },
+    {
+      "trait": "Self-Taught",
+      "value": 70,
+      "link": "Keeps buying every technical book on a whim, chasing the next skill to learn."
     }
   ],
   "fun_facts": [

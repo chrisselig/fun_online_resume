@@ -3,7 +3,6 @@ import { StatsBar } from "@/components/StatsBar";
 import { ExperienceTimeline } from "@/components/ExperienceTimeline";
 import { EducationCertifications } from "@/components/EducationCertifications";
 import { Portfolio } from "@/components/Portfolio";
-import { PersonalityRadar } from "@/components/PersonalityRadar";
 import { FunFacts } from "@/components/FunFacts";
 import { ArcadeSection } from "@/components/ArcadeSection";
 import { resume } from "@/lib/resume";
@@ -14,6 +13,7 @@ export default function Home() {
       <Hero
         profile={resume.profile}
         focusAreaExamples={resume.focus_area_examples}
+        personalityTraits={resume.personality_traits}
       />
       <StatsBar stats={resume.stats} />
       <ExperienceTimeline experience={resume.experience} />
@@ -22,7 +22,6 @@ export default function Home() {
         certifications={resume.certifications}
       />
       <Portfolio portfolio={resume.portfolio} />
-      <PersonalityRadar traits={resume.personality_traits} />
       <FunFacts facts={resume.fun_facts} />
       <ArcadeSection
         summary={resume.profile.summary}
@@ -33,7 +32,7 @@ export default function Home() {
         hireMePool={resume.hire_me_pool}
       />
       <footer className="brutal-tag px-6 py-8 text-center text-xs font-bold">
-        010 / EOF — {resume.profile.name.toUpperCase()}
+        009 / EOF — {resume.profile.name.toUpperCase()}
       </footer>
     </main>
   );

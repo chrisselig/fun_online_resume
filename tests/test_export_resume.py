@@ -53,6 +53,7 @@ def test_personality_traits_are_percentages():
     for t in traits:
         assert t["trait"]
         assert 0 <= t["value"] <= 100
+        assert t["link"] is None or (isinstance(t["link"], str) and t["link"])
 
 
 def test_every_focus_area_has_a_real_example():
