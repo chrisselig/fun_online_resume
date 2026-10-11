@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type { Resume } from "@/lib/resume";
 import { JailCellPortrait } from "./JailCellPortrait";
 import { ArcadeSection } from "@/components/ArcadeSection";
@@ -75,6 +76,12 @@ export function CaseFile({ resume }: { resume: Resume }) {
   return (
     <main className="min-h-screen bg-[#2b251e] px-4 py-10 sm:px-8 sm:py-16">
       <div className="mx-auto max-w-4xl">
+        <Link
+          href="/"
+          className="mb-2 inline-block font-mono text-xs text-[#9c927c] uppercase hover:text-[#f3e9d2]"
+        >
+          ← Pull a different file
+        </Link>
         <div className="flex gap-1 overflow-x-auto" role="tablist" aria-label="Case file sections">
           {TABS.map((t) => (
             <button
@@ -308,6 +315,7 @@ export function CaseFile({ resume }: { resume: Resume }) {
                   earlierRewards={resume.experience.earlier_rewards}
                   skills={resume.skills}
                   hireMePool={resume.hire_me_pool}
+                  variant="manila"
                 />
               </div>
             )}

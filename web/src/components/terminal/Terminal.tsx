@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import Link from "next/link";
 import type { Resume } from "@/lib/resume";
 
 interface Entry {
@@ -199,6 +200,12 @@ export function Terminal({ resume }: { resume: Resume }) {
           <span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
           <span className="h-3 w-3 rounded-full bg-[#27c93f]" />
           <span className="ml-3 font-mono text-xs text-[#6b8a6b]">chris@resume: ~</span>
+          <Link
+            href="/"
+            className="ml-auto font-mono text-xs text-[#6b8a6b] hover:text-[#33ff33]"
+          >
+            [other versions]
+          </Link>
         </div>
 
         <div className="relative bg-black">

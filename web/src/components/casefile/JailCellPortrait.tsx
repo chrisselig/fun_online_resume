@@ -5,7 +5,7 @@
 export function JailCellPortrait() {
   return (
     <div className="w-36 shrink-0 border-2 border-[#8a7752] bg-[#c9c2b2]">
-      <svg viewBox="0 0 160 200" className="block w-full" role="img" aria-label="Not an actual photograph">
+      <svg viewBox="0 0 160 200" className="block w-full" role="img" aria-label="Redacted — not an actual photograph">
         <rect x={0} y={0} width={160} height={200} fill="#c9c2b2" />
 
         {[40, 70, 100, 130, 160].map((y) => (
@@ -24,8 +24,8 @@ export function JailCellPortrait() {
         <rect x={0} y={18} width={160} height={6} fill="#3a362c" />
         <rect x={0} y={176} width={160} height={6} fill="#3a362c" />
       </svg>
-      <p className="border-t-2 border-[#8a7752] bg-[#2b2117] py-1 text-center font-mono text-[9px] tracking-wide text-[#d9c48f] uppercase">
-        Subject not pictured
+      <p className="border-t-2 border-[#8a7752] bg-[#2b2117] py-1 text-center font-mono text-[11px] font-bold tracking-widest text-[#c0352b] uppercase">
+        Redacted
       </p>
     </div>
   );

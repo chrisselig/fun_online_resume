@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { FocusAreaExample, PersonalityTrait, Profile } from "@/lib/resume";
 import { PersonalityRadar } from "./PersonalityRadar";
 
@@ -12,7 +13,15 @@ export function Hero({
 }) {
   return (
     <header className="relative border-b-8 border-line px-6 pt-10 pb-20 sm:px-10 sm:pt-16 sm:pb-28">
-      <p className="brutal-tag text-sm font-bold">001 / RESUME.EXE</p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="brutal-tag text-sm font-bold">001 / RESUME.EXE</p>
+        <Link
+          href="/"
+          className="brutal-tag border-line hover:bg-ink hover:text-paper border-2 px-2 py-1 text-xs font-bold uppercase"
+        >
+          ← Other versions
+        </Link>
+      </div>
 
       <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0 flex-1">

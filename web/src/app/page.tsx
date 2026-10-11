@@ -38,6 +38,27 @@ const THEMES: ThemeOption[] = [
     tagline: "The resume is now the terrible spreadsheet it keeps bragging about retiring.",
     href: null,
   },
+  {
+    slug: "space-station",
+    file: "SPACESTATION.SYS",
+    title: "Space station",
+    tagline: "Cargo modules drift in zero-g. Fire a thruster to pull them toward a wall.",
+    href: "/space-station",
+  },
+  {
+    slug: "dashboard",
+    file: "DASHBOARD.APP",
+    title: "The dashboard",
+    tagline: "Modern, slick, colorblind-safe. The resume as a KPI dashboard.",
+    href: null,
+  },
+  {
+    slug: "accessible",
+    file: "ACCESSIBLE.TXT",
+    title: "Accessible / screen reader",
+    tagline: "Plain semantic HTML, high contrast, and a read-aloud button. Built to be heard, not just seen.",
+    href: null,
+  },
 ];
 
 export default function ThemePicker() {
@@ -50,7 +71,7 @@ export default function ThemePicker() {
         </h1>
         <p className="mt-4 max-w-2xl font-serif text-lg">
           Same resume, same real work — {resume.profile.name.replace(", MBA", "")}, {resume.stats[0]?.value}{" "}
-          {resume.stats[0]?.label.toLowerCase()}. Four different ways to read it.
+          {resume.stats[0]?.label.toLowerCase()}. {THEMES.length} different ways to read it.
         </p>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2">
