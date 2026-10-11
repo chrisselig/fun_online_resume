@@ -4,34 +4,40 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Resume } from "@/lib/resume";
 
-function buildSpeechText(resume: Resume): string {
-  const parts: string[] = [];
-  parts.push(`${resume.profile.name}. ${resume.profile.headline}. ${resume.profile.location}.`);
-  parts.push(resume.profile.summary);
+// Short, per-sentence chunks rather than one giant utterance: very long
+// utterances are known to silently fail or truncate on mobile Safari and
+// some Android WebViews, and also trip Chrome's ~15s idle cutoff. Each
+// chunk is queued as its own speak() call once the previous one ends.
+function buildSpeechChunks(resume: Resume): string[] {
+  const chunks: string[] = [];
+  chunks.push(resume.profile.name);
+  chunks.push(resume.profile.headline);
+  chunks.push(resume.profile.location);
+  chunks.push(resume.profile.summary);
 
   for (const role of resume.experience.featured) {
-    parts.push(`${role.role} at ${role.company}, ${role.date_range}.`);
-    if (role.summary) parts.push(role.summary);
-    parts.push(...role.bullets);
+    chunks.push(`${role.role} at ${role.company}, ${role.date_range}.`);
+    if (role.summary) chunks.push(role.summary);
+    chunks.push(...role.bullets);
     for (const eng of role.engagements) {
-      parts.push(`Client engagement: ${eng.client}.`);
-      parts.push(...eng.bullets);
+      chunks.push(`Client engagement: ${eng.client}.`);
+      chunks.push(...eng.bullets);
     }
   }
 
-  parts.push("Earlier career.");
+  chunks.push("Earlier career.");
   for (const role of resume.experience.earlier) {
-    parts.push(`${role.role} at ${role.company}, ${role.date_range}.`);
-    parts.push(...role.bullets);
+    chunks.push(`${role.role} at ${role.company}, ${role.date_range}.`);
+    chunks.push(...role.bullets);
   }
 
-  parts.push(`Skills include ${resume.skills.map((s) => s.name).join(", ")}.`);
-  parts.push("Education.");
+  chunks.push(`Skills include ${resume.skills.map((s) => s.name).join(", ")}.`);
+  chunks.push("Education.");
   for (const ed of resume.education) {
-    parts.push(`${ed.degree} from ${ed.school}.`);
+    chunks.push(`${ed.degree} from ${ed.school}.`);
   }
 
-  return parts.join(" ");
+  return chunks.filter(Boolean);
 }
 
 export function AccessibleResume({ resume }: { resume: Resume }) {
@@ -40,58 +46,46 @@ export function AccessibleResume({ resume }: { resume: Resume }) {
   // Chrome can garbage-collect an utterance with no other live reference,
   // silently killing speech mid-sentence — keeping it here prevents that.
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  // Chrome keepalive workaround: long utterances otherwise go silent after
-  // ~15s because the synthesis engine pauses itself.
-  const keepAliveRef = useRef<number | null>(null);
+  const stoppedRef = useRef(false);
 
   useEffect(() => {
     return () => {
+      stoppedRef.current = true;
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
         window.speechSynthesis.cancel();
       }
-      if (keepAliveRef.current !== null) window.clearInterval(keepAliveRef.current);
     };
   }, []);
+
+  const speakChunk = (chunks: string[], index: number) => {
+    if (stoppedRef.current || index >= chunks.length) {
+      setSpeaking(false);
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(chunks[index]);
+    utterance.onend = () => speakChunk(chunks, index + 1);
+    utterance.onerror = () => setSpeaking(false);
+    utteranceRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+  };
 
   const readAloud = () => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
       setUnsupported(true);
       return;
     }
-
-    const utterance = new SpeechSynthesisUtterance(buildSpeechText(resume));
-    utterance.onend = () => {
-      setSpeaking(false);
-      if (keepAliveRef.current !== null) window.clearInterval(keepAliveRef.current);
-    };
-    utterance.onerror = () => {
-      setSpeaking(false);
-      if (keepAliveRef.current !== null) window.clearInterval(keepAliveRef.current);
-    };
-    utteranceRef.current = utterance;
-
-    const speakNow = () => {
-      window.speechSynthesis.speak(utterance);
-      keepAliveRef.current = window.setInterval(() => {
-        window.speechSynthesis.pause();
-        window.speechSynthesis.resume();
-      }, 10000);
-    };
-
-    // Calling speak() in the same tick as cancel() can silently no-op in
-    // Chrome — deferring a tick avoids that race.
-    if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-      window.speechSynthesis.cancel();
-      setTimeout(speakNow, 50);
-    } else {
-      speakNow();
-    }
+    // Reaching here means nothing is currently playing (the button shows
+    // "Stop reading" instead while speaking), so there's never a prior
+    // queue to cancel — avoids the Chrome race where cancel()
+    // immediately followed by speak() silently drops the utterance.
+    stoppedRef.current = false;
     setSpeaking(true);
+    speakChunk(buildSpeechChunks(resume), 0);
   };
 
   const stopReading = () => {
+    stoppedRef.current = true;
     window.speechSynthesis.cancel();
-    if (keepAliveRef.current !== null) window.clearInterval(keepAliveRef.current);
     setSpeaking(false);
   };
 

@@ -69,14 +69,18 @@ function buildCategories(resume: Resume): CategoryContent[] {
   ];
 }
 
-const NET_LAYOUT: { face: Face; gridArea: string }[] = [
-  { face: "U", gridArea: "1 / 2" },
-  { face: "L", gridArea: "2 / 1" },
-  { face: "F", gridArea: "2 / 2" },
-  { face: "R", gridArea: "2 / 3" },
-  { face: "B", gridArea: "2 / 4" },
-  { face: "D", gridArea: "3 / 2" },
-];
+const FACE_SIZE = 112;
+const HALF = FACE_SIZE / 2;
+
+/** Positions each face on the surface of an actual cube (standard CSS 3D cube technique). */
+const FACE_TRANSFORM: Record<Face, string> = {
+  F: `translateZ(${HALF}px)`,
+  B: `rotateY(180deg) translateZ(${HALF}px)`,
+  R: `rotateY(90deg) translateZ(${HALF}px)`,
+  L: `rotateY(-90deg) translateZ(${HALF}px)`,
+  U: `rotateX(90deg) translateZ(${HALF}px)`,
+  D: `rotateX(-90deg) translateZ(${HALF}px)`,
+};
 
 export function RubiksCube({ resume }: { resume: Resume }) {
   const categories = buildCategories(resume);
@@ -152,46 +156,48 @@ export function RubiksCube({ resume }: { resume: Resume }) {
 
         <div
           className="mt-8 touch-none select-none"
-          style={{ perspective: 800 }}
+          style={{ perspective: 900, height: FACE_SIZE * 2.4 }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerLeave={onPointerUp}
         >
           <div
-            className="mx-auto grid w-fit gap-1 transition-transform"
+            className="relative mx-auto"
             style={{
-              gridTemplateColumns: "repeat(4, 3.5rem)",
-              gridTemplateRows: "repeat(3, 3.5rem)",
-              transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+              width: FACE_SIZE,
+              height: FACE_SIZE,
               transformStyle: "preserve-3d",
+              transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
             }}
           >
-            {NET_LAYOUT.map(({ face, gridArea }) => {
-              return (
-                <div
-                  key={face}
-                  style={{ gridArea }}
-                  className="grid grid-cols-2 grid-rows-2 gap-0.5 border-2 border-black/40 p-0.5"
-                >
-                  {cube[face].map((stickerValue, i) => {
-                    const stickerCategory = categories[stickerValue];
-                    return (
-                      <button
-                        key={i}
-                        type="button"
-                        onMouseEnter={() => setActiveFace(stickerCategory.face)}
-                        onClick={() => setActiveFace(stickerCategory.face)}
-                        className="flex items-center justify-center rounded-[2px] text-[8px] font-bold text-black/70"
-                        style={{ backgroundColor: stickerCategory.color }}
-                      >
-                        {stickerCategory.tag}
-                      </button>
-                    );
-                  })}
-                </div>
-              );
-            })}
+            {FACES.map((face) => (
+              <div
+                key={face}
+                className="absolute grid grid-cols-2 grid-rows-2 gap-0.5 border-2 border-black/60 bg-black/40 p-0.5"
+                style={{
+                  width: FACE_SIZE,
+                  height: FACE_SIZE,
+                  transform: FACE_TRANSFORM[face],
+                }}
+              >
+                {cube[face].map((stickerValue, i) => {
+                  const stickerCategory = categories[stickerValue];
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      onMouseEnter={() => setActiveFace(stickerCategory.face)}
+                      onClick={() => setActiveFace(stickerCategory.face)}
+                      className="flex items-center justify-center rounded-[2px] text-[8px] font-bold text-black/70"
+                      style={{ backgroundColor: stickerCategory.color }}
+                    >
+                      {stickerCategory.tag}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
           </div>
         </div>
 
