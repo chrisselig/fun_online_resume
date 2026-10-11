@@ -65,7 +65,7 @@ const THEMES: ThemeOption[] = [
     title: "The spreadsheet",
     tagline: "The resume is now the terrible spreadsheet it keeps bragging about retiring.",
     accent: "#22c55e",
-    href: null,
+    href: "/spreadsheet",
   },
   {
     slug: "star-wars",
