@@ -84,3 +84,11 @@ def test_hire_me_pool_has_a_reasonable_minimum_size():
     assert len(pool) >= 15
     assert len(set(pool)) == len(pool)  # no duplicate lines
     assert all(isinstance(line, str) and line for line in pool)
+
+
+def test_star_wars_crawl_is_non_empty_prose():
+    resume = load_resume()
+
+    crawl = resume["star_wars_crawl"]
+    assert len(crawl) >= 3
+    assert all(isinstance(p, str) and p for p in crawl)

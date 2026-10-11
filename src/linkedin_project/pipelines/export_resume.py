@@ -748,6 +748,28 @@ FUN_FACTS: list[str] = [
     "Addicted to hand-tool woodworking and buying saws — 15 and counting. Send help.",
 ]
 
+# ---------------------------------------------------------------------------
+# Star Wars opening crawl — the resume as a short story, not a bullet dump.
+# ---------------------------------------------------------------------------
+STAR_WARS_CRAWL: list[str] = [
+    "It is a time of endless spreadsheets. Across the galaxy of Calgary, "
+    "organizations drown in manual processes, duplicate reports, and data "
+    "nobody quite trusts.",
+    "For over 18 years, CHRIS SELIG has fought this chaos — building data "
+    "pipelines, dashboards, and automation that turn scattered information "
+    "into something people actually use.",
+    "From the energy sector at CENOVUS and CONOCOPHILLIPS, through a "
+    "freelance career serving a dozen companies as BIDAMIA INC., to "
+    "co-founding SELICA ANALYTICS INC., his mission has stayed the same: "
+    "retire the terrible spreadsheet and replace it with something that "
+    "works.",
+    "Armed with PYTHON, SQL, DATABRICKS, POWER BI, and R — and these days, "
+    "AI copilots that help him move even faster — he now seeks his next "
+    "assignment.",
+    "The galaxy needs fewer manual processes.",
+    "It needs YOU to hire him....",
+]
+
 
 def _records(df: pd.DataFrame) -> list[dict[str, object]]:
     """Convert a DataFrame to JSON-safe records (NaN/NaT -> None)."""
@@ -779,5 +801,6 @@ def load_resume() -> dict[str, object]:
         "portfolio": PORTFOLIO,
         "personality_traits": PERSONALITY_TRAITS,
         "fun_facts": FUN_FACTS,
+        "star_wars_crawl": STAR_WARS_CRAWL,
         "hire_me_pool": REASONS_TO_HIRE_ME,
     }
