@@ -39,13 +39,18 @@ export function StarWarsCrawl({ resume }: { resume: Resume }) {
       >
         <div
           key={playKey}
-          className="sw-crawl-text absolute left-1/2 w-[92%] max-w-3xl text-center sm:w-[78%]"
+          className="sw-crawl-text absolute left-1/2 w-[96%] text-center sm:w-[90%] lg:w-[82%] xl:w-[72%]"
           style={{ transformOrigin: "50% 100%", transform: "translateX(-50%) rotateX(25deg)" }}
         >
-          <p className="mb-16 text-xl tracking-[0.3em] sm:text-3xl">EPISODE XVIII</p>
-          <h1 className="mb-12 text-4xl leading-tight font-bold sm:text-6xl">A NEW QUERY</h1>
+          <p className="mb-16 text-2xl tracking-[0.3em] sm:text-4xl lg:text-5xl">EPISODE XVIII</p>
+          <h1 className="mb-14 text-5xl leading-tight font-bold sm:text-7xl lg:text-8xl xl:text-9xl">
+            A NEW QUERY
+          </h1>
           {resume.star_wars_crawl.map((paragraph, i) => (
-            <p key={i} className="mb-10 text-2xl leading-relaxed font-semibold sm:text-4xl">
+            <p
+              key={i}
+              className="mb-12 text-3xl leading-relaxed font-semibold sm:text-5xl lg:text-6xl xl:text-7xl"
+            >
               {paragraph}
             </p>
           ))}
