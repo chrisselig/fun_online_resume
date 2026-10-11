@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import type { Resume } from "@/lib/resume";
 import { stepBody, type Body, type Vector } from "@/lib/spaceStationPhysics";
+import { StarField } from "./StarField";
+import { ShipFrame } from "./ShipFrame";
 
 interface Module {
   id: string;
@@ -218,6 +220,7 @@ export function SpaceStation({ resume }: { resume: Resume }) {
 
   return (
     <main className="min-h-screen bg-[#05070d] p-4 text-[#e8f1ff] sm:p-8">
+      <StarField />
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="font-mono text-xs tracking-[0.3em] text-[#7dd3fc] uppercase">
@@ -256,10 +259,12 @@ export function SpaceStation({ resume }: { resume: Resume }) {
           ))}
         </div>
 
-        <div
-          ref={containerRef}
-          className="relative mt-6 h-[60vh] min-h-[420px] overflow-hidden rounded-lg border border-[#2a3a52] bg-[radial-gradient(circle_at_20%_20%,#0d1526,#05070d)]"
-        >
+        <div className="relative mt-6 px-10 py-16 sm:px-20 sm:py-20">
+          <ShipFrame />
+          <div
+            ref={containerRef}
+            className="relative z-10 h-[60vh] min-h-[420px] overflow-hidden rounded-lg border border-[#2a3a52] bg-[radial-gradient(circle_at_20%_20%,#0d1526,#05070d)]"
+          >
           {modules.map((m, i) => (
             <button
               key={m.id}
@@ -282,6 +287,7 @@ export function SpaceStation({ resume }: { resume: Resume }) {
               <p className="line-clamp-3 text-xs text-[#e8f1ff]">{m.summary}</p>
             </button>
           ))}
+          </div>
         </div>
       </div>
 
