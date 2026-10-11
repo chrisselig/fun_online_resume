@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import type { Resume } from "@/lib/resume";
+import { JailCellPortrait } from "./JailCellPortrait";
+import { ArcadeSection } from "@/components/ArcadeSection";
 
-type TabId = "profile" | "experience" | "skills" | "education" | "exhibits";
+type TabId = "profile" | "experience" | "skills" | "education" | "exhibits" | "yard";
 
 const TABS: { id: TabId; label: string }[] = [
   { id: "profile", label: "Profile" },
@@ -11,6 +13,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: "skills", label: "Evidence Log" },
   { id: "education", label: "Credentials" },
   { id: "exhibits", label: "Exhibits" },
+  { id: "yard", label: "Yard Time" },
 ];
 
 const INK = "text-[#2b2117]";
@@ -22,7 +25,7 @@ const STAMP_RED = "text-[#9c2a1f]";
 function Stamp() {
   return (
     <div
-      className={`-rotate-3 border-4 ${STAMP_RED} border-[#9c2a1f]/70 mt-4 inline-block px-3 py-1 font-mono text-sm font-bold tracking-widest uppercase opacity-80 sm:absolute sm:top-10 sm:right-10 sm:mt-0 sm:-rotate-12`}
+      className={`-rotate-3 border-4 ${STAMP_RED} border-[#9c2a1f]/70 mt-4 inline-block px-3 py-1 font-mono text-sm font-bold tracking-widest uppercase opacity-80`}
     >
       Available for hire
     </div>
@@ -90,19 +93,27 @@ export function CaseFile({ resume }: { resume: Resume }) {
         </div>
 
         <div className={`relative border-2 ${MANILA_LINE} ${PAPER} ${INK} p-6 shadow-2xl shadow-black/50 sm:p-10`}>
-          <p className="font-mono text-xs tracking-[0.3em] uppercase opacity-60">Case File</p>
-          <h1 className="mt-1 max-w-sm font-mono text-3xl font-black tracking-tight uppercase sm:text-4xl">
-            {resume.profile.name.replace(", MBA", "")}
-          </h1>
-          <Stamp />
-          <div className="mt-3 space-y-1">
-            <Field label="Occupation" value={resume.profile.headline} />
-            <Field label="Location" value={resume.profile.location} />
-            <Field label="Case No." value="2008-ONGOING" />
-            <p className="font-mono text-xs tracking-wide uppercase">
-              <span className="opacity-60">Handler:</span>{" "}
-              <span className="bg-[#2b2117] px-2 py-0.5 text-[#2b2117] select-none">REDACTED</span>
-            </p>
+          <div className="flex flex-col gap-6 sm:flex-row sm:justify-between">
+            <div>
+              <p className="font-mono text-xs tracking-[0.3em] uppercase opacity-60">Case File</p>
+              <h1 className="mt-1 max-w-sm font-mono text-3xl font-black tracking-tight uppercase sm:text-4xl">
+                {resume.profile.name.replace(", MBA", "")}
+              </h1>
+              <Stamp />
+              <div className="mt-3 space-y-1">
+                <Field label="Occupation" value={resume.profile.headline} />
+                <Field label="Location" value={resume.profile.location} />
+                <Field label="Case No." value="2008-ONGOING" />
+                <p className="font-mono text-xs tracking-wide uppercase">
+                  <span className="opacity-60">Handler:</span>{" "}
+                  <span className="bg-[#2b2117] px-2 py-0.5 text-[#2b2117] select-none">
+                    REDACTED
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <JailCellPortrait />
           </div>
 
           <div className={`mt-6 border-t-2 border-dashed ${MANILA_LINE} pt-6`}>
@@ -282,6 +293,22 @@ export function CaseFile({ resume }: { resume: Resume }) {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {tab === "yard" && (
+              <div>
+                <p className="mb-4 font-mono text-xs opacity-60">
+                  Recreational privileges, revoked at any time.
+                </p>
+                <ArcadeSection
+                  summary={resume.profile.summary}
+                  featured={resume.experience.featured}
+                  earlier={resume.experience.earlier}
+                  earlierRewards={resume.experience.earlier_rewards}
+                  skills={resume.skills}
+                  hireMePool={resume.hire_me_pool}
+                />
               </div>
             )}
           </div>
