@@ -12,6 +12,7 @@ import type { EarlierRole, FeaturedRole, SkillEntry } from "@/lib/resume";
 import { extractPainPoints, topWeapons, weaponKindFor, type WeaponKind } from "@/lib/arcadeContent";
 import { pickRandomReasons } from "@/lib/pickRandomReasons";
 import { useFullscreen } from "@/lib/useFullscreen";
+import { ArcadeTouchButton } from "./ArcadeTouchButton";
 
 const CANVAS_W = 480;
 const CANVAS_H = 320;
@@ -552,7 +553,11 @@ export function ArcadeInvaders({
           )}
 
           {status === "levelClear" && (
-            <div className="bg-ink/90 absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center font-mono">
+            <button
+              type="button"
+              onClick={advanceWave}
+              className="bg-ink/90 absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center font-mono"
+            >
               <span className="text-accent text-lg font-black uppercase">
                 Hire me, you get:
               </span>
@@ -567,20 +572,24 @@ export function ArcadeInvaders({
                 proven at {reveal.company}
               </span>
               <span className="text-paper/50 mt-2 animate-pulse text-xs">
-                press space to continue
+                press space / tap to continue
               </span>
-            </div>
+            </button>
           )}
 
           {status === "gameOver" && (
-            <div className="bg-ink/95 absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center font-mono">
+            <button
+              type="button"
+              onClick={beginGame}
+              className="bg-ink/95 absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center font-mono"
+            >
               <span className="text-accent text-xl font-black uppercase">Game Over</span>
               <span className="text-paper text-sm">Buried in spreadsheets.</span>
               <span className="text-paper/70 text-xs">Score: {score}</span>
               <span className="text-paper/50 mt-2 animate-pulse text-xs">
-                press space to retry from wave one
+                press space / tap to retry from wave one
               </span>
-            </div>
+            </button>
           )}
 
           {status === "complete" && (
@@ -600,6 +609,45 @@ export function ArcadeInvaders({
               </span>
             </div>
           )}
+          </div>
+        </div>
+
+        <div className="mt-4 flex items-center justify-between gap-4 sm:hidden">
+          <div className="flex gap-2">
+            <ArcadeTouchButton
+              label="←"
+              aria-label="Move ship left"
+              onPress={() => keysRef.current.add("arrowleft")}
+              onRelease={() => keysRef.current.delete("arrowleft")}
+              className="h-14 w-14 text-xl"
+            />
+            <ArcadeTouchButton
+              label="→"
+              aria-label="Move ship right"
+              onPress={() => keysRef.current.add("arrowright")}
+              onRelease={() => keysRef.current.delete("arrowright")}
+              className="h-14 w-14 text-xl"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <ArcadeTouchButton
+              label="Q"
+              aria-label="Previous weapon"
+              onPress={() => cycleWeapon(-1)}
+              className="h-10 w-10 text-sm"
+            />
+            <ArcadeTouchButton
+              label="E"
+              aria-label="Next weapon"
+              onPress={() => cycleWeapon(1)}
+              className="h-10 w-10 text-sm"
+            />
+            <ArcadeTouchButton
+              label="FIRE"
+              aria-label="Fire"
+              onPress={fire}
+              className="h-14 w-20 text-sm"
+            />
           </div>
         </div>
 

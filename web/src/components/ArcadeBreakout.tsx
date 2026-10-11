@@ -6,6 +6,7 @@ import { topWeapons } from "@/lib/arcadeContent";
 import { buildBricks, reflectOffPaddle, type Brick } from "@/lib/breakoutPhysics";
 import { pickRandomReasons } from "@/lib/pickRandomReasons";
 import { useFullscreen } from "@/lib/useFullscreen";
+import { ArcadeTouchButton } from "./ArcadeTouchButton";
 
 const CANVAS_W = 480;
 const CANVAS_H = 320;
@@ -322,6 +323,23 @@ export function ArcadeBreakout({
           </div>
         )}
       </div>
+      </div>
+
+      <div className="mt-4 flex gap-2 sm:hidden">
+        <ArcadeTouchButton
+          label="←"
+          aria-label="Move paddle left"
+          onPress={() => keysRef.current.add("arrowleft")}
+          onRelease={() => keysRef.current.delete("arrowleft")}
+          className="h-14 w-16 text-xl"
+        />
+        <ArcadeTouchButton
+          label="→"
+          aria-label="Move paddle right"
+          onPress={() => keysRef.current.add("arrowright")}
+          onRelease={() => keysRef.current.delete("arrowright")}
+          className="h-14 w-16 text-xl"
+        />
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-4">
