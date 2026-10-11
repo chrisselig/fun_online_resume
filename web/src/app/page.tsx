@@ -81,7 +81,7 @@ const THEMES: ThemeOption[] = [
     title: "Retro baseball",
     tagline: "8-bit diamond. Hits reveal the resume, outs tell you how I can help.",
     accent: "#60a5fa",
-    href: null,
+    href: "/baseball",
   },
   {
     slug: "rubiks-cube",
