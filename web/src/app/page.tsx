@@ -97,7 +97,7 @@ const THEMES: ThemeOption[] = [
     title: "Wingdings",
     tagline: "The same resume. You just can't read it anymore.",
     accent: "#a855f7",
-    href: null,
+    href: "/wingdings",
   },
 ];
 
