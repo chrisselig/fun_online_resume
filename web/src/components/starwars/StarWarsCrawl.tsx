@@ -11,8 +11,8 @@ export function StarWarsCrawl({ resume }: { resume: Resume }) {
     <main className="relative h-screen overflow-hidden bg-black text-[#ffe81f]">
       <style>{`
         @keyframes sw-crawl {
-          0% { top: 100%; }
-          100% { top: -400%; }
+          0% { top: 5%; }
+          100% { top: -500%; }
         }
         .sw-crawl-text {
           animation: sw-crawl 65s linear forwards;
@@ -35,21 +35,21 @@ export function StarWarsCrawl({ resume }: { resume: Resume }) {
 
       <div
         className="absolute inset-0"
-        style={{ perspective: "400px", perspectiveOrigin: "50% 100%" }}
+        style={{ perspective: "1300px", perspectiveOrigin: "50% 100%" }}
       >
         <div
           key={playKey}
-          className="sw-crawl-text absolute left-1/2 w-[96%] text-center sm:w-[90%] lg:w-[82%] xl:w-[72%]"
-          style={{ transformOrigin: "50% 100%", transform: "translateX(-50%) rotateX(25deg)" }}
+          className="sw-crawl-text absolute left-1/2 w-[98%] text-center sm:w-[94%] lg:w-[86%] xl:w-[76%]"
+          style={{ transformOrigin: "50% 100%", transform: "translateX(-50%) rotateX(15deg)" }}
         >
-          <p className="mb-16 text-2xl tracking-[0.3em] sm:text-4xl lg:text-5xl">EPISODE XVIII</p>
-          <h1 className="mb-14 text-5xl leading-tight font-bold sm:text-7xl lg:text-8xl xl:text-9xl">
+          <p className="mb-16 text-3xl tracking-[0.3em] sm:text-5xl lg:text-6xl">EPISODE XVIII</p>
+          <h1 className="mb-14 text-7xl leading-tight font-bold sm:text-8xl lg:text-9xl xl:text-[10rem]">
             A NEW QUERY
           </h1>
           {resume.star_wars_crawl.map((paragraph, i) => (
             <p
               key={i}
-              className="mb-12 text-3xl leading-relaxed font-semibold sm:text-5xl lg:text-6xl xl:text-7xl"
+              className="mb-12 text-4xl leading-relaxed font-semibold sm:text-6xl lg:text-7xl xl:text-8xl"
             >
               {paragraph}
             </p>
