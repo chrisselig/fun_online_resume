@@ -3,7 +3,7 @@ export function FunFacts({ facts }: { facts: string[] }) {
 
   return (
     <section className="bg-accent px-6 py-16 sm:px-10 sm:py-24">
-      <p className="brutal-tag text-sm font-bold">008 / OFF_TOPIC.TXT</p>
+      <p className="brutal-tag text-sm font-bold">007 / OFF_TOPIC.TXT</p>
       <h2 className="mt-2 max-w-3xl text-5xl font-black tracking-tighter uppercase sm:text-7xl">
         Skills that won&apos;t make the cut anywhere else
       </h2>

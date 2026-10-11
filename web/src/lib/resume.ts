@@ -93,6 +93,7 @@ export interface PortfolioItem {
 export interface PersonalityTrait {
   trait: string;
   value: number;
+  link: string | null;
 }
 
 export interface Resume {

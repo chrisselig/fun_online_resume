@@ -665,20 +665,68 @@ PORTFOLIO: list[dict[str, object]] = [
 ]
 
 # ---------------------------------------------------------------------------
-# Personality traits — carried over from the original ShinyResume project's
-# personality_tbl.rds (self-assessed, scale of 0-20), rescaled to 0-100.
+# Personality traits — the original 10 carried over from the ShinyResume
+# project's personality_tbl.rds (self-assessed, scale of 0-20, rescaled to
+# 0-100; Introvert/Creative manually adjusted upward from the raw rescale),
+# plus 10 more self-assessed by hand. "link" ties a trait to a real resume
+# bullet or fun fact where one genuinely fits — left None otherwise rather
+# than forcing a connection that isn't there.
 # ---------------------------------------------------------------------------
 PERSONALITY_TRAITS: list[dict[str, object]] = [
-    {"trait": "Analytical", "value": 80},
-    {"trait": "Curious", "value": 90},
-    {"trait": "Honest", "value": 90},
-    {"trait": "Humour", "value": 100},
-    {"trait": "Motivated", "value": 80},
-    {"trait": "Introvert", "value": 60},
-    {"trait": "Creative", "value": 40},
-    {"trait": "Serious", "value": 30},
-    {"trait": "Extrovert", "value": 20},
-    {"trait": "Unmotivated", "value": 10},
+    {"trait": "Analytical", "value": 80, "link": None},
+    {"trait": "Curious", "value": 90, "link": None},
+    {"trait": "Honest", "value": 90, "link": None},
+    {"trait": "Humour", "value": 100, "link": None},
+    {"trait": "Motivated", "value": 80, "link": None},
+    {"trait": "Introvert", "value": 75, "link": None},
+    {
+        "trait": "Creative",
+        "value": 60,
+        "link": "Built the Movie Awards Video Analysis app — proof the data skills don't clock out at 5pm.",
+    },
+    {"trait": "Serious", "value": 30, "link": None},
+    {"trait": "Extrovert", "value": 20, "link": None},
+    {
+        "trait": "Unmotivated",
+        "value": 10,
+        "link": (
+            "Can still knock out Glass Joe in about a minute in Punch-Out!! "
+            "— just don't always feel like proving it."
+        ),
+    },
+    {
+        "trait": "Leadership",
+        "value": 40,
+        "link": "Founder & Co-CEO of SELICA Analytics, leading a team of developers serving enterprise clients.",
+    },
+    {"trait": "Perfectionist", "value": 0, "link": None},
+    {"trait": "Skeptical", "value": 50, "link": None},
+    {"trait": "Stubborn", "value": 10, "link": None},
+    {"trait": "Direct / Blunt", "value": 80, "link": None},
+    {
+        "trait": "Collaborative",
+        "value": 90,
+        "link": "Facilitated requirements-gathering sessions with stakeholders to drive Power BI report development.",
+    },
+    {"trait": "Patience", "value": 70, "link": None},
+    {
+        "trait": "Resourceful",
+        "value": 80,
+        "link": (
+            "Reverse-engineered a large manual process that took days each "
+            "month and sped it up using system resources and Power BI."
+        ),
+    },
+    {
+        "trait": "Mentoring",
+        "value": 100,
+        "link": "Delivered Power BI training sessions to groups across Canada and the US.",
+    },
+    {
+        "trait": "Self-Taught",
+        "value": 70,
+        "link": "Keeps buying every technical book on a whim, chasing the next skill to learn.",
+    },
 ]
 
 # ---------------------------------------------------------------------------

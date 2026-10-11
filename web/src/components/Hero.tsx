@@ -1,23 +1,32 @@
-import type { FocusAreaExample, Profile } from "@/lib/resume";
+import type { FocusAreaExample, PersonalityTrait, Profile } from "@/lib/resume";
+import { PersonalityRadar } from "./PersonalityRadar";
 
 export function Hero({
   profile,
   focusAreaExamples,
+  personalityTraits,
 }: {
   profile: Profile;
   focusAreaExamples: Record<string, FocusAreaExample[]>;
+  personalityTraits: PersonalityTrait[];
 }) {
   return (
     <header className="relative border-b-8 border-ink px-6 pt-10 pb-20 sm:px-10 sm:pt-16 sm:pb-28">
       <p className="brutal-tag text-sm font-bold">001 / RESUME.EXE</p>
 
-      <div className="relative mt-6 max-w-5xl">
-        <h1 className="text-[15vw] leading-[0.82] font-black tracking-tighter uppercase sm:text-8xl md:text-9xl">
-          {profile.name.replace(", MBA", "")}
-        </h1>
-        <span className="brutal-tag absolute top-2 right-0 border-4 border-ink bg-accent px-2 py-1 text-xs font-bold whitespace-nowrap sm:top-4 sm:-right-6 sm:rotate-6">
-          MBA
-        </span>
+      <div className="mt-6 flex flex-col items-start gap-8 lg:flex-row lg:items-start lg:justify-between">
+        <div className="relative max-w-5xl">
+          <h1 className="text-[15vw] leading-[0.82] font-black tracking-tighter uppercase sm:text-8xl md:text-9xl">
+            {profile.name.replace(", MBA", "")}
+          </h1>
+          <span className="brutal-tag absolute top-2 right-0 border-4 border-ink bg-accent px-2 py-1 text-xs font-bold whitespace-nowrap sm:top-4 sm:-right-6 sm:rotate-6">
+            MBA
+          </span>
+        </div>
+
+        <div className="hidden w-full shrink-0 lg:block lg:w-72 xl:w-80">
+          <PersonalityRadar traits={personalityTraits} />
+        </div>
       </div>
 
       <p className="mt-6 inline-block border-4 border-ink bg-ink px-3 py-1 text-xl font-bold text-paper sm:text-2xl">

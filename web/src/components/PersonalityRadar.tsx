@@ -1,85 +1,104 @@
+"use client";
+
+import { useState } from "react";
 import type { PersonalityTrait } from "@/lib/resume";
 import { axisLines, computeRadarPoints, gridRingPoints, polygonPoints } from "@/lib/personalityRadar";
 
-const SIZE = 240;
-const LABEL_OFFSET = 50;
-const PADDING = SIZE / 2 + LABEL_OFFSET + 120;
+const SIZE = 200;
+const PADDING = SIZE / 2 + 20;
 const VIEWBOX = PADDING * 2;
 const OFFSET = PADDING - SIZE / 2;
 
 export function PersonalityRadar({ traits }: { traits: PersonalityTrait[] }) {
-  const points = computeRadarPoints(traits, SIZE, LABEL_OFFSET);
+  const [selected, setSelected] = useState(0);
+  const points = computeRadarPoints(traits, SIZE, 0);
+  const active = traits[selected];
 
   return (
-    <section className="border-b-8 border-ink bg-paper px-6 py-16 sm:px-10 sm:py-24">
-      <p className="brutal-tag text-sm font-bold">007 / PERSONALITY.DAT</p>
-      <h2 className="mt-2 text-5xl font-black tracking-tighter uppercase sm:text-7xl">
-        Self-reported, not audited
-      </h2>
-      <p className="mt-3 max-w-2xl font-serif text-lg">
-        Pulled straight from an old personality quiz I never deleted. Take it exactly as
-        seriously as the arcade high scores below.
-      </p>
+    <div className="border-4 border-ink bg-paper p-4">
+      <p className="brutal-tag text-xs font-bold uppercase">Personality.dat</p>
 
-      <div className="mt-12 flex justify-center">
-        <svg
-          viewBox={`0 0 ${VIEWBOX} ${VIEWBOX}`}
-          className="w-full max-w-xl"
-          role="img"
-          aria-label="Radar chart of self-reported personality traits"
-        >
-          <g transform={`translate(${OFFSET}, ${OFFSET})`}>
-            {[0.25, 0.5, 0.75, 1].map((fraction) => (
-              <polygon
-                key={fraction}
-                points={gridRingPoints(traits.length, SIZE, fraction)}
-                fill="none"
-                stroke="var(--color-ink)"
-                strokeOpacity={0.2}
-                strokeWidth={1}
-              />
-            ))}
-
-            {axisLines(traits.length, SIZE).map((line, i) => (
-              <line
-                key={i}
-                x1={line.x1}
-                y1={line.y1}
-                x2={line.x2}
-                y2={line.y2}
-                stroke="var(--color-ink)"
-                strokeOpacity={0.2}
-                strokeWidth={1}
-              />
-            ))}
-
+      <svg
+        viewBox={`0 0 ${VIEWBOX} ${VIEWBOX}`}
+        className="mt-2 w-full"
+        role="img"
+        aria-label="Interactive radar chart of self-reported personality traits — click a point for details"
+      >
+        <g transform={`translate(${OFFSET}, ${OFFSET})`}>
+          {[0.33, 0.66, 1].map((fraction) => (
             <polygon
-              points={polygonPoints(points)}
-              fill="var(--color-accent)"
-              fillOpacity={0.55}
+              key={fraction}
+              points={gridRingPoints(traits.length, SIZE, fraction)}
+              fill="none"
               stroke="var(--color-ink)"
-              strokeWidth={3}
+              strokeOpacity={0.15}
+              strokeWidth={1}
             />
+          ))}
 
-            {points.map((p) => (
-              <circle key={p.trait} cx={p.x} cy={p.y} r={4} fill="var(--color-ink)" />
-            ))}
+          {axisLines(traits.length, SIZE).map((line, i) => (
+            <line
+              key={i}
+              x1={line.x1}
+              y1={line.y1}
+              x2={line.x2}
+              y2={line.y2}
+              stroke="var(--color-ink)"
+              strokeOpacity={0.15}
+              strokeWidth={1}
+            />
+          ))}
 
-            {points.map((p) => (
-              <text
-                key={p.trait}
-                x={p.labelX}
-                y={p.labelY}
-                textAnchor={p.anchor}
-                dominantBaseline="middle"
-                className="brutal-tag fill-ink text-[10px] font-bold uppercase"
-              >
-                {p.trait} · {p.value}
-              </text>
-            ))}
-          </g>
-        </svg>
+          <polygon
+            points={polygonPoints(points)}
+            fill="var(--color-accent)"
+            fillOpacity={0.55}
+            stroke="var(--color-ink)"
+            strokeWidth={2}
+          />
+
+          {points.map((p, i) => (
+            <g
+              key={p.trait}
+              role="button"
+              tabIndex={0}
+              aria-label={`${p.trait}, ${p.value} out of 100`}
+              aria-pressed={i === selected}
+              className="cursor-pointer outline-none"
+              onClick={() => setSelected(i)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setSelected(i);
+                }
+              }}
+            >
+              <circle cx={p.x} cy={p.y} r={14} fill="transparent" />
+              <circle
+                cx={p.x}
+                cy={p.y}
+                r={i === selected ? 7 : 4}
+                fill={i === selected ? "var(--color-accent)" : "var(--color-ink)"}
+                stroke="var(--color-ink)"
+                strokeWidth={i === selected ? 2 : 0}
+              />
+            </g>
+          ))}
+        </g>
+      </svg>
+
+      <div className="mt-3 min-h-20 border-t-4 border-ink pt-3">
+        <p className="brutal-tag text-xs font-bold uppercase">
+          {active.trait} · {active.value}
+        </p>
+        <p className="mt-1 font-serif text-sm">
+          {active.link ?? "Self-assessed. No case study for this one — yet."}
+        </p>
       </div>
-    </section>
+
+      <p className="brutal-tag text-ink/50 mt-2 text-[10px] uppercase">
+        Click a point for the receipts
+      </p>
+    </div>
   );
 }
