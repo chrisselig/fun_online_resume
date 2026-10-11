@@ -11,7 +11,7 @@ export function FunFacts({ facts }: { facts: string[] }) {
         {facts.map((fact, i) => (
           <li
             key={fact}
-            className={`border-4 border-ink bg-paper p-5 font-serif text-lg ${rotations[i % rotations.length]}`}
+            className={`border-4 border-line bg-paper p-5 font-serif text-lg ${rotations[i % rotations.length]}`}
           >
             {fact}
           </li>

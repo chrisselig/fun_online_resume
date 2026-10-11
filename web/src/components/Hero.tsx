@@ -11,7 +11,7 @@ export function Hero({
   personalityTraits: PersonalityTrait[];
 }) {
   return (
-    <header className="relative border-b-8 border-ink px-6 pt-10 pb-20 sm:px-10 sm:pt-16 sm:pb-28">
+    <header className="relative border-b-8 border-line px-6 pt-10 pb-20 sm:px-10 sm:pt-16 sm:pb-28">
       <p className="brutal-tag text-sm font-bold">001 / RESUME.EXE</p>
 
       <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
@@ -20,16 +20,16 @@ export function Hero({
             <h1 className="text-[15vw] leading-[0.82] font-black tracking-tighter uppercase sm:text-8xl md:text-9xl">
               {profile.name.replace(", MBA", "")}
             </h1>
-            <span className="brutal-tag absolute top-2 right-0 border-4 border-ink bg-accent px-2 py-1 text-xs font-bold whitespace-nowrap sm:top-4 sm:-right-6 sm:rotate-6">
+            <span className="brutal-tag absolute top-2 right-0 border-4 border-line bg-accent px-2 py-1 text-xs font-bold whitespace-nowrap sm:top-4 sm:-right-6 sm:rotate-6">
               MBA
             </span>
           </div>
 
-          <p className="mt-6 inline-block border-4 border-ink bg-ink px-3 py-1 text-xl font-bold text-paper sm:text-2xl">
+          <p className="mt-6 inline-block border-4 border-line bg-ink px-3 py-1 text-xl font-bold text-paper sm:text-2xl">
             {profile.headline}
           </p>
 
-          <p className="mt-8 max-w-2xl border-l-8 border-ink pl-4 font-serif text-lg leading-snug">
+          <p className="mt-8 max-w-2xl border-l-8 border-line pl-4 font-serif text-lg leading-snug">
             {profile.summary}
           </p>
 
@@ -41,10 +41,10 @@ export function Hero({
                   {examples ? (
                     <button
                       type="button"
-                      className="group relative block border-4 border-ink px-3 py-1 text-left cursor-help"
+                      className="group relative block border-4 border-line px-3 py-1 text-left cursor-help"
                     >
                       <span className="brutal-tag text-xs font-bold uppercase">{area} *</span>
-                      <div className="invisible absolute top-full left-0 z-10 mt-1 w-72 border-4 border-ink bg-paper p-4 text-left opacity-0 shadow-[8px_8px_0_0_var(--color-ink)] transition-opacity duration-100 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100">
+                      <div className="invisible absolute top-full left-0 z-10 mt-1 w-72 border-4 border-line bg-paper p-4 text-left opacity-0 shadow-[8px_8px_0_0_var(--color-ink)] transition-opacity duration-100 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100">
                         <ul className="space-y-3">
                           {examples.map((example) => (
                             <li key={example.client}>
@@ -60,7 +60,7 @@ export function Hero({
                       </div>
                     </button>
                   ) : (
-                    <span className="block border-4 border-ink px-3 py-1">
+                    <span className="block border-4 border-line px-3 py-1">
                       <span className="brutal-tag text-xs font-bold uppercase">{area}</span>
                     </span>
                   )}
@@ -76,7 +76,7 @@ export function Hero({
             {profile.business_domains.map((domain) => (
               <li
                 key={domain}
-                className="brutal-tag bg-ink text-paper -ml-[4px] border-4 border-ink px-3 py-1 text-xs font-bold uppercase first:ml-0"
+                className="brutal-tag bg-ink text-paper -ml-[4px] border-4 border-line px-3 py-1 text-xs font-bold uppercase first:ml-0"
               >
                 {domain}
               </li>
@@ -98,7 +98,7 @@ export function Hero({
           </div>
         </div>
 
-        <div className="hidden w-full shrink-0 lg:mt-6 lg:block lg:w-72 xl:w-80">
+        <div className="mt-8 w-full shrink-0 lg:mt-6 lg:w-80 xl:w-96">
           <PersonalityRadar traits={personalityTraits} />
         </div>
       </div>

@@ -2,14 +2,14 @@ import type { Stat } from "@/lib/resume";
 
 export function StatsBar({ stats }: { stats: Stat[] }) {
   return (
-    <section className="border-b-8 border-ink">
+    <section className="border-b-8 border-line">
       <div className="grid grid-cols-2 sm:grid-cols-4">
         {stats.map((stat, i) =>
           stat.details ? (
             <button
               key={stat.label}
               type="button"
-              className={`group relative block w-full border-r-8 border-b-8 border-ink px-6 py-10 text-left last:border-r-0 sm:border-b-0 cursor-help ${
+              className={`group relative block w-full border-r-8 border-b-8 border-line px-6 py-10 text-left last:border-r-0 sm:border-b-0 cursor-help ${
                 i === 0 ? "bg-accent" : "bg-paper"
               }`}
             >
@@ -18,7 +18,7 @@ export function StatsBar({ stats }: { stats: Stat[] }) {
                 {stat.label} *
               </p>
 
-              <div className="invisible absolute top-full left-0 z-10 mt-1 w-64 border-4 border-ink bg-paper p-4 text-left opacity-0 shadow-[8px_8px_0_0_var(--color-ink)] transition-opacity duration-100 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100">
+              <div className="invisible absolute top-full left-0 z-10 mt-1 w-64 border-4 border-line bg-paper p-4 text-left opacity-0 shadow-[8px_8px_0_0_var(--color-ink)] transition-opacity duration-100 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100">
                 <ul className="space-y-1">
                   {stat.details.map((d) => (
                     <li key={d} className="font-serif text-sm text-ink">
@@ -31,7 +31,7 @@ export function StatsBar({ stats }: { stats: Stat[] }) {
           ) : (
             <div
               key={stat.label}
-              className={`border-r-8 border-b-8 border-ink px-6 py-10 last:border-r-0 sm:border-b-0 ${
+              className={`border-r-8 border-b-8 border-line px-6 py-10 last:border-r-0 sm:border-b-0 ${
                 i === 0 ? "bg-accent" : "bg-paper"
               }`}
             >

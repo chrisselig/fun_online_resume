@@ -4,7 +4,7 @@ const ROTATIONS = ["-rotate-1", "rotate-1", "rotate-2", "-rotate-2"];
 
 export function Portfolio({ portfolio }: { portfolio: PortfolioItem[] }) {
   return (
-    <section className="border-b-8 border-ink bg-paper px-6 py-16 sm:px-10 sm:py-24">
+    <section className="border-b-8 border-line bg-paper px-6 py-16 sm:px-10 sm:py-24">
       <p className="brutal-tag text-sm font-bold">005 / PORTFOLIO.LINKS</p>
       <h2 className="mt-2 text-5xl font-black tracking-tighter uppercase sm:text-7xl">
         Proof, not claims
@@ -14,7 +14,7 @@ export function Portfolio({ portfolio }: { portfolio: PortfolioItem[] }) {
         {portfolio.map((item, i) => (
           <div
             key={item.title}
-            className={`group relative overflow-hidden border-4 border-ink bg-paper p-6 text-ink transition-all duration-150 hover:-translate-y-1 hover:rotate-0 hover:bg-ink hover:text-paper ${ROTATIONS[i % ROTATIONS.length]}`}
+            className={`group relative overflow-hidden border-4 border-line bg-paper p-6 text-ink transition-all duration-150 hover:-translate-y-1 hover:rotate-0 hover:bg-ink hover:text-paper ${ROTATIONS[i % ROTATIONS.length]}`}
           >
             <span
               aria-hidden
@@ -36,7 +36,7 @@ export function Portfolio({ portfolio }: { portfolio: PortfolioItem[] }) {
                     href={link.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="border-ink group-hover:border-paper inline-block border-2 px-2 py-1 font-mono text-xs font-bold uppercase underline decoration-2 underline-offset-4 hover:text-accent"
+                    className="border-line group-hover:border-paper inline-block border-2 px-2 py-1 font-mono text-xs font-bold uppercase underline decoration-2 underline-offset-4 hover:text-accent"
                   >
                     {link.label} ↗
                   </a>
