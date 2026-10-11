@@ -13,6 +13,7 @@ import {
 } from "@/lib/snakeLogic";
 import { pickRandomReasons } from "@/lib/pickRandomReasons";
 import { useFullscreen } from "@/lib/useFullscreen";
+import { ArcadeTouchButton } from "./ArcadeTouchButton";
 
 const CANVAS_W = 480;
 const CANVAS_H = 320;
@@ -157,6 +158,12 @@ export function ArcadeSnake({
     canvasRef.current?.focus();
   }, []);
 
+  const trySetDirection = (dir: Direction) => {
+    if (isValidTurn(dirRef.current, dir)) {
+      pendingDirRef.current = dir;
+    }
+  };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLCanvasElement>) => {
     const key = e.key.toLowerCase();
     const dir = DIR_KEYS[key];
@@ -166,9 +173,7 @@ export function ArcadeSnake({
       if (key === " ") beginGame();
       return;
     }
-    if (dir && isValidTurn(dirRef.current, dir)) {
-      pendingDirRef.current = dir;
-    }
+    if (dir) trySetDirection(dir);
   };
 
   return (
@@ -247,6 +252,33 @@ export function ArcadeSnake({
           </button>
         )}
       </div>
+      </div>
+
+      <div className="mt-4 grid w-36 grid-cols-3 grid-rows-3 gap-1 sm:hidden">
+        <ArcadeTouchButton
+          label="↑"
+          aria-label="Steer up"
+          onPress={() => trySetDirection("up")}
+          className="col-start-2 row-start-1 h-11 text-lg"
+        />
+        <ArcadeTouchButton
+          label="←"
+          aria-label="Steer left"
+          onPress={() => trySetDirection("left")}
+          className="col-start-1 row-start-2 h-11 text-lg"
+        />
+        <ArcadeTouchButton
+          label="→"
+          aria-label="Steer right"
+          onPress={() => trySetDirection("right")}
+          className="col-start-3 row-start-2 h-11 text-lg"
+        />
+        <ArcadeTouchButton
+          label="↓"
+          aria-label="Steer down"
+          onPress={() => trySetDirection("down")}
+          className="col-start-2 row-start-3 h-11 text-lg"
+        />
       </div>
 
       <div className="mt-4">
