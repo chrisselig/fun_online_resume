@@ -15,7 +15,7 @@ import pandas as pd
 # ---------------------------------------------------------------------------
 PROFILE: dict[str, object] = {
     "name": "Chris Selig, MBA",
-    "headline": "Senior Data Engineer, Analytics",
+    "headline": "Senior Advisor, Analytics & AI",
     "location": "Calgary, AB, Canada",
     "email": "",
     "linkedin_url": "https://www.linkedin.com/in/chris-selig/",
