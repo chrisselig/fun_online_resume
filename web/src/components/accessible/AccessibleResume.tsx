@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Resume } from "@/lib/resume";
 
@@ -37,12 +37,19 @@ function buildSpeechText(resume: Resume): string {
 export function AccessibleResume({ resume }: { resume: Resume }) {
   const [speaking, setSpeaking] = useState(false);
   const [unsupported, setUnsupported] = useState(false);
+  // Chrome can garbage-collect an utterance with no other live reference,
+  // silently killing speech mid-sentence — keeping it here prevents that.
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  // Chrome keepalive workaround: long utterances otherwise go silent after
+  // ~15s because the synthesis engine pauses itself.
+  const keepAliveRef = useRef<number | null>(null);
 
   useEffect(() => {
     return () => {
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
         window.speechSynthesis.cancel();
       }
+      if (keepAliveRef.current !== null) window.clearInterval(keepAliveRef.current);
     };
   }, []);
 
@@ -51,16 +58,40 @@ export function AccessibleResume({ resume }: { resume: Resume }) {
       setUnsupported(true);
       return;
     }
+
     const utterance = new SpeechSynthesisUtterance(buildSpeechText(resume));
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
+    utterance.onend = () => {
+      setSpeaking(false);
+      if (keepAliveRef.current !== null) window.clearInterval(keepAliveRef.current);
+    };
+    utterance.onerror = () => {
+      setSpeaking(false);
+      if (keepAliveRef.current !== null) window.clearInterval(keepAliveRef.current);
+    };
+    utteranceRef.current = utterance;
+
+    const speakNow = () => {
+      window.speechSynthesis.speak(utterance);
+      keepAliveRef.current = window.setInterval(() => {
+        window.speechSynthesis.pause();
+        window.speechSynthesis.resume();
+      }, 10000);
+    };
+
+    // Calling speak() in the same tick as cancel() can silently no-op in
+    // Chrome — deferring a tick avoids that race.
+    if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+      window.speechSynthesis.cancel();
+      setTimeout(speakNow, 50);
+    } else {
+      speakNow();
+    }
     setSpeaking(true);
   };
 
   const stopReading = () => {
     window.speechSynthesis.cancel();
+    if (keepAliveRef.current !== null) window.clearInterval(keepAliveRef.current);
     setSpeaking(false);
   };
 
