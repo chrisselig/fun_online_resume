@@ -667,6 +667,7 @@ PORTFOLIO: list[dict[str, object]] = [
 # ---------------------------------------------------------------------------
 # Personality traits — carried over from the original ShinyResume project's
 # personality_tbl.rds (self-assessed, scale of 0-20), rescaled to 0-100.
+# Introvert/Creative manually adjusted upward from the raw rescale.
 # ---------------------------------------------------------------------------
 PERSONALITY_TRAITS: list[dict[str, object]] = [
     {"trait": "Analytical", "value": 80},
@@ -674,8 +675,8 @@ PERSONALITY_TRAITS: list[dict[str, object]] = [
     {"trait": "Honest", "value": 90},
     {"trait": "Humour", "value": 100},
     {"trait": "Motivated", "value": 80},
-    {"trait": "Introvert", "value": 60},
-    {"trait": "Creative", "value": 40},
+    {"trait": "Introvert", "value": 75},
+    {"trait": "Creative", "value": 60},
     {"trait": "Serious", "value": 30},
     {"trait": "Extrovert", "value": 20},
     {"trait": "Unmotivated", "value": 10},
