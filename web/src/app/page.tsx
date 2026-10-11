@@ -89,7 +89,7 @@ const THEMES: ThemeOption[] = [
     title: "The Rubik's Cube",
     tagline: "Drag it, turn it, solve it. Every face hides another piece of the story.",
     accent: "#f97316",
-    href: null,
+    href: "/rubiks-cube",
   },
   {
     slug: "wingdings",
