@@ -22,7 +22,7 @@ const THEMES: ThemeOption[] = [
     file: "CASE_FILE.DAT",
     title: "The case file",
     tagline: "A redacted dossier you flip through with folder tabs, not a scrollbar.",
-    href: null,
+    href: "/case-file",
   },
   {
     slug: "terminal",

@@ -98,7 +98,7 @@ export function Hero({
           </div>
         </div>
 
-        <div className="mt-8 w-full shrink-0 lg:mt-6 lg:w-80 xl:w-96">
+        <div className="mt-8 w-full shrink-0 lg:mt-6 lg:w-[26rem] xl:w-[30rem] 2xl:w-[34rem]">
           <PersonalityRadar traits={personalityTraits} />
         </div>
       </div>
