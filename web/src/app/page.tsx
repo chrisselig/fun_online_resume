@@ -29,7 +29,7 @@ const THEMES: ThemeOption[] = [
     file: "TERMINAL.SH",
     title: "Terminal",
     tagline: "Green phosphor, blinking cursor. cat your way through 18 years of experience.",
-    href: null,
+    href: "/terminal",
   },
   {
     slug: "spreadsheet",
