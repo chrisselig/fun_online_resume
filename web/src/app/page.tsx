@@ -50,7 +50,7 @@ const THEMES: ThemeOption[] = [
     file: "DASHBOARD.APP",
     title: "The dashboard",
     tagline: "Modern, slick, colorblind-safe. The resume as a KPI dashboard.",
-    href: null,
+    href: "/dashboard",
   },
   {
     slug: "accessible",
