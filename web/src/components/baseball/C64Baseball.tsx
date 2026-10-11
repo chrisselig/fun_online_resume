@@ -47,9 +47,11 @@ export function C64Baseball({ resume }: { resume: Resume }) {
   const [inning, setInning] = useState(1);
   const [score, setScore] = useState(0);
   const [log, setLog] = useState<LogEntry[]>([]);
+  const [ball, setBall] = useState<{ key: number; outcome: "hit" | "out" } | null>(null);
 
   const swing = () => {
     const result = resolveAtBat(Math.random());
+    setBall((b) => ({ key: (b?.key ?? 0) + 1, outcome: result }));
 
     if (result === "hit") {
       const { bases: nextBases, runsScored } = advanceRunners(bases);
@@ -100,6 +102,18 @@ export function C64Baseball({ resume }: { resume: Resume }) {
         </div>
 
         <div className="relative mx-auto mt-6 h-40 w-40">
+          <style>{`
+            @keyframes bb-fly-hit {
+              0% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+              80% { opacity: 1; }
+              100% { transform: translate(-130%, -180px) scale(0.6); opacity: 0; }
+            }
+            @keyframes bb-fly-out {
+              0% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+              60% { transform: translate(10%, -90px) scale(0.85); opacity: 1; }
+              100% { transform: translate(10%, -70px) scale(0.5); opacity: 0; }
+            }
+          `}</style>
           <div className="absolute top-0 left-1/2 -translate-x-1/2">
             <DiamondBase occupied={bases.second} label="Second" />
           </div>
@@ -112,6 +126,16 @@ export function C64Baseball({ resume }: { resume: Resume }) {
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
             <div className="h-4 w-4 rotate-45 border-2 border-white bg-white" aria-label="Home plate" />
           </div>
+          {ball && (
+            <div
+              key={ball.key}
+              aria-hidden
+              className="absolute bottom-2 left-1/2 h-3 w-3 rounded-full bg-[#ffff00]"
+              style={{
+                animation: `${ball.outcome === "hit" ? "bb-fly-hit" : "bb-fly-out"} 700ms ease-out forwards`,
+              }}
+            />
+          )}
         </div>
 
         <div className="mt-6 flex justify-center">

@@ -14,7 +14,7 @@ const THEMES: ThemeOption[] = [
   {
     slug: "brutalist",
     icon: "⬛",
-    title: "Brutalist infographic",
+    title: "The Brutalist",
     tagline: "Raw, ugly-on-purpose, confident. Thick borders, one neon accent, playable arcade.",
     accent: "#d6ff1f",
     href: "/brutalist",
@@ -109,7 +109,7 @@ export default function ThemePicker() {
           Chris Selig · {resume.stats[0]?.value} {resume.stats[0]?.label.toLowerCase()}
         </p>
         <h1 className="mt-2 bg-gradient-to-r from-white to-slate-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-6xl">
-          Pick which theme you want to use to view my resume
+          Pick a themed version of my resume
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-slate-400">
           Same resume, same real work, {THEMES.length} different ways to explore it.
