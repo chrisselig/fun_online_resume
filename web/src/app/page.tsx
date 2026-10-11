@@ -46,7 +46,7 @@ const THEMES: ThemeOption[] = [
   {
     slug: "space-station",
     icon: "🚀",
-    title: "Space station",
+    title: "Space ship",
     tagline: "A crude hand-drawn ship adrift among the stars, hauling cargo.",
     accent: "#7dd3fc",
     href: "/space-station",
@@ -57,7 +57,7 @@ const THEMES: ThemeOption[] = [
     title: "Accessible / screen reader",
     tagline: "Plain semantic HTML, high contrast, and a read-aloud button.",
     accent: "#ffffff",
-    href: null,
+    href: "/accessible",
   },
   {
     slug: "spreadsheet",

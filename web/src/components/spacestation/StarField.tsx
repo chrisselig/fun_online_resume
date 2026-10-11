@@ -29,6 +29,7 @@ export function StarField() {
       preserveAspectRatio="none"
       viewBox="0 0 100 100"
     >
+      <rect x={0} y={0} width={100} height={100} fill="#05070d" />
       {stars.map((s, i) => (
         <circle key={i} cx={s.cx} cy={s.cy} r={s.r} fill="#e8f1ff" opacity={s.opacity} />
       ))}

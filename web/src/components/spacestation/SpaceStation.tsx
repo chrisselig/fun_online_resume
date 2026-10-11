@@ -219,7 +219,7 @@ export function SpaceStation({ resume }: { resume: Resume }) {
   };
 
   return (
-    <main className="min-h-screen bg-[#05070d] p-4 text-[#e8f1ff] sm:p-8">
+    <main className="min-h-screen p-4 text-[#e8f1ff] sm:p-8">
       <StarField />
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-wrap items-center justify-between gap-2">
